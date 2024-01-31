@@ -140,6 +140,7 @@ class Client extends CI_Controller {
 		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');								
 		$data['nama_faskes'] 			= $this->input->post('nama_faskes');								
 		$data['status'] 			= $this->input->post('status');								
+		$data['id_kelurahan'] 			= $this->input->post('id_kelurahan');
 		$data['alamat'] 			= $this->input->post('alamat');
 		$data['no_hp'] 			= $this->input->post('no_hp');							
 		$data['jenis'] 			= $this->input->post('jenis');																
@@ -188,7 +189,12 @@ class Client extends CI_Controller {
 				$data['logo']	= $this->upload->file_name;
 			}
 		}
-		$id 			= $this->input->post('id');						
+		$id 			= $this->input->post('id');		
+
+		$id_kel 			= $this->input->post('id_kelurahan');
+		if($id_kel!=""){				
+			$data['id_kelurahan'] = $this->input->post('id_kelurahan');
+		}				
 		$data['kode_faskes'] 			= $this->input->post('kode_faskes');								
 		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');								
 		$data['nama_faskes'] 			= $this->input->post('nama_faskes');								

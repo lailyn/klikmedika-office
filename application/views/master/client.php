@@ -109,6 +109,14 @@
                       </div>                                          
                     </div>     
                     <div class="form-group row">
+                      <label class="col-sm-2 col-form-label">Kelurahan</label>
+                      <div class="col-sm-10">                        
+                        <select id="id_kelurahan" class="form-control form-control-sm js-select2" <?php echo $read2 ?> name="id_kelurahan">                        
+                          <option value="">Ketik Kata Kunci</option>
+                        </select>
+                      </div>                    
+                    </div>
+                    <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Tgl Daftar</label>
                       <div class="col-sm-2">                        
                         <input type="date" required value="<?php echo $tampil = ($row!='') ? $row->tgl_daftar : "" ; ?>" name="tgl_daftar" placeholder="Tgl Daftar" class="form-control form-control-sm " />
@@ -224,4 +232,34 @@
   </div>
 
   <?php } ?>
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".js-select2").select2({
+      ajax: { 
+        url: '<?= base_url() ?>master/provinsi/ambil_kelurahan_all',
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+              term: params.term // search term
+          };
+        },
+        processResults: function (response) {
+          return {
+              results: response
+          };
+        },
+        cache: true
+      }
+  });
+});  
+</script>
+
 
