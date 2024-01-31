@@ -53,36 +53,9 @@
                         <label class="col-sm-2 col-form-label-sm">Kategori</label>
                         <div class="col-sm-10">
                           <?php echo $form_id ?>
-                          <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->name : "" ; ?>" name="name" placeholder="Kategori Alat Kesehatan" class="form-control form-control-sm " />
+                          <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->name : "" ; ?>" name="name" placeholder="Kategori" class="form-control form-control-sm " />
                         </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-sm-2 col-form-label-sm">Keterangan</label>
-                        <div class="col-sm-10">
-                          <textarea id="summernote" name="keterangan" class="form-control form-control-sm "><?php echo $tampil = ($row!='') ? $row->keterangan : "" ; ?></textarea>                        
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-sm-2 col-form-label-sm">Gambar</label>
-                        <?php 
-                        $rt = "style=display:none";
-                        $gambar="";
-                        if($mode!="insert"){ 
-                          $rt = "";
-                          if(!isset($row->gambar) OR $row->gambar==""){
-                            $gambar = "produk.png";
-                          }else{
-                            $gambar = $row->gambar;
-                          }
-                        }
-                        ?>
-                          <div class='col-sm-4'>
-                          <input type="file" name="gambar" class="form-control form-control-sm ">                          
-                          </div>
-                          <div class='col-sm-2'></div>
-                          <div <?php echo $rt ?> class='col-sm-4'><img width="300px" src="assets/4lkes/<?php echo $gambar ?>">                                              
-                        </div>
-                      </div>
+                      </div>                      
                     </div>                   
                   </div>   
                   <hr>

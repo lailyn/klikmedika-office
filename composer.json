@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"dompdf/dompdf": "^1.0"
+		"dompdf/dompdf": "^1.0",
+		"robmorgan/phinx": "^0.16.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
@@ -20,5 +21,18 @@
 	"require-dev": {
 		"mikey179/vfsstream": "1.1.*",
 		"phpunit/phpunit": "4.* || 5.*"
+	},
+	"scripts": {
+		"db:create": "./vendor/bin/phinx create --",
+		"db:migrate": "./vendor/bin/phinx migrate",
+		"db:migrate:refresh": "composer run db:rollback:reset && ./vendor/bin/phinx migrate",
+		"db:rollback": "./vendor/bin/phinx rollback",
+		"db:rollback:reset": "./vendor/bin/phinx rollback -t 0",
+		"db:status": "./vendor/bin/phinx status",
+		"db:migrate:valid": "./vendor/bin/phinx migrate --dry-run",
+		"db:rollback:valid": "./vendor/bin/phinx rollback --dry-run",
+		"db:seed:create": "./vendor/bin/phinx seed:create --",
+		"db:seed": "./vendor/bin/phinx seed:run --",
+		"db:test": "./vendor/bin/phinx test"
 	}
 }

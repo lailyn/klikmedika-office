@@ -70,7 +70,7 @@ class Produk extends CI_Controller {
 		$data['isi']    = $this->file;		
 		$data['title']	= "Tambah ".$this->title;	
 		$data['bread']	= $this->bread;																															
-		$data['dt_produk_kategori'] = $this->m_admin->getAll('md_kategori');		
+		$data['dt_produk_kategori'] = $this->m_admin->getAll('product_category');		
 		$data['set']		= "insert";	
 		$data['mode']		= "insert";									
 		$this->template($data);	
@@ -127,59 +127,24 @@ class Produk extends CI_Controller {
 		$tabel		= $this->tables;		
 		$pk				= $this->pk;				
 		$id_user = $this->session->userdata("id_user");
-		
-		$config = $this->m_admin->set_upload_options('./assets/uploads/products/','jpg|png|jpeg','1000');
-		$files = $_FILES;
-    $cpt = count($_FILES['gambar']['name']);
-    for($i=0; $i<$cpt; $i++)
-    {
-      $_FILES['gambar']['name']= $files['gambar']['name'][$i];
-      $_FILES['gambar']['type']= $files['gambar']['type'][$i];
-      $_FILES['gambar']['tmp_name']= $files['gambar']['tmp_name'][$i];
-      $_FILES['gambar']['error']= $files['gambar']['error'][$i];
-      $_FILES['gambar']['size']= $files['gambar']['size'][$i];
 				
-			if(!empty($_FILES['gambar']['name'])){
-				$this->upload->initialize($config);
-				if(!$this->upload->do_upload('gambar')){
-					$err = $this->upload->display_errors();				
-				}else{
-					$err = "";								
-					$dataInfo[] = $this->upload->file_name;
-					$data['picture_name'] 					= $dataInfo[0];
-				}
-			}        
-    }    
 
 		$data['sku'] 			= $this->get_kode();
 		$data['name'] 			= $this->input->post('name');								
 		$data['status'] 			= $this->input->post('status');								
 		$data['description'] 			= $this->input->post('description');
-		$data['id_kategori'] 			= $this->input->post('id_kategori');	
-		$data['id_merchant'] 			= $this->input->post('id_merchant');	
-		$data['current_discount'] 			= $this->input->post('current_discount');		
+		$data['id_kategori'] 			= $this->input->post('id_kategori');					
 		$data['price'] 			= str_replace(",", "", $this->input->post('price'));
 		$data['description'] 			= $this->input->post('keterangan');																
-		$data['created_at'] 			= $waktu;
-		$data['tipe'] 				= 1;
+		$data['created_at'] 			= $waktu;		
 		$data['created_by'] 			= $id_user;
 		
-		if($err==""){
-			$this->m_admin->insert($tabel,$data);					
-			$id = $this->db->insert_id();
-			// for($i=0; $i<$cpt; $i++){
-			// 	$data2['id'] = $id;
-			// 	$data2['picture_name'] = $dataInfo[$i];
-			// 	$this->m_admin->insert("products_gambar",$data2);						
-			// }    
-			$_SESSION['pesan'] 		= "Data berhasil disimpan";
-			$_SESSION['tipe'] 		= "success";						
-			echo "<meta http-equiv='refresh' content='0; url=".base_url()."master/produk'>";							
-		}else{
-			$_SESSION['pesan'] 		= "Data gagal disimpan";
-			$_SESSION['tipe'] 		= "danger";
-			echo "<script>history.go(-1)</script>";
-		}
+		
+		$this->m_admin->insert($tabel,$data);							
+		$_SESSION['pesan'] 		= "Data berhasil disimpan";
+		$_SESSION['tipe'] 		= "success";						
+		echo "<meta http-equiv='refresh' content='0; url=".base_url()."master/produk'>";							
+		
 	}	
 	public function update()
 	{		
@@ -188,38 +153,12 @@ class Produk extends CI_Controller {
 		$pk				= $this->pk;								
 		$id 	= $this->input->post('id');		
 		$id_user = $this->session->userdata("id_user");		
-		$config = $this->m_admin->set_upload_options('./assets/uploads/products/','jpg|png|jpeg','1000');				
-		$files = $_FILES;
-    $cpt = count($_FILES['gambar']['name']);
-    
-    for($i=0; $i<$cpt; $i++)
-    {
-      $_FILES['gambar']['name']= $files['gambar']['name'][$i];
-      $_FILES['gambar']['type']= $files['gambar']['type'][$i];
-      $_FILES['gambar']['tmp_name']= $files['gambar']['tmp_name'][$i];
-      $_FILES['gambar']['error']= $files['gambar']['error'][$i];
-      $_FILES['gambar']['size']= $files['gambar']['size'][$i];
-				
-			if(!empty($_FILES['gambar']['name'])){
-				$this->upload->initialize($config);
-				if(!$this->upload->do_upload('gambar')){
-					$err = $this->upload->display_errors();				
-				}else{
-					$err = "";	
-					$dataInfo[] = $this->upload->file_name;
-					$data['picture_name'] 			= $dataInfo[0]; 
-				}
-			}        
-    }	    	    
-
-		$id 			= $this->input->post('id');				
-		//$data['kode_produk'] 			= $this->get_kode();
+		
+		$id 			= $this->input->post('id');						
 		$data['name'] 			= $this->input->post('name');								
 		$data['status'] 			= $this->input->post('status');						
 		$data['description'] 			= $this->input->post('description');
 		$data['id_kategori'] 			= $this->input->post('id_kategori');	
-		$data['id_merchant'] 			= $this->input->post('id_merchant');	
-		$data['current_discount'] 			= $this->input->post('current_discount');		
 		$data['price'] 			= str_replace(",", "", $this->input->post('price'));							
 		$data['description'] 			= $this->input->post('keterangan');												
 		$data['updated_at'] 			= $waktu;				
@@ -241,7 +180,7 @@ class Produk extends CI_Controller {
 		$id 		= $this->input->get('id');																															
 		$data['set']		= "insert";		
 		$data['mode']		= "edit";						
-		$data['dt_produk_kategori'] = $this->m_admin->getAll('md_kategori');		
+		$data['dt_produk_kategori'] = $this->m_admin->getAll('product_category');		
 		$data['dt_produk'] = $this->m_admin->getByID($tabel,$pk,$id);		
 		$this->template($data);	
 	}
@@ -254,7 +193,7 @@ class Produk extends CI_Controller {
 		$pk			= $this->pk;
 		$id 		= $this->input->get('id');																															
 		$data['set']		= "insert";						
-		$data['dt_produk_kategori'] = $this->m_admin->getAll('md_kategori');		
+		$data['dt_produk_kategori'] = $this->m_admin->getAll('product_category');		
 		$data['dt_produk'] = $this->m_admin->getByID($tabel,$pk,$id);
 		$data['mode']		= "detail";				
 		$this->template($data);	

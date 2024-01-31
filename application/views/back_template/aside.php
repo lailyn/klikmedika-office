@@ -59,12 +59,12 @@
                 <p>Dashboard<span class="right badge badge-danger"></span></p>
               </a>
             </li>                       
-            <!--?php 
+            <?php 
             $act="";$show="";
-            if(setMenu('paket')!='' AND setMenu('kategori')!='' AND setMenu('produk')!='' AND setMenu('merchant')!=''){           
+            if(setMenu('client')!='' AND setMenu('produk')!='' AND setMenu('produk_kategori')!=''){
               $show = 'd-none';                        
             }else{              
-              if($isi=='paket' OR $isi=='kategori' OR $isi=='produk' OR $isi=='merchant'){
+              if($isi=='client' OR $isi=='produk' OR $isi=='produk_kategori'){
                 $act = "active"; 
                 $show = "menu-open"; 
               }
@@ -73,35 +73,60 @@
             <li class="nav-item <?php echo $show ?>">
               <a href="#" class="nav-link <?php echo $act ?>">
                 <i class="nav-icon fas fa-folder"></i>
-                <p>Master Umum<i class="right fas fa-angle-left"></i></p>
+                <p>General<i class="right fas fa-angle-left"></i></p>
               </a>
-              <ul class="nav nav-treeview">                
+              <ul class="nav nav-treeview">                                                        
                 <li class="nav-item">
-                  <a <?= setMenu('kategori') ?> href="master/kategori" class="nav-link <?php echo ($isi=='kategori')?'active':'';?>">
+                  <a <?= setMenu('produk') ?> href="master/produk_kategori" class="nav-link <?php echo ($isi=='produk_kategori')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Kategori</p>
+                    <p>Produk Kategori</p>
                   </a>
-                </li>                
-                <li class="nav-item">
-                  <a <?= setMenu('merchant') ?> href="master/merchant" class="nav-link <?php echo ($isi=='merchant')?'active':'';?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Merchant</p>
-                  </a>
-                </li>                
+                </li>                              
                 <li class="nav-item">
                   <a <?= setMenu('produk') ?> href="master/produk" class="nav-link <?php echo ($isi=='produk')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Produk/Layanan</p>
+                    <p>Produk</p>
                   </a>
-                </li>              
+                </li>                              
                 <li class="nav-item">
-                  <a <?= setMenu('paket') ?> href="master/paket" class="nav-link <?php echo ($isi=='paket')?'active':'';?>">
+                  <a <?= setMenu('client') ?> href="master/client" class="nav-link <?php echo ($isi=='client')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Paket</p>
+                    <p>Client</p>
                   </a>
-                </li>              
+                </li>                                              
               </ul>
-            </li-->            
+            </li>           
+            <?php 
+            $act="";$show="";
+            if(setMenu('dokumen')!='' AND setMenu('dokumen_kategori')!=''){
+              $show = 'd-none';                        
+            }else{              
+              if($isi=='dokumen' OR $isi=='dokumen_kategori'){
+                $act = "active"; 
+                $show = "menu-open"; 
+              }
+            }              
+            ?>            
+            <li class="nav-item <?php echo $show ?>">
+              <a href="#" class="nav-link <?php echo $act ?>">
+                <i class="nav-icon fas fa-folder"></i>
+                <p>Pemberkasan<i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">                                                        
+                <li class="nav-item">
+                  <a <?= setMenu('dokumen_kategori') ?> href="master/dokumen_kategori" class="nav-link <?php echo ($isi=='dokumen_kategori')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kategori</p>
+                  </a>
+                </li>                                              
+                <li class="nav-item">
+                  <a <?= setMenu('dokumen') ?> href="master/dokumen" class="nav-link <?php echo ($isi=='dokumen')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Dokumen</p>
+                  </a>
+                </li>                                              
+              </ul>
+            </li>           
             <?php 
             $act="";$show="";
             if(setMenu('user_type')!='' AND setMenu('user')!=''){           
@@ -116,7 +141,7 @@
             <li class="nav-item <?php echo $show ?>">
               <a href="#" class="nav-link <?php echo $act ?>">
                 <i class="nav-icon fas fa-folder"></i>
-                <p>Master User<i class="right fas fa-angle-left"></i></p>
+                <p>User<i class="right fas fa-angle-left"></i></p>
               </a>
               <ul class="nav nav-treeview">                
                 <li class="nav-item">
@@ -168,10 +193,10 @@
 
             <?php 
             $act="";$show="";
-            if(setMenu('pengeluaran')!='' AND setMenu('pemasukan')!=''){
+            if(setMenu('invoice')!='' AND setMenu('pengeluaran')!='' AND setMenu('pemasukan')!=''){
               $show = 'd-none';                        
             }else{              
-              if($isi=='pengeluaran' OR $isi=='pemasukan'){
+              if($isi=='invoice' OR $isi=='pengeluaran' OR $isi=='pemasukan'){
                 $act = "active"; 
                 $show = "menu-open"; 
               }
@@ -183,6 +208,12 @@
                 <p>Finance<i class="right fas fa-angle-left"></i></p>
               </a>
               <ul class="nav nav-treeview">                
+                <li class="nav-item">
+                  <a <?= setMenu('invoice') ?> href="transaksi/invoice" class="nav-link <?php echo ($isi=='invoice')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Invoice</p>
+                  </a>
+                </li>                                        
                 <li class="nav-item">
                   <a <?= setMenu('pengeluaran') ?> href="transaksi/pengeluaran" class="nav-link <?php echo ($isi=='pengeluaran')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>

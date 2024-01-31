@@ -243,15 +243,7 @@
                     ORDER BY md_pengeluaran.id_pengeluaran DESC");
                   foreach($cek->result() AS $row){
                     $penyewaan="-";
-                    $cek = $this->m_admin->getByID("orders","id",$row->order_id);
-                    if($cek->num_rows()>0){
-                      $isi = $cek->row();
-                      $cek_user = $this->m_admin->getByID("md_konsumen","id_konsumen",$isi->user_id);
-                      $user = ($cek_user->num_rows()>0) ? $cek_user->row()->nama_lengkap : "" ;                    
-                      if($isi->user_id==0) $user = "Umum";
-
-                      $penyewaan = $user." // ".$isi->order_number." // ".$isi->order_date;
-                    }
+                    
                     echo "
                     <tr>
                       <td>$no</td>"; ?>
