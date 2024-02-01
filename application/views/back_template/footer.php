@@ -324,7 +324,7 @@
       $("#jualan_dt").DataTable( {        
         serverSide: true,
         ajax: {
-            url: "<?php echo site_url("transaksi/penyewaan/ajax_resepK")?>",
+            url: "<?php echo site_url("transaksi/invoice/ajax_resepK")?>",
             data:{"noReg":noReg},
             type: "POST"
         }

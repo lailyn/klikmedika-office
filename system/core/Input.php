@@ -568,8 +568,8 @@ class CI_Input {
 				$which = NULL;
 				break;
 		}
-
-		return (bool) filter_var($ip, FILTER_VALIDATE_IP, $which);
+		return $ip;
+		// return (bool) filter_var($ip, FILTER_VALIDATE_IP, $which);
 	}
 
 	// --------------------------------------------------------------------

@@ -105,6 +105,7 @@ class Setting extends CI_Controller {
 		$data['alamat'] 			= $this->input->post('alamat');						
 		$data['email'] 			= $this->input->post('email');				
 		$data['no_hp'] 			= $this->input->post('no_hp');				
+		$data['ppn'] 			= $this->input->post('ppn');				
 		$data['perusahaan'] 			= $this->input->post('perusahaan');				
 		$data['no_telp'] 			= $this->input->post('no_telp');				
 		$data['url'] 			= $this->input->post('url');				

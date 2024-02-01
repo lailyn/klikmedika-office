@@ -109,6 +109,10 @@
                       <div class="col-sm-4">
                         <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->admin : "" ; ?>" name="admin" placeholder="Nama Admin" class="form-control form-control-sm " />
                       </div>                    
+                      <label class="col-sm-2 col-form-label-sm">PPN</label>
+                      <div class="col-sm-2">
+                        <input type="number" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->ppn : "" ; ?>" name="ppn" placeholder="PPN" class="form-control form-control-sm " />
+                      </div>                    
                     </div>                    
                     <div class="form-group row">  
                       <label class="col-sm-2 col-form-label-sm">Password Karyawan</label>

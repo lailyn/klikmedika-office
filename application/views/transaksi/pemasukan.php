@@ -240,10 +240,12 @@
                     INNER JOIN md_pemasukan_kategori ON md_pemasukan.id_kategori = md_pemasukan_kategori.id
                     ORDER BY md_pemasukan.id_pemasukan DESC");
                   foreach($cek->result() AS $row){
+                    if($row->sumber=="invoice") $rt = "d-none";
+                      else $rt = "";
                     echo "
                     <tr>
                       <td>$no</td>"; ?>
-                      <td>
+                      <td class="<?=$rt?>">
                         <a href="transaksi/pemasukan/delete?id=<?php echo $row->id_pemasukan ?>" onclick="return confirm('Anda yakin?')" class="btn btn-danger btn-xs" title="Hapus"><i class="fa fa-trash"></i></a>                          
                         <a href="transaksi/pemasukan/edit?id=<?php echo $row->id_pemasukan ?>" class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>                                                      
                         <a href="transaksi/pemasukan/tambah_detail?id=<?php echo $row->id_pemasukan ?>" class="btn btn-warning btn-xs" title="Bayar"><i class="fa fa-list"></i></a>                                                      
