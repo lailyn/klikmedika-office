@@ -129,7 +129,22 @@
                       <div class="col-sm-2">                          
                         <input type="date" value="<?php echo $tampil = ($row!='') ? $row->tgl_kadaluarsa : "" ; ?>" name="tgl_kadaluarsa" placeholder="Tgl Kadaluarsa" class="form-control form-control-sm " />
                       </div>
-                    </div>                                                                                
+                    </div> 
+                    <div class="form-group row">
+                      <label class="col-sm-2 col-form-label-sm">Langganan</label>
+                      <div class="col-sm-2">                        
+                        <select class="form-control form-control-sm" <?php echo $read2 ?> name="langganan">                        
+                          <?php $tampil = ($row!='') ? $row->langganan : "" ; ?>                          
+                          <option <?php if($tampil=="") echo 'selected' ?> value="">- choose -</option>                          
+                          <option <?php if($tampil=="pra-bayar") echo 'selected' ?> value="pra-bayar">Pra Bayar</option>                          
+                          <option <?php if($tampil=="pasca-bayar") echo 'selected' ?> value="pasca-bayar">Pasca Bayar</option>                                                    
+                        </select>
+                      </div>
+                      <label class="col-sm-1 col-form-label-sm">No MoU Terakhir</label>
+                      <div class="col-sm-4">                          
+                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->no_mou : "" ; ?>" name="no_mou" placeholder="No MoU" class="form-control form-control-sm " />                                                                        
+                      </div>
+                    </div>                                                                               
                   </div>   
                 </div>
                 <div class="row">
@@ -178,6 +193,7 @@
                       <th>No HP</th>                                                                                       
                       <th>Jenis</th>                                                                                       
                       <th>Nama PIC</th>                                                                                                                                                                     
+                      <th>Langganan</th>                                                             
                       <th>Tgl Daftar</th>                                                             
                       <th>Tgl Aktif</th>                                                             
                       <th>Tgl Kadaluarsa</th>                                                                                                         
@@ -210,6 +226,7 @@
                       <td>$isi->no_hp</td>                                            
                       <td>$isi->jenis</td>                                            
                       <td>$isi->nama_lengkap</td>                                                                  
+                      <td>$isi->langganan</td>                                                                  
                       <td>".tgl_indo($isi->tgl_daftar)."</td>                        
                       <td>".tgl_indo($isi->tgl_aktif)."</td>                        
                       <td>".tgl_indo($isi->tgl_kadaluarsa)."</td>                        

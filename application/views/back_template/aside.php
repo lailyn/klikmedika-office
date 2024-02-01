@@ -61,10 +61,10 @@
             </li>                       
             <?php 
             $act="";$show="";
-            if(setMenu('client')!='' AND setMenu('produk')!='' AND setMenu('produk_kategori')!=''){
+            if(setMenu('prospek')!='' AND setMenu('bagian')!='' AND setMenu('karyawan')!='' AND setMenu('client')!='' AND setMenu('produk')!='' AND setMenu('produk_kategori')!=''){
               $show = 'd-none';                        
             }else{              
-              if($isi=='client' OR $isi=='produk' OR $isi=='produk_kategori'){
+              if($isi=='prospek' OR $isi=='bagian' OR $isi=='karyawan' OR $isi=='client' OR $isi=='produk' OR $isi=='produk_kategori'){
                 $act = "active"; 
                 $show = "menu-open"; 
               }
@@ -88,6 +88,24 @@
                     <p>Produk</p>
                   </a>
                 </li>                              
+                <li class="nav-item">
+                  <a <?= setMenu('bagian') ?> href="master/bagian" class="nav-link <?php echo ($isi=='bagian')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Bagian</p>
+                  </a>
+                </li>                                              
+                <li class="nav-item">
+                  <a <?= setMenu('karyawan') ?> href="master/karyawan" class="nav-link <?php echo ($isi=='karyawan')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Karyawan</p>
+                  </a>
+                </li>                                              
+                <li class="nav-item">
+                  <a <?= setMenu('prospek') ?> href="master/prospek" class="nav-link <?php echo ($isi=='prospek')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Prospek</p>
+                  </a>
+                </li>                                              
                 <li class="nav-item">
                   <a <?= setMenu('client') ?> href="master/client" class="nav-link <?php echo ($isi=='client')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>

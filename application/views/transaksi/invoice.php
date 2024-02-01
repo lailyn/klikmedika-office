@@ -45,7 +45,7 @@
         $vis2  = "style='display:none;'";
 				$form_id = "<input type='hidden' name='id' value='$row->id'>";              
       }elseif($mode == 'customerReceipt'){
-        $tombol = "Upload Bukti Pembayaran";
+        $tombol = "Upload Bukti Pembayaran & Cetak CR";
         $row  = $dt_invoice->row();
         $read = "readonly";
         $read2 = "disabled";
@@ -289,7 +289,7 @@
                       <div class="form-group row">
                         <label class="col-sm-4 col-form-label-sm">Bukti Transfer</label>
                         <div class="col-sm-8">
-                          <input type="file" class="form-upload" name="bukti">
+                          <input type="file" required class="form-upload" name="bukti">
                         </div>
                       </div>
 
@@ -306,10 +306,10 @@
                       <div class="form-group row">
                         <label class="col-sm-4 col-form-label-sm">Status Bayar</label>
                         <div class="col-sm-8">                        
-                          <select onchange="cekResi()" class="form-control form-control-sm" id="payment_status" name="payment_status" required>                          
+                          <select onchange="cekResi()" class="form-control form-control-sm" id="payment_status" name="payment_status" required>                 
+                            <option <?=($row!='' && $row->payment_status=="2")?'selected':'';?> value="2">Konfirmasi</option>                                                             
                             <option <?=($row!='' && $row->payment_status=="0")?'selected':'';?> value="0">Belum Bayar</option>
-                            <option <?=($row!='' && $row->payment_status=="1")?'selected':'';?> value="1">Menunggu Konfirmasi</option>                          
-                            <option <?=($row!='' && $row->payment_status=="2")?'selected':'';?> value="2">Konfirmasi</option>                                                    
+                            <option <?=($row!='' && $row->payment_status=="1")?'selected':'';?> value="1">Menunggu Konfirmasi</option>                                                      
                           </select>
                         </div>                    
                       </div>
@@ -383,7 +383,7 @@
                   foreach ($dt_invoice->result() as $isi) {                                        
 
                     $cek_user = $this->m_admin->getByID("md_client","id",$isi->id_client);
-                    $user = ($cek_user->num_rows()>0) ? $cek_user->row()->nama_lengkap : "" ;                    
+                    $user = ($cek_user->num_rows()>0) ? $cek_user->row()->nama_faskes : "" ;                    
                     
                     $cr = "display:none;";
                     if($isi->status==1){      
@@ -482,7 +482,7 @@
                   foreach ($dt_invoice->result() as $isi) {                                        
 
                     $cek_user = $this->m_admin->getByID("md_client","id",$isi->id_client);
-                    $user = ($cek_user->num_rows()>0) ? $cek_user->row()->nama_lengkap : "" ;                    
+                    $user = ($cek_user->num_rows()>0) ? $cek_user->row()->nama_faskes : "" ;                    
                     
                     if($isi->status==1){      
                       $edit = $approval = $hapus = "";
@@ -498,9 +498,13 @@
                       $status = "<label class='badge badge-danger'>Batal</label>";
                     }
 
-                    if($isi->paid_status==1){
+                    $pembayaran = "";
+                    if($isi->payment_status==2){
                       $konfirmasi = "display:none;";
                       $status = "<label class='badge badge-primary'>Konfirmasi Bayar</label>";
+                      $pembayaran.=" Method :".$isi->payment_method;
+                      $pembayaran.=" <br> Paid at :".$isi->paid_at;
+                      $pembayaran.=" <br> <a href='assets/uploads/payments/$isi->bukti' class='badge badge-info'>lihat bukti</a>";
                     }                                      
                     
 
@@ -515,6 +519,7 @@
                         <div class='btn-group'>
                           <button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
                           <div class='dropdown-menu'>
+                            <a href='transaksi/invoice/cetakCr/$kode' class='dropdown-item'>Cetak CR</a>                            
                             <a href='transaksi/invoice/cetak/$kode' class='dropdown-item'>Cetak Invoice</a>                            
                             <a href='transaksi/invoice/detail/$kode' class='dropdown-item'>Detail</a>                            
                             <a href='transaksi/invoice/approval/$kode' class='dropdown-item' style='$approval'>Approve</a>                            
@@ -529,7 +534,7 @@
                       <td>$isi->tgl_invoice</td>
                       <td>$isi->periode</td>
                       <td align='left'>Rp ".mata_uang($isi->total)."</td>                                                                                        
-                      <td></td>
+                      <td>$pembayaran</td>
                       <td>$status</td>
                     </tr>
                     "; 

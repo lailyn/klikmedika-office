@@ -55,7 +55,7 @@ class Invoice extends CI_Controller {
 		$data['bread']	= $this->bread;																													
 		$data['set']		= "view";		
 		$data['mode']		= "view";				
-		$data['dt_invoice'] = $this->db->query("SELECT * FROM md_invoice WHERE status < '4' ORDER BY id DESC");	
+		$data['dt_invoice'] = $this->db->query("SELECT * FROM md_invoice WHERE status < 3 ORDER BY id DESC");	
 		$this->template($data);	
 	}
 	public function riwayat()
@@ -65,7 +65,7 @@ class Invoice extends CI_Controller {
 		$data['bread']	= $this->bread;																													
 		$data['set']		= "riwayat";		
 		$data['mode']		= "riwayat";			
-		$data['dt_invoice'] = $this->db->query("SELECT * FROM md_invoice WHERE status >= '4' ORDER BY id DESC");	
+		$data['dt_invoice'] = $this->db->query("SELECT * FROM md_invoice WHERE status >= 3 ORDER BY id DESC");	
 		$this->template($data);	
 	}		
 	public function delete()
@@ -258,6 +258,20 @@ class Invoice extends CI_Controller {
 		}
 		return date('dmy').$kd;
 	}
+	public function cariKodeCr(){
+		$tgl = date("Y-m");
+		$q = $this->db->query("SELECT MAX(RIGHT(kode_cr,6)) AS kd_max FROM md_invoice WHERE LEFT(updated_at,7) = '$tgl' ORDER BY id DESC LIMIT 0,1");		
+		$kd = "";
+		if($q->num_rows()>0){
+			foreach($q->result() as $k){
+				$tmp = ((int)$k->kd_max)+1;
+				$kd = sprintf("%06s", $tmp);
+			}
+		}else{
+			$kd = "000001";
+		}
+		return date('dmy').$kd;
+	}
 	public function simpanInvoice()
 	{		
 		$jam = jam();
@@ -412,6 +426,23 @@ class Invoice extends CI_Controller {
     // $this->load->view('transaksi/cetak_invoice', $data);    
 		
 	}
+	public function cetakCr($kode)
+	{						    
+    if (ob_get_contents()) ob_clean();    
+		ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 900);
+		$mpdf = new \Mpdf\Mpdf();	
+    $mpdf->allow_charset_conversion = true;  // Set by default to TRUE
+    $mpdf->charset_in               = 'UTF-8';
+    $mpdf->autoLangToFont           = true;      
+    $data['set']                   	= 'download';                      
+    $data['kode']           = $kode;    
+    $html = $this->load->view('transaksi/cetak_cr', $data, true);    
+    $mpdf->WriteHTML($html);    
+    $mpdf->Output();    
+    // $this->load->view('transaksi/cetak_invoice', $data);    
+		
+	}
 	public function updatePembayaran()
 	{		
 		$waktu 		= gmdate("Y-m-d H:i:s", time()+60*60*7);				
@@ -422,6 +453,7 @@ class Invoice extends CI_Controller {
 		$submit = $this->input->post("submit");
 		
 		$row = $this->m_admin->getByID("md_invoice","kode",$kode)->row();
+		$data['kode_cr'] = $this->cariKodeCr();
 		$data['paid_at'] = $data['updated_at'] 			= $waktu;				
 		$data['payment_method'] = $this->input->post("payment_method");
 		$data['payment_status'] = $this->input->post("payment_status");
@@ -438,7 +470,12 @@ class Invoice extends CI_Controller {
 			}
 		}
 		
-
+		if($err!=''){
+			$_SESSION['pesan'] 		= $err;
+			$_SESSION['tipe'] 		= "danger";											
+			echo "<script>history.go(-1)</script>";
+			exit();
+		}
 		$this->m_admin->update("md_invoice",$data,"kode",$kode);
 		
 		$data2['sumber'] = "invoice";
@@ -456,8 +493,10 @@ class Invoice extends CI_Controller {
 			$this->m_admin->insert("md_pemasukan",$data2);
 		}		
 
+		$enr = encrypt_url($kode);
+
 		$_SESSION['pesan'] 		= "Status invoice berhasil diubah";
 		$_SESSION['tipe'] 		= "success";											
-		echo "<meta http-equiv='refresh' content='0; url=".base_url()."transaksi/invoice'>";												
+		echo "<meta http-equiv='refresh' content='0; url=".base_url()."transaksi/invoice/cetakCr/".$enr."'>";												
 	}	
 }

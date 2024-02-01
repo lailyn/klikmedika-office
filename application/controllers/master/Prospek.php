@@ -1,16 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Client extends CI_Controller {
+class Prospek extends CI_Controller {
 
-	var $tables =   "md_client";		
-	var $page		=		"master/client";
-	var $file		=		"client";
+	var $tables =   "md_prospek";		
+	var $page		=		"master/prospek";
+	var $file		=		"prospek";
 	var $pk     =   "id";
-	var $title  =   "Client";
+	var $title  =   "Prospek";
 	var $bread	=   "<ol class='breadcrumb'>
-	<li class='breadcrumb-item'><a>Client</a></li>										
-	<li class='breadcrumb-item active'><a href='master/client'>Client</a></li>										
+	<li class='breadcrumb-item'><a>Prospek</a></li>										
+	<li class='breadcrumb-item active'><a href='master/prospek'>Prospek</a></li>										
 	</ol>";				          
 
 
@@ -135,20 +135,15 @@ class Client extends CI_Controller {
 				$data['logo']	= $this->upload->file_name;
 			}
 		}
-
-		$data['kode_faskes'] 			= $this->input->post('kode_faskes');								
-		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');								
-		$data['langganan'] 			= $this->input->post('langganan');								
-		$data['no_mou'] 			= $this->input->post('no_mou');								
+		
+		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');										
 		$data['nama_faskes'] 			= $this->input->post('nama_faskes');								
-		$data['status'] 			= $this->input->post('status');								
-		$data['id_kelurahan'] 			= $this->input->post('id_kelurahan');
+		$data['status'] 			= $this->input->post('status');										
 		$data['alamat'] 			= $this->input->post('alamat');
 		$data['no_hp'] 			= $this->input->post('no_hp');							
-		$data['jenis'] 			= $this->input->post('jenis');																
-		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');																
-		$data['tgl_aktif'] 			= $this->input->post('tgl_aktif');																
-		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
+		$data['keterangan'] 			= $this->input->post('keterangan');																		
+		$data['jenis'] 			= $this->input->post('jenis');																		
+		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');
 		$data['created_at'] 			= $waktu;		
 		$data['created_by'] 			= $id_user;
 		
@@ -160,7 +155,7 @@ class Client extends CI_Controller {
 			$this->m_admin->insert($tabel,$data);							
 			$_SESSION['pesan'] 		= "Data berhasil disimpan";
 			$_SESSION['tipe'] 		= "success";						
-			echo "<meta http-equiv='refresh' content='0; url=".base_url()."master/client'>";							
+			echo "<meta http-equiv='refresh' content='0; url=".base_url()."master/prospek'>";							
 		}
 		
 	}	
@@ -184,7 +179,7 @@ class Client extends CI_Controller {
 				$err = $this->upload->display_errors();				
 			}else{
 				$err = "";
-				$row = $this->m_admin->getByID("md_client","id",$id)->row();
+				$row = $this->m_admin->getByID("md_prospek","id",$id)->row();
 	    	if(isset($row->logo)){
 	    		unlink('assets/uploads/sites/'.$row->logo);         	    		
 	    	}
@@ -197,18 +192,14 @@ class Client extends CI_Controller {
 		if($id_kel!=""){				
 			$data['id_kelurahan'] = $this->input->post('id_kelurahan');
 		}				
-		$data['kode_faskes'] 			= $this->input->post('kode_faskes');								
-		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');								
-		$data['langganan'] 			= $this->input->post('langganan');								
+		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');										
 		$data['nama_faskes'] 			= $this->input->post('nama_faskes');								
-		$data['status'] 			= $this->input->post('status');								
+		$data['status'] 			= $this->input->post('status');										
 		$data['alamat'] 			= $this->input->post('alamat');
 		$data['no_hp'] 			= $this->input->post('no_hp');							
-		$data['jenis'] 			= $this->input->post('jenis');				
-		$data['no_mou'] 			= $this->input->post('no_mou');												
-		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');																
-		$data['tgl_aktif'] 			= $this->input->post('tgl_aktif');																
-		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
+		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');																		
+		$data['keterangan'] 			= $this->input->post('keterangan');																		
+		$data['jenis'] 			= $this->input->post('jenis');																		
 		$data['updated_at'] 			= $waktu;				
 		$data['updated_by'] 			= $id_user;		
 		
@@ -220,7 +211,7 @@ class Client extends CI_Controller {
 			$this->m_admin->update($tabel,$data,$pk,$id);					
 			$_SESSION['pesan'] 		= "Data berhasil diubah";
 			$_SESSION['tipe'] 		= "success";						
-			echo "<meta http-equiv='refresh' content='0; url=".base_url()."master/client'>";					
+			echo "<meta http-equiv='refresh' content='0; url=".base_url()."master/prospek'>";					
 		}
 		
 	}	
@@ -234,7 +225,7 @@ class Client extends CI_Controller {
 		$id 		= $this->input->get('id');																															
 		$data['set']		= "insert";		
 		$data['mode']		= "edit";								
-		$data['dt_client'] = $this->m_admin->getByID($tabel,$pk,$id);		
+		$data['dt_prospek'] = $this->m_admin->getByID($tabel,$pk,$id);		
 		$this->template($data);	
 	}
 	public function detail()
@@ -252,18 +243,18 @@ class Client extends CI_Controller {
 		$this->template($data);	
 	}
 	public function resetKode(){
-		$sql = $this->m_admin->getAll("md_client");
+		$sql = $this->m_admin->getAll("md_prospek");
 		foreach($sql->result() AS $er){
 			if($er->sku==''){
 				$data['sku'] = $this->get_kode();
-				$this->m_admin->update("md_client",$data,"id",$er->id);
+				$this->m_admin->update("md_prospek",$data,"id",$er->id);
 			}
 		}
 	}
 	public function get_kode(){
 		$tgl = date("Y-m");
 		$rd = rand(11,99);
-		$q = $this->db->query("SELECT MAX(RIGHT(sku,6)) AS kd_max FROM md_client WHERE LEFT(created_at,7) = '$tgl' ORDER BY id DESC LIMIT 0,1");
+		$q = $this->db->query("SELECT MAX(RIGHT(sku,6)) AS kd_max FROM md_prospek WHERE LEFT(created_at,7) = '$tgl' ORDER BY id DESC LIMIT 0,1");
 		$kd = "";
 		if($q->num_rows()>0){
 			foreach($q->result() as $k){
