@@ -118,6 +118,30 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-sm-2 col-form-label-sm">No Rekening</label>
+                      <div class="col-sm-2">                        
+                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->no_rek : "" ; ?>" name="no_rek" placeholder="No Rekening" class="form-control form-control-sm " />                                                
+                      </div>                                          
+                      <label class="col-sm-1 col-form-label-sm">Atas Nama</label>
+                      <div class="col-sm-3">                        
+                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->nama_rek : "" ; ?>" name="nama_rek" placeholder="Atas Nama" class="form-control form-control-sm " />                        
+                      </div>                                          
+                      <label class="col-sm-1 col-form-label-sm">Bank</label>
+                      <div class="col-sm-3">                        
+                        <select class="form-control form-control-sm" name="bank">
+                          <?php echo $tampil = ($row!='') ? $row->bank : "" ; ?>                          
+                          <option <?php if($tampil=="") echo 'selected' ?> value="">- choose -</option>
+                          <option <?php if($tampil=="BRI") echo 'selected' ?>>BRI</option>
+                          <option <?php if($tampil=="Mandiri") echo 'selected' ?>>Mandiri</option>
+                          <option <?php if($tampil=="BNI") echo 'selected' ?>>BNI</option>
+                          <option <?php if($tampil=="BCA") echo 'selected' ?>>BCA</option>
+                          <option <?php if($tampil=="UOB") echo 'selected' ?>>UOB</option>
+                          <option <?php if($tampil=="BSI") echo 'selected' ?>>BSI</option>
+                        </select>
+                      </div>                                          
+                    </div>
+
+                    <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Alamat</label>
                       <div class="col-sm-10">                        
                         <textarea id="summernote" name="alamat" class="form-control form-control-sm "><?php echo $tampil = ($row!='') ? $row->alamat : "" ; ?></textarea>                        

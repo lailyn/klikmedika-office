@@ -67,9 +67,9 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.alamat, md_client.n
       </td>
       <td valign="top">
         <b>No Invoice: </b> <?=$kode?> <br>
-        <b>Tgl Invoice: </b> <?=tgl_indo($cek_data->tgl_invoice)?> <br>              
-        
-        <b>Tgl Jatuh Tempo: </b> <?=tgl_indo(manipulate_time($cek_data->tgl_invoice,'days','10','+','Y-m-d'))?> <br>        
+        <b>Tgl Invoice: </b> <?=tgl_indo($cek_data->tgl_invoice)?> <br>                      
+        <b>Tgl Invoice: </b> <?=tgl_indo($cek_data->tgl_invoice)?> <br>                      
+        <b>Periode: </b> <?=bulan_indo($cek_data->periode)?> <br>        
       </td>      
     </tr>
     
@@ -137,14 +137,17 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.alamat, md_client.n
     </tr>
     <tr>
       <td></td>
-      <td> <br></td>
-    </tr>
-    <tr>
-      <td colspan="2"><br></td>
+      <td></td>
     </tr>
     <tr>
       <td></td>
-      <td>___________________________</td>
+      <td>
+        <img src="assets/im493/<?=$setting->banner?>" width="100px">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><u><b><?=strtoupper($setting->admin)?></b></u></td>
     </tr>
   </table>
 </body>

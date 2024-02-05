@@ -135,7 +135,7 @@
                     
 
                     <div class="form-group row">
-                      <label class="col-sm-2 col-form-label-sm">Banner Halaman</label>
+                      <label class="col-sm-2 col-form-label-sm">TTD Admin</label>
                       <?php 
                       $rt = "style=display:none";
                       $banner="";

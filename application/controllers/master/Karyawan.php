@@ -139,7 +139,7 @@ class Karyawan extends CI_Controller {
 		$pk				= $this->pk;		
 		$id = $this->input->get("id");
 		$row = $this->m_admin->getByID("md_karyawan","id_karyawan",$id)->row();
-		$data['id_karyawan'] 			= $row->id_karyawan;
+		$data['id_karyawan'] 			= $row->id_karyawan;		
 		$data['nama_lengkap'] 			= $row->nama_lengkap;
 		$data['email'] 		= $row->email;
 		$data['no_hp'] 			= $row->no_hp;
@@ -183,6 +183,9 @@ class Karyawan extends CI_Controller {
 		$data['id_bagian'] 			= $this->input->post('id_bagian');						
 		$data['jenis_kelamin'] 			= $this->input->post('jenis_kelamin');						
 		$data['alamat'] 			= $this->input->post('alamat');						
+		$data['no_rek'] 			= $this->input->post('no_rek');						
+		$data['nama_rek'] 			= $this->input->post('nama_rek');						
+		$data['bank'] 			= $this->input->post('bank');						
 		$data['created_at'] 			= $waktu;		
     $this->m_admin->insert($tabel,$data);					
     $_SESSION['pesan'] 		= "Data berhasil diubah";
@@ -201,6 +204,9 @@ class Karyawan extends CI_Controller {
 		$data['id_bagian'] 			= $this->input->post('id_bagian');						
 		$data['status'] 			= $this->input->post('status');						
 		$data['jenis_kelamin'] 			= $this->input->post('jenis_kelamin');						
+		$data['no_rek'] 			= $this->input->post('no_rek');						
+		$data['nama_rek'] 			= $this->input->post('nama_rek');						
+		$data['bank'] 			= $this->input->post('bank');						
 		$data['alamat'] 			= $this->input->post('alamat');						
 		$data['updated_at'] 			= $waktu;		
     $this->m_admin->update($tabel,$data,$pk,$id);					
