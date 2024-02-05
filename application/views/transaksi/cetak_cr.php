@@ -101,7 +101,7 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.a
         <b>
         Pembayaran RME <br>
         <?php echo $cek_data->nama_faskes ?></b><br>
-        Periode <?php echo bulan_indo($cek_data->periode) ?>
+        Periode <?php echo $cek_data->periode ?>
       </td>
     </tr>  
     <tr>
