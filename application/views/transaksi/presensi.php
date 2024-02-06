@@ -50,7 +50,7 @@
                 <li><strong>Waktu : </strong> <?php echo $ro->waktu ?> <?php echo ($ro->telat==1) ? "<span class='badge badge-danger'>terlambat</span>" : '' ; ?></li>                
                 <li><strong>Status : </strong> <?php echo strtoupper($ro->kesehatan) ?></li>                                
                 <li><strong>Tagging : </strong> <?php echo $ro->tagging ?></li>                
-                <img src="assets/uploads/presensi/<?php echo $ro->foto ?>">
+                <img width="100px" src="assets/uploads/presensi/<?php echo $ro->foto ?>">
               </ul>
             <?php } ?>
           </div>
@@ -61,7 +61,7 @@
                 <li><strong>Waktu : </strong> <?php echo $ro->waktu ?> <?php echo ($ro->telat==1) ? "<span class='badge badge-danger'>pulang terlalu cepat</span>" : '' ; ?></li>                
                 <li><strong>Status : </strong> <?php echo strtoupper($ro->kesehatan) ?></li>                                
                 <li><strong>Tagging : </strong> <?php echo $ro->tagging ?></li>                
-                <img src="assets/uploads/presensi/<?php echo $ro->foto ?>">
+                <img width="100px" src="assets/uploads/presensi/<?php echo $ro->foto ?>">
               </ul>
             <?php } ?>
           </div>          
