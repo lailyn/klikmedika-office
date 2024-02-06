@@ -44,7 +44,7 @@
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="assets/im493/<?php echo $setting->logo ?>" alt="Logo" height="100" width="700">
+    <img class="animation__shake" src="assets/im493/<?php echo $setting->logo ?>" alt="Logo" height="100" width="100">
   </div>
 
   <!-- Navbar -->

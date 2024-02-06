@@ -92,8 +92,8 @@ class M_admin extends CI_Model{
 		
 		function login($username,$password)
 		{
-				$sql =  "SELECT * FROM md_user WHERE email=? AND password = ? AND status = 1";        				
-				return $this->db->query($sql, array($username, $password));
+				$sql =  "SELECT * FROM md_user WHERE (email=? OR no_hp=?) AND password = ? AND status = 1";        				
+				return $this->db->query($sql, array($username, $username, $password));
 		}
 		function login_user($username,$password)
 		{

@@ -90,7 +90,7 @@ class M4suk4dm1n extends CI_Controller {
 					'jenis' 		=> $row->jenis,										
 					'id_karyawan' 		=> $row->id_karyawan,
 					'id_user_type' => $row->id_user_type,
-					'app' => "keikoalkses"
+					'app' => "klikmedika-office"
 				);
 				$nama = $row->nama_lengkap;
 				$this->session->set_userdata($newdata);

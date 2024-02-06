@@ -58,7 +58,7 @@
                       <label class="col-sm-2 col-form-label-sm">Email</label>
                       <div class="col-sm-4">
                         <?php echo $form_id ?>
-                        <input type="email" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->email : "" ; ?>" name="email" placeholder="Email" class="form-control form-control-sm " />
+                        <input readonly type="email" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->email : "" ; ?>" name="email" placeholder="Email" class="form-control form-control-sm " />
                       </div>                    
                       <label class="col-sm-2 col-form-label-sm">Password</label>
                       <div class="col-sm-4">                          
@@ -84,11 +84,7 @@
                           }
                           ?>
                         </select>
-                      </div> 
-                      <label class="col-sm-2 col-form-label-sm">No HP</label>
-                      <div class="col-sm-4">                          
-                        <input type="number" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? "" : "" ; ?>" name="no_hp" placeholder="No HP" class="form-control form-control-sm " />                                                                        
-                      </div>                     
+                      </div>                       
                     </div>
 
                     
@@ -148,9 +144,7 @@
     <div class="row">
       <div class="col-12 grid-margin">
         <div class="card">
-          <div class="card-header">
-            <h4 class="card-title"><a href="master/user/add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah</a></h4>
-          </div>
+          
           <div class="card-body">            
             <div class="box">                            
               <div class="table-responsive">
@@ -160,9 +154,9 @@
                       <th width="5%">No</th>                      
                       <th></th>
                       <th>Nama User</th>     
-                      <th>Email</th>                                                             
-                      <th>No HP</th>                                                             
-                      <th>Jenis</th>                      
+                      <th>Email</th>                                                                                                                                             
+                      <th>No HP</th>                                                                                                                                             
+                      <th>User Type</th>                      
                       <th width="10%"></th>
                     </tr>
                   </thead>
@@ -198,9 +192,9 @@
                     <td>$no</td>
                     <td><a href='master/user/detail?id=$isi->id_user'><img src='assets/im493/$foto' class='img-circle elevation-2' width='40px'></a></td>
                     <td><a href='master/user/detail?id=$isi->id_user'>$isi->nama_lengkap</a></td>
-                    <td>$isi->email $status $email_sent $email_verified $banned</td>                                        
-                    <td>$isi->no_hp</td>                                        
-                    <td>$jenis</td>                          
+                    <td>$isi->email $status $banned</td>                                                            
+                    <td>$isi->no_hp</td>                                                            
+                    <td>$user_type</td>                          
                     <td>
                       <div class='btn-group'>
                         <button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>

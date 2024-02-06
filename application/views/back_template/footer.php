@@ -4,8 +4,8 @@
   <?php 
   $setting = $this->m_admin->getByID("md_setting","id_setting",1)->row();
   $y = date("Y");
-  if($y=='2021') $year = $y;
-    else $year = '2021 - '.$y;
+  if($y=='2023') $year = $y;
+    else $year = '2023 - '.$y;
   ?>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
@@ -341,6 +341,13 @@
         serverSide: true,
         ajax: {
             url: "<?php echo site_url("master/lamaran/ajax_list")?>",
+            type: "POST"
+        }
+      } );
+      $("#sosmed_dt").DataTable( {
+        serverSide: true,
+        ajax: {
+            url: "<?php echo site_url("master/sosmed/ajax_list")?>",
             type: "POST"
         }
       } );

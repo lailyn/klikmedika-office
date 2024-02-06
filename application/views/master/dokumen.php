@@ -171,7 +171,11 @@
                       <td>$isi->kategori</td>                      
                       <td>$isi->no_surat</td>                      
                       <td>$isi->tgl_surat</td>                      
-                      <td>$isi->tautan</td>                      
+                      <td>
+                        <a href='$isi->tautan' target='_BLANK'>
+                          $isi->tautan
+                        </a>
+                      </td>                      
                       <td>$isi->client</td>                      
                       <td>";?>
                         <a href="master/dokumen/delete?id=<?php echo $isi->id ?>" onclick="return confirm('Anda yakin?')" class="btn btn-danger btn-sm" title="Hapus"><i class="fa fa-trash"></i></a>                          

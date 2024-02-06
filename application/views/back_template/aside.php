@@ -58,6 +58,23 @@
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>Dashboard<span class="right badge badge-danger"></span></p>
               </a>
+            </li>
+            <?php 
+            $act="";$show="";
+            if(setMenu('presensi')!=''){           
+              $show = 'd-none';                        
+            }else{            
+              if($isi=='presensi'){
+                $act = "active"; 
+                $show = "menu-open"; 
+              }
+            }              
+            ?>
+            <li class="nav-item <?php echo $show ?>">
+              <a href="transaksi/presensi" class="nav-link <?php echo ($isi=='presensi')?'active':'';?>">
+                <i class="nav-icon fas fa-check"></i>
+                <p>Presensi<span class="right badge badge-danger"></span></p>
+              </a>
             </li>                       
             <?php 
             $act="";$show="";
@@ -177,12 +194,12 @@
               </ul>
             </li>
 
-            <!--?php 
+            <?php 
             $act="";$show="";
-            if(setMenu('konsumen')!='' AND setMenu('penyewaan')!=''){
+            if(setMenu('sosmed')!=''){
               $show = 'd-none';                        
             }else{              
-              if($isi=='konsumen' OR $isi=='penyewaan'){
+              if($isi=='sosmed'){
                 $act = "active"; 
                 $show = "menu-open"; 
               }
@@ -190,31 +207,25 @@
             ?>            
             <li class="nav-item <?php echo $show ?>">
               <a href="#" class="nav-link <?php echo $act ?>">
-                <i class="nav-icon fas fa-truck"></i>
-                <p>Transaksi<i class="right fas fa-angle-left"></i></p>
+                <i class="nav-icon fas fa-phone"></i>
+                <p>Digital Marketing<i class="right fas fa-angle-left"></i></p>
               </a>
-              <ul class="nav nav-treeview">                
+              <ul class="nav nav-treeview">                                
                 <li class="nav-item">
-                  <a <?= setMenu('konsumen') ?> href="transaksi/konsumen" class="nav-link <?php echo ($isi=='konsumen')?'active':'';?>">
+                  <a <?= setMenu('sosmed') ?> href="master/sosmed" class="nav-link <?php echo ($isi=='sosmed')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Konsumen</p>
+                    <p>Social Media</p>
                   </a>
-                </li>                                        
-                <li class="nav-item">
-                  <a <?= setMenu('penyewaan') ?> href="transaksi/penyewaan" class="nav-link <?php echo ($isi=='penyewaan')?'active':'';?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Data Penyewaan</p>
-                  </a>
-                </li>                                          
+                </li>                                                        
               </ul>
-            </li-->
+            </li>
 
             <?php 
             $act="";$show="";
-            if(setMenu('invoice')!='' AND setMenu('pengeluaran')!='' AND setMenu('pemasukan')!=''){
+            if(setMenu('invoice')!='' AND setMenu('pengeluaran')!='' AND setMenu('pemasukan')!='' AND setMenu('penggajian')!='' AND setMenu('salary')!=''){
               $show = 'd-none';                        
             }else{              
-              if($isi=='invoice' OR $isi=='pengeluaran' OR $isi=='pemasukan'){
+              if($isi=='invoice' OR $isi=='pengeluaran' OR $isi=='pemasukan' OR $isi=="penggajian" OR $isi=="salary"){
                 $act = "active"; 
                 $show = "menu-open"; 
               }
@@ -222,7 +233,7 @@
             ?>            
             <li class="nav-item <?php echo $show ?>">
               <a href="#" class="nav-link <?php echo $act ?>">
-                <i class="nav-icon fas fa-box"></i>
+                <i class="nav-icon fas fa-money-bill"></i>
                 <p>Finance<i class="right fas fa-angle-left"></i></p>
               </a>
               <ul class="nav nav-treeview">                
@@ -242,6 +253,18 @@
                   <a <?= setMenu('pemasukan') ?> href="transaksi/pemasukan" class="nav-link <?php echo ($isi=='pemasukan')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pemasukan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a <?= setMenu('salary') ?> href="payroll/salary" class="nav-link <?php echo ($isi=='salary')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Master Salary</p>
+                  </a>
+                </li>                                        
+                <li class="nav-item">
+                  <a <?= setMenu('penggajian') ?> href="payroll/penggajian" class="nav-link <?php echo ($isi=='penggajian')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Penggajian</p>
                   </a>
                 </li>                                          
               </ul>

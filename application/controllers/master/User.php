@@ -98,8 +98,7 @@ class User extends CI_Controller {
 		}
 		$data['id_user_type'] 			= $this->input->post('id_user_type');				
 		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');						
-		$data['email'] 			= $this->input->post('email');				
-		$data['no_hp'] 			= $this->input->post('no_hp');				
+		$data['email'] 			= $this->input->post('email');						
 		$data['jenis'] 			= "user";						
 		$data['password'] 			= md5(encr().$this->input->post('password'));				
 		$data['tgl_daftar'] 			= $waktu;
@@ -138,8 +137,7 @@ class User extends CI_Controller {
 
 		$data['id_user_type'] 			= $this->input->post('id_user_type');				
 		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');						
-		$data['email'] 			= $this->input->post('email');				
-		$data['no_hp'] 			= $this->input->post('no_hp');						
+		$data['email'] 			= $this->input->post('email');						
 		$password 			= $this->input->post('password');
 		if($password!=""){				
 			$data['password'] 			= md5(encr().$this->input->post('password'));				

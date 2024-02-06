@@ -59,12 +59,8 @@
                       <label class="col-sm-2 col-form-label-sm">Email</label>
                       <div class="col-sm-4">
                         <?php echo $form_id ?>
-                        <input type="email" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->email : "" ; ?>" name="email" placeholder="Email" class="form-control form-control-sm " />
-                      </div>                    
-                      <label class="col-sm-2 col-form-label-sm">No HP</label>
-                      <div class="col-sm-4">                          
-                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->no_hp : "" ; ?>" name="no_hp" placeholder="No HP" class="form-control form-control-sm " />                                                                        
-                      </div>
+                        <input type="email" readonly <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->email : "" ; ?>" name="email" placeholder="Email" class="form-control form-control-sm " />
+                      </div>                                          
                     </div>
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Foto</label>

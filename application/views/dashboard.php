@@ -155,34 +155,24 @@ body{margin-top:0px;}
 
     <div class="row">
 
-      <div class="col-lg-3 col-6">
+      <div class="col-lg-6 col-6">
         <!-- small box -->
         <div class="small-box bg-info">
-          <div class="inner">
-            <h3></h3>
-            <p>Layanan</p>
-          </div>                      
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-          <div class="inner">
-            <a href="master/produk" class="text-white">
-              <h3></h3>
-              <p>Paket</p>
+          <div class="inner">            
+            <a class="text-white" href="transaksi/presensi">
+              <h3>Presensi</h3>
+              <p>Klik untuk Isi Kehadiran</p>
             </a>
           </div>                      
         </div>
       </div>
-
+      
       <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-success">
           <div class="inner">
-            <h3></h3>
-            <p> User</p>
+            <h3><?php echo $this->m_admin->getAll("md_client")->num_rows() ?></h3>
+            <p> Clients</p>
           </div>                      
         </div>
       </div>
@@ -191,58 +181,15 @@ body{margin-top:0px;}
         <!-- small box -->
         <div class="small-box bg-warning">
           <div class="inner">
-            <h3></h3>
-            <p> Pesanan Baru</p>
+            <h3><?php echo $this->m_admin->getAll("md_dokumen")->num_rows() ?></h3>
+            <p> Dokumen</p>
           </div>                      
         </div>
       </div>
 
             
     </div>  
-    <div class="row">      
-      <div class="col-lg-6 col-md-12 grid-margin">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Pesanan Terbaru <a href="trans/penjualan" class="btn btn-sm btn-info">lihat semua</a></h4>
-            <div class="table-responsive">
-              <table id="example3" class="table table-hover table-striped">
-                <thead>
-                  <tr>                    
-                    <th> User </th>
-                    <th> Layanan </th>
-                    <th> Status </th>                    
-                    <th> No Order </th>
-                  </tr>
-                </thead>
-                <tbody>                
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>    
-
-      <div class="col-lg-6 col-md-12 grid-margin">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">User Terbaru <a href="master/product" class="btn btn-sm btn-info">lihat semua</a></h4>
-            <div class="table-responsive">
-              <table id="example4" class="table table-hover table-striped">
-                <thead>
-                  <tr>                    
-                    <th> Username </th>
-                    <th> Email </th>
-                    <th> No HP </th>                                        
-                  </tr>
-                </thead>  
-                <tbody>
-                
-                </tbody>              
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>   
+    
 
       
          

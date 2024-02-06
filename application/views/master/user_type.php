@@ -95,7 +95,7 @@
                     </div>
                   </div>          
                   <div class="table-responsive">
-                    <table id="example2" class="table" style="width:100%">                  
+                    <table id="" class="table" style="width:100%">                  
                       <thead>
                         <tr>
                           <th width="5%">No</th>
