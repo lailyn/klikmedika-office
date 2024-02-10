@@ -12,145 +12,7 @@
   
 ?>
 
-<body>
-<?php
-function time_ago($timestamp)
-    {
-        $time_ago = strtotime($timestamp);
-        $current_time = time();
-        $time_difference = $current_time - $time_ago;
-        $seconds = $time_difference;
-        $minutes = round($seconds / 60);           // value 60 is seconds
-        $hours = round($seconds / 3600);           //value 3600 is 60 minutes * 60 sec
-        $days = round($seconds / 86400);          //86400 = 24 * 60 * 60;
-        $weeks = round($seconds / 604800);          // 7*24*60*60;
-        $months = round($seconds / 2629440);     //((365+365+365+365+366)/5/12)*24*60*60
-        $years = round($seconds / 31553280);     //(365+365+365+365+366)/5 * 24 * 60 * 60
-        if ($seconds <= 60) {
-            return "just_now";
-        } else if ($minutes <= 60) {
-            if ($minutes == 1) {
-                return "1 " . "minute_ago";
-            } else {
-                return "$minutes " . "minutes_ago";
-            }
-        } else if ($hours <= 24) {
-            if ($hours == 1) {
-                return "1 " . "hour_ago";
-            } else {
-                return "$hours " . "hours_ago";
-            }
-        } else if ($days <= 30) {
-            if ($days == 1) {
-                return "1 " . "day_ago";
-            } else {
-                return "$days " . "days_ago";
-            }
-        } else if ($months <= 12) {
-            if ($months == 1) {
-                return "1 " . "month_ago";
-            } else {
-                return "$months " . "months_ago";
-            }
-        } else {
-            if ($years == 1) {
-                return "1 " . "year_ago";
-            } else {
-                return "$years " . "years_ago";
-            }
-        }
-    }
-?>
-
-<style type="text/css">
-body{margin-top:0px;}
-
-.team-list img {
-  width: 50%;
-}
-
-.team-list .content {
-  width: 50%;
-}
-
-.team-list .content .follow {
-  position: absolute;
-  bottom: 24px;
-}
-
-.team-list:hover {
-  -webkit-transform: scale(1.05);
-          transform: scale(1.05);
-}
-
-.team, .team-list {
-  -webkit-transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
-}
-
-.team .content .title, .team-list .content .title {
-  font-size: 18px;
-}
-
-.team .overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  opacity: 0;
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease;
-}
-
-.team .member-position, .team .team-social {
-  position: absolute;
-  bottom: -35px;
-  right: 0;
-  left: 0;
-  margin: auto 10%;
-  z-index: 99;
-}
-
-.team .team-social {
-  bottom: 40px;
-  opacity: 0;
-  -webkit-transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
-}
-
-.team:hover {
-  -webkit-transform: translateY(-7px);
-          transform: translateY(-7px);
-  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-}
-
-.team:hover .overlay {
-  opacity: 0.6;
-}
-
-.team:hover .team-social {
-  opacity: 1;
-}
-
-
-.rounded {
-    border-radius: 1px !important;
-}
-
-.para-desc {
-    max-width: 600px;
-}
-.text-muted {
-    color: #8492a6 !important;
-}
-
-.section-title .title {
-    letter-spacing: 0.5px;
-    font-size: 30px;
-}
-</style>
+<body onload="jenisClient()">
 
 
     <div class="row">
@@ -191,10 +53,51 @@ body{margin-top:0px;}
     </div>  
     
 
+    
+
       
          
 
     </div>
+
+    <div class="row">
+      <div class="col-md-12 col-lg-6 grid-margin" >
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Presentase Jenis Client </h4>
+            <div id="jenisClient"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-lg-6 grid-margin" >
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Perkembangan Digital Marketing</h4>
+            <div class="grafik3" style="width:100%; height:400px;"></div>          
+          </div>
+        </div>      
+      </div>
+    </div>
+
+    <div class="col-md-12 col-lg-12 grid-margin" >
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Perkembangan Prospek</h4>
+          <div class="grafik" style="width:100%; height:400px;"></div>          
+        </div>
+      </div>      
+    </div>
+
+    <div class="col-md-12 col-lg-12 grid-margin" >
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Perkembangan Client</h4>
+          <div class="grafik2" style="width:100%; height:400px;"></div>          
+        </div>
+      </div>      
+    </div>
+
   </div>  
   <base href="<?php echo base_url(); ?>" />
   
@@ -205,5 +108,251 @@ body{margin-top:0px;}
   <script src="assets/js_chart/export-data.js" type="text/javascript"></script>
 
   <script src="https://unpkg.com/rc-year-calendar@latest/dist/rc-year-calendar.umd.min.js"></script>
+  <script type="text/javascript">
+    
+  $('.grafik').highcharts({
+    <?php 
+    $tgl_akhir2 = date("Y-m-d");   
+    $tgl_awal2 = manipulate_time($tgl_akhir2,"days",60,"-","Y-m-d");  
+    $cari_data = $this->db->query("SELECT tgl_daftar AS tgl, count(id) AS jum FROM md_prospek WHERE tgl_daftar
+      BETWEEN '$tgl_awal2' AND '$tgl_akhir2' GROUP BY tgl_daftar
+      ORDER BY tgl ASC");
+    ?>
+    chart: {
+      type: 'line',
+      marginTop: 80
+    },
+    credits: {
+      enabled: false
+    }, 
+    tooltip: {
+      shared: true,
+      crosshairs: true,
+      headerFormat: '<b>{point.key}</b>< br />'
+    },
+    title: {
+      text: 'Jumlah Prospek 2 Bulan Terakhir'
+    },
+    subtitle: {
+      text: ""
+    },
+    xAxis: {
+      categories: [
+      <?php 
+      foreach($cari_data->result() AS $label){
+        $tgl_b = substr($label->tgl, 5, 5);
+        echo "'$tgl_b'";
+        echo ",";
+      }
+      ?>
+      ],
+      labels: {
+        rotation: 0,
+        align: 'right',
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Verdana, sans-serif'
+        }
+      }
+    },
+    legend: {
+      enabled: true
+    },
+    series: [{
+      "name":"Prospek",
+      "data":[
 
+      <?php 
+      foreach($cari_data->result() AS $label){      
+        echo "$label->jum";
+        echo ",";
+      }
+      ?>
+
+      ]
+      }]
+  });
+  </script>  
+  <script type="text/javascript">
+    
+  $('.grafik3').highcharts({
+    <?php 
+    $tgl_akhir2 = date("Y-m-d");   
+    $tgl_awal2 = manipulate_time($tgl_akhir2,"days",60,"-","Y-m-d");  
+    $cari_data = $this->db->query("SELECT LEFT(created_at,10) AS tgl, count(id_sosmed) AS jum FROM md_sosmed WHERE LEFT(created_at,10)
+      BETWEEN '$tgl_awal2' AND '$tgl_akhir2' GROUP BY LEFT(created_at,10)
+      ORDER BY tgl ASC");
+    ?>
+    chart: {
+      type: 'line',
+      marginTop: 80
+    },
+    credits: {
+      enabled: false
+    }, 
+    tooltip: {
+      shared: true,
+      crosshairs: true,
+      headerFormat: '<b>{point.key}</b>< br />'
+    },
+    title: {
+      text: 'Jumlah Konten 2 Bulan Terakhir'
+    },
+    subtitle: {
+      text: ""
+    },
+    xAxis: {
+      categories: [
+      <?php 
+      foreach($cari_data->result() AS $label){
+        $tgl_b = substr($label->tgl, 5, 5);
+        echo "'$tgl_b'";
+        echo ",";
+      }
+      ?>
+      ],
+      labels: {
+        rotation: 0,
+        align: 'right',
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Verdana, sans-serif'
+        }
+      }
+    },
+    legend: {
+      enabled: true
+    },
+    series: [{
+      "name":"Konten",
+      "data":[
+
+      <?php 
+      foreach($cari_data->result() AS $label){      
+        echo "$label->jum";
+        echo ",";
+      }
+      ?>
+
+      ]
+      }]
+  });
+  </script>   
+  <script type="text/javascript">
+    
+  $('.grafik2').highcharts({
+    <?php     
+    $cari_data = $this->db->query("SELECT tgl_daftar AS tgl, count(id) AS jum FROM md_client GROUP BY tgl_daftar
+      ORDER BY tgl ASC");
+    ?>
+    chart: {
+      type: 'line',
+      marginTop: 80
+    },
+    credits: {
+      enabled: false
+    }, 
+    tooltip: {
+      shared: true,
+      crosshairs: true,
+      headerFormat: '<b>{point.key}</b>< br />'
+    },
+    title: {
+      text: 'Jumlah Client'
+    },
+    subtitle: {
+      text: ""
+    },
+    xAxis: {
+      categories: [
+      <?php 
+      foreach($cari_data->result() AS $label){
+        $tgl_b = substr($label->tgl, 5, 5);
+        echo "'$tgl_b'";
+        echo ",";
+      }
+      ?>
+      ],
+      labels: {
+        rotation: 0,
+        align: 'right',
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Verdana, sans-serif'
+        }
+      }
+    },
+    legend: {
+      enabled: true
+    },
+    series: [{
+      "name":"Faskes",
+      "data":[
+
+      <?php 
+      foreach($cari_data->result() AS $label){      
+        echo "$label->jum";
+        echo ",";
+      }
+      ?>
+
+      ]
+      }]
+  });
+  </script>   
+  <script type="text/javascript">
+function jenisClient(){
+    var chart = new Highcharts.Chart({
+
+    chart: {
+        renderTo: 'jenisClient',
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: ''
+    },
+    credits: {
+            enabled: false
+          },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Sumber',
+        colorByPoint: true,
+        data: [
+
+        <?php         
+        $sql = $this->db->query("SELECT jenis,Count(kode_faskes) AS jum FROM md_client WHERE jenis <> '' 
+          GROUP BY jenis ORDER BY COUNT(kode_faskes) ASC");
+        foreach($sql->result() AS $isi){          
+          $tt = $this->db->query("SELECT Count(kode_faskes) AS jum FROM md_client WHERE jenis <> ''")->row();
+          $y = ($isi->jum / $tt->jum) * 100;
+          $r = round($y,2);
+          $status = $isi->jenis;           
+          echo "{ y : $r, name: '$status ($isi->jum client)'},";        
+        }
+        ?>
+
+       ]
+    }]
+  });
+}
+</script>
   

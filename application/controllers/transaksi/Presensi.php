@@ -51,7 +51,7 @@ class Presensi extends CI_Controller {
 		$data['bread']	= "";																													
 		$data['set']		= "view";		
 		$data['mode']		= "view";
-		if($this->session->level!='administrator'){				
+		if($this->session->level!='admin'){				
 			$this->template($data);	
 		}else{
 			$this->load->view('back_template/header',$data);

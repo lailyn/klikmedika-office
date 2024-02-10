@@ -99,6 +99,20 @@ function setMenu($id){
     $ci =& get_instance();
     return $ci->m_admin->user_menu($id);
 }
+function do_resize($file_path = null, $width = null, $height = null) {
+  $ci =& get_instance();
+  $ci->load->library('image_lib');
+  $config = [
+      'image_library'  => 'gd2',
+      'source_image'   => $file_path,
+      'create_thumb'   => false,
+      'maintain_ratio' => true,
+      'width'          => $width,
+      'height'         => $height,
+  ]; 
+  $ci->image_lib->initialize($config);
+  $ci->image_lib->resize();
+}
 function datatableFilter($table, $columns_search = [], $columns_order = [], $tables_join = [], $custom_select = null, $custom_where = [], $limit = false, $nolimit = false){
   $ci =& get_instance();
 

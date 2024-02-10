@@ -991,7 +991,7 @@ class M_admin extends CI_Model{
   	if(!is_null($id_dokter)){
   		$this->db->query("UPDATE md_dokter SET saldo = saldo + '$bagian' WHERE id_dokter = '$id_dokter'");
   	}
-  }
+  }  
 }	
 
 ?>
