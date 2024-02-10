@@ -114,8 +114,8 @@
     <?php 
     $tgl_akhir2 = date("Y-m-d");   
     $tgl_awal2 = manipulate_time($tgl_akhir2,"days",60,"-","Y-m-d");  
-    $cari_data = $this->db->query("SELECT tgl_daftar AS tgl, count(id) AS jum FROM md_prospek WHERE tgl_daftar
-      BETWEEN '$tgl_awal2' AND '$tgl_akhir2' GROUP BY tgl_daftar
+    $cari_data = $this->db->query("SELECT LEFT(tgl_daftar,7) AS tgl, count(id) AS jum FROM md_prospek WHERE LEFT(tgl_daftar,7)
+      BETWEEN '$tgl_awal2' AND '$tgl_akhir2' GROUP BY LEFT(tgl_daftar,7)
       ORDER BY tgl ASC");
     ?>
     chart: {
@@ -140,7 +140,7 @@
       categories: [
       <?php 
       foreach($cari_data->result() AS $label){
-        $tgl_b = substr($label->tgl, 5, 5);
+        $tgl_b = $label->tgl;
         echo "'$tgl_b'";
         echo ",";
       }
@@ -242,7 +242,7 @@
     
   $('.grafik2').highcharts({
     <?php     
-    $cari_data = $this->db->query("SELECT tgl_daftar AS tgl, count(id) AS jum FROM md_client GROUP BY tgl_daftar
+    $cari_data = $this->db->query("SELECT LEFT(tgl_daftar,7) AS tgl, count(id) AS jum FROM md_client GROUP BY LEFT(tgl_daftar,7)
       ORDER BY tgl ASC");
     ?>
     chart: {
@@ -267,7 +267,7 @@
       categories: [
       <?php 
       foreach($cari_data->result() AS $label){
-        $tgl_b = substr($label->tgl, 5, 5);
+        $tgl_b = $label->tgl;
         echo "'$tgl_b'";
         echo ",";
       }
