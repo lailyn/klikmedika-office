@@ -142,27 +142,16 @@ class M4suk4dm1n extends CI_Controller {
 		$this->load->view("master/notifikasi");		
 		$this->load->view('back_template/footer');
 	}	
-	public function redirect()
-	{		
-		$notif = $this->uri->segment(3);																
-		$tipe = $this->uri->segment(4);																
-		$link = str_replace("-", "/",$notif);		
-		
-		// $id_user_type = $this->session->userdata("id_user_type");
-  //   $id_user = $this->session->userdata("id_user");
-  //   $id_staf = $this->session->userdata("id_staf");
-  //   $cek_seksi = $this->db->query("SELECT * FROM bn_user INNER JOIN bn_staf ON bn_user.id_staf = bn_staf.id_staf WHERE bn_user.id_user = '$id_user'");
-  //   $id_seksi = ($cek_seksi->num_rows() > 0) ? $cek_seksi->row()->id_seksi : "" ;
-  //   if($id_user_type==4){
-		// 	$this->db->query("UPDATE bn_notif SET status = 1 WHERE id_user = '$id_user2' AND link = '$link'");
-		// }elseif($id_user_type==3){			
-		// 	$this->db->query("UPDATE bn_notif SET status = 1 WHERE id_seksi = '$id_seksi' AND level = 1 AND link = '$link'");
-		// }elseif($id_user_type==2){			
-		// 	$this->db->query("UPDATE bn_notif SET status = 1 WHERE id_seksi = '$id_seksi' AND level = 2 AND link = '$link'");
-		// }
-		$this->db->query("UPDATE md_notifikasi SET status = 1 WHERE id_user = '0' AND tipe_notifikasi = '$tipe'");
-
-		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "$link'>";	
+	public function grafik()	
+	{								
+		$data['isi']    = "grafik";		
+		$data['title']	= $this->title;	
+		$data['bread']	= $this->bread;																													
+		$data['set']		= "grafik";		
+		$data['title2']	= "Grafik";		
+		$this->load->view('back_template/header',$data);
+		$this->load->view('back_template/aside');			
+		$this->load->view('grafik');		
+		$this->load->view('back_template/footer');
 	}
-
 }

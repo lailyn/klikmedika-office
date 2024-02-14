@@ -27,11 +27,13 @@
           $lbpulang = "d-none";
           $datang = "";
           $pulang = 'd-none';
+          $jenis = "datang";
         }elseif($cek_datang->num_rows() == 1 AND $cek_pulang->num_rows() == 0){
           $datang = 'd-none';
           $pulang = '';
           $lbdatang = "";
           $lbpulang = "d-none";
+          $jenis = "pulang";
         }else{
           $datang = 'd-none';
           $pulang = 'd-none';
@@ -91,9 +93,10 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label-sm">Keterangan</label>
                       <div class="col-sm-9">
-                        <input type="hidden" name="waktu" value="<?php echo $waktu ?>">
-                        <input type="hidden" name="id_karyawan" value="<?php echo $id_karyawan ?>">
-                        <input type="text" class="form-control" name="kerja_ket" placeholder="Keterangan">
+                        <input type="hidden" id="jenis" name="jenis" value="<?php echo $jenis ?>">
+                        <input type="hidden" id="waktu" name="waktu" value="<?php echo $waktu ?>">
+                        <input type="hidden" id="id_karyawan" name="id_karyawan" value="<?php echo $id_karyawan ?>">
+                        <input type="text" class="form-control" id="kerja_ket" name="kerja_ket" placeholder="Keterangan">
                       </div>                                          
                     </div>                                                                  
                     <div class="form-group row">
@@ -120,7 +123,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label-sm">Foto</label>
                       <div class="col-sm-8">                        
-                        <input type="file" required class="form-upload" name="foto" accept="capture=camera">
+                        <input type="file" id="fileInput" required class="form-upload" name="foto" accept="capture=camera">
                       </div>                                                                
                     </div>                                                                                                                                                                         
 
@@ -138,8 +141,9 @@
                     <hr>
                     <div class="row">
                       <div class="col-md-12">                    
-                        <button type="submit" id="tombol1" name="submit" value="datang" onclick="return confirm('Anda yakin?')" class="btn btn-block btn-primary <?php echo $datang ?>"><i class="fa fa-download"></i> Datang</button>                          
-                        <button type="submit" id="tombol2" name="submit" value="pulang" onclick="return confirm('Anda yakin?')" class="btn btn-block btn-danger <?php echo $pulang ?>"><i class="fa fa-upload"></i> Pulang</button>                                                   
+                        <button class="btn btn-block btn-primary" type="button" onclick="simpanData()">Simpan</button>
+                        <!-- <button type="submit" id="tombol1" name="submit" value="datang" onclick="return confirm('Anda yakin?')" class="btn btn-block btn-primary <?php echo $datang ?>"><i class="fa fa-download"></i> Datang</button>                          
+                        <button type="submit" id="tombol2" name="submit" value="pulang" onclick="return confirm('Anda yakin?')" class="btn btn-block btn-danger <?php echo $pulang ?>"><i class="fa fa-upload"></i> Pulang</button>                                                    -->
                       </div>
                     </div>
                   </div>
@@ -191,4 +195,107 @@
       }
     });
   </script>
-    
+
+<script>
+
+  function simpanData() {
+
+    // Mendapatkan gambar dari input file
+    const fileInput = document.getElementById('fileInput');
+    const selectedImage = fileInput.files[0];
+
+    var radioButtons = document.getElementsByName('kesehatan');
+    var selectedValue;
+
+    for (var i = 0; i < radioButtons.length; i++) {
+      if (radioButtons[i].checked) {
+        selectedValue = radioButtons[i].value;
+        break;
+      }
+    }
+
+    // Mengompres gambar sebelum mengirimkannya ke server
+    compressImage(selectedImage, function (compressedImageBlob) {
+      // Parameter tambahan
+      const additionalParameters = {
+        id_karyawan: $("#id_karyawan").val(),        
+        kerja_ket: $("#kerja_ket").val(),        
+        kesehatan: selectedValue,
+        waktu: $("#waktu").val(),                
+        jenis: $("#jenis").val(),        
+        tagging: $("#locationResult").val()      
+      };
+
+      // Menggabungkan gambar yang dikompres dengan parameter tambahan
+      const formData = new FormData();
+      formData.append('image', compressedImageBlob, 'compressedImage.jpg');
+      for (const key in additionalParameters) {
+        formData.append(key, additionalParameters[key]);
+      }
+
+      // Mengirim data ke server menggunakan Ajax
+      $.ajax({
+        url: '<?php echo site_url('transaksi/presensi/save')?>',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+          location.reload();
+        },
+        error: function (error) {
+          alert(error);
+        },
+      });
+    });
+  }
+
+  function compressImage(file, callback) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = new Image();
+
+      img.onload = function () {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Menghitung rasio kompresi
+        const maxWidth = 800; // Sesuaikan dengan kebutuhan
+        const maxHeight = 600; // Sesuaikan dengan kebutuhan
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+
+        // Mengatur ukuran canvas
+        canvas.width = width;
+        canvas.height = height;
+
+        // Menggambar gambar ke dalam canvas dengan ukuran yang disesuaikan
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Mengompres gambar menjadi data URL
+        canvas.toBlob(function (blob) {
+          // Panggil kembali fungsi dengan objek Blob hasil kompresi
+          callback(blob);
+        }, 'image/jpeg', 0.7); // Sesuaikan dengan kebutuhan kualitas
+      };
+
+      img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  </script>  

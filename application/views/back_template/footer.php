@@ -265,10 +265,10 @@
             type: "POST"
         }
       } );
-      $("#konsumen_dt").DataTable( {
+      $("#presensi_dt").DataTable( {
         serverSide: true,
         ajax: {
-            url: "<?php echo site_url("transaksi/konsumen/ajax_list")?>",
+            url: "<?php echo site_url("transaksi/presensi/ajax_list")?>",
             type: "POST"
         }
       } );

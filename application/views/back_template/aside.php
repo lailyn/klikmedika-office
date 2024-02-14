@@ -222,10 +222,10 @@
 
             <?php 
             $act="";$show="";
-            if(setMenu('invoice')!='' AND setMenu('pengeluaran')!='' AND setMenu('pemasukan')!='' AND setMenu('penggajian')!='' AND setMenu('salary')!=''){
+            if(setMenu('grafik')!='' AND setMenu('invoice')!='' AND setMenu('pengeluaran')!='' AND setMenu('pemasukan')!='' AND setMenu('penggajian')!='' AND setMenu('salary')!=''){
               $show = 'd-none';                        
             }else{              
-              if($isi=='invoice' OR $isi=='pengeluaran' OR $isi=='pemasukan' OR $isi=="penggajian" OR $isi=="salary"){
+              if($isi=='grafik' OR $isi=='invoice' OR $isi=='pengeluaran' OR $isi=='pemasukan' OR $isi=="penggajian" OR $isi=="salary"){
                 $act = "active"; 
                 $show = "menu-open"; 
               }
@@ -237,6 +237,12 @@
                 <p>Finance<i class="right fas fa-angle-left"></i></p>
               </a>
               <ul class="nav nav-treeview">                
+                <li class="nav-item">
+                  <a <?= setMenu('grafik') ?> href="m4suk4dm1n/grafik" class="nav-link <?php echo ($isi=='grafik')?'active':'';?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Infografis</p>
+                  </a>
+                </li>                                        
                 <li class="nav-item">
                   <a <?= setMenu('invoice') ?> href="transaksi/invoice" class="nav-link <?php echo ($isi=='invoice')?'active':'';?>">
                     <i class="far fa-circle nav-icon"></i>

@@ -7,7 +7,7 @@
           <div class="card-body">            
             <div class="box">                            
               <div class="table-responsive">
-                <table id="example1" class="table" style="width:100%">
+                <table id="presensi_dt" class="table" style="width:100%">
                   <thead>
                     <tr>
                       <th width="5%">No</th>                      
@@ -20,7 +20,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                  <?php 
+                  <!--?php 
                   $no = 1;                  
                   $sql = $this->m_admin->getAll("md_presensi");                  
                   foreach($sql->result() AS $dt){                    
@@ -43,7 +43,7 @@
                     ";
                     $no++;
                   }
-                  ?>                  
+                  ?-->                  
                   </tbody>
                 </table>
               </div>
