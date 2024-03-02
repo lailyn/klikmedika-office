@@ -171,7 +171,7 @@
           var longitude = position.coords.longitude;
 
           // Tampilkan hasil di dalam input teks
-          locationResultInput.value = "Latitude: " + latitude + ", Longitude: " + longitude;
+          locationResultInput.value = latitude + "," + longitude;
         }, function (error) {
           // Tangani kesalahan jika ada
           switch (error.code) {
