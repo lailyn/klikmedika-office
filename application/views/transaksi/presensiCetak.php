@@ -10,9 +10,6 @@ header("Expires: 0");
 $setting = $this->m_admin->getByID("md_setting","id_setting",1)->row();
 $where = "";
 if($filter_5!='') $where .= " AND LEFT(md_presensi.waktu,7) = '$filter_5'";
-if($filter_3!='') $where .= " AND md_presensi.jenis '$filter_3'";
-if($filter_4!='') $where .= " AND md_presensi.id_karyawan '$filter_4'";
-if($filter_4!='') $where .= " AND md_presensi.id_karyawan '$filter_4'";
 
 $cek_data_karyawan = $this->db->query("SELECT * FROM md_presensi LEFT JOIN md_karyawan ON md_presensi.id_karyawan = md_karyawan.id_karyawan
   WHERE 1=1 $where GROUP BY md_presensi.id_karyawan ORDER BY md_karyawan.nama_lengkap");
