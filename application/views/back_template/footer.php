@@ -265,13 +265,25 @@
             type: "POST"
         }
       } );
+
+
+      var presensi_1 = $("#presensi_1").val();
+      var presensi_2 = $("#presensi_2").val();
+      var presensi_3 = $("#presensi_3").val();
+      var presensi_4 = $("#presensi_4").val();      
       $("#presensi_dt").DataTable( {
+        destroy: true,        
         serverSide: true,
         ajax: {
             url: "<?php echo site_url("transaksi/presensi/ajax_list")?>",
+            data:{"tgl_awal":presensi_1,"tgl_akhir":presensi_2,"jenis":presensi_3,"id_karyawan":presensi_4},
             type: "POST"
-        }
-      } );
+        },        
+        columnDefs: [
+          { "orderable": false, "targets": [3, 4, 5] } // Nonaktifkan pengurutan untuk kolom 1 dan 2      
+        ]
+      });      
+
       $("#supplier_dt").DataTable( {
         serverSide: true,
         ajax: {

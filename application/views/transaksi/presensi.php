@@ -176,16 +176,16 @@
           // Tangani kesalahan jika ada
           switch (error.code) {
             case error.PERMISSION_DENIED:
-              locationResultInput.value = "Anda menolak akses ke lokasi.";
+              locationResultInput.value = "error,Anda menolak akses ke lokasi.";
               break;
             case error.POSITION_UNAVAILABLE:
-              locationResultInput.value = "Informasi lokasi tidak tersedia.";
+              locationResultInput.value = "error,Informasi lokasi tidak tersedia.";
               break;
             case error.TIMEOUT:
-              locationResultInput.value = "Waktu permintaan lokasi habis.";
+              locationResultInput.value = "error,Waktu permintaan lokasi habis.";
               break;
             case error.UNKNOWN_ERROR:
-              locationResultInput.value = "Terjadi kesalahan yang tidak diketahui.";
+              locationResultInput.value = "error,Terjadi kesalahan yang tidak diketahui.";
               break;
           }
         });

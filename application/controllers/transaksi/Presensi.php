@@ -44,20 +44,42 @@ class Presensi extends CI_Controller {
 		}
 	}
 	
-	public function index()
+	public function index($reset=null)
 	{								
 		$data['isi']    = $this->file;		
 		$data['title']	= $this->title;	
 		$data['bread']	= "";																													
 		$data['set']		= "view";		
-		$data['mode']		= "view";
+		$data['mode']		= "view";		
 		if($this->session->level!='admin'){				
 			$this->template($data);	
 		}else{
-			$this->load->view('back_template/header',$data);
-			$this->load->view('back_template/aside');			
-			$this->load->view("transaksi/presensiAdmin");		
-			$this->load->view('back_template/footer');
+			$data['filter_1'] = date("Y-m-01");
+			$data['filter_2'] = date("Y-m-d");
+			$data['filter_3'] = "";
+			$data['filter_4'] = "";
+			if(is_null($reset)){
+				$filter_1 = $this->input->get("tgl_awal");
+				$filter_2 = $this->input->get("tgl_akhir");
+				$filter_3 = $this->input->get("jenis");
+				$filter_4 = $this->input->get("id_karyawan");				
+				$filter_5 = $this->input->get("bulan");				
+				if(isset($filter_1) AND !is_null($filter_1)) $data['filter_1'] = $filter_1;			
+				if(isset($filter_2) AND !is_null($filter_2)) $data['filter_2'] = $filter_2;					
+				if(isset($filter_3) AND !is_null($filter_3)) $data['filter_3'] = $filter_3;					
+				if(isset($filter_4) AND !is_null($filter_4)) $data['filter_4'] = $filter_4;					
+				if(isset($filter_5) AND !is_null($filter_5)) $data['filter_5'] = $filter_5;					
+			}
+
+			$submit = $this->input->get('filter');
+			if($submit=="download"){
+				$this->load->view('transaksi/presensiCetak',$data);
+			}else{
+				$this->load->view('back_template/header',$data);
+				$this->load->view('back_template/aside');			
+				$this->load->view("transaksi/presensiAdmin");		
+				$this->load->view('back_template/footer');
+			}
 		}
 	}
 	public function ajax_list()
@@ -65,18 +87,42 @@ class Presensi extends CI_Controller {
 		$starts = (null !== $this->input->post("start"))?$this->input->post("start"):0;
 		$length = (null !== $this->input->post("length"))?$this->input->post("length"):10;
 		$LIMIT = "LIMIT $starts, $length ";
-		$search = $this->input->post("search")["value"];
+		$search = (null !== $this->input->post("search")["value"])?$this->input->post("search")["value"]:'';
 		$orders = isset($_POST["order"]) ? $_POST["order"] : '';		
 
 		$where = "WHERE 1=1 ";
 		$where_limit = "WHERE 1=1 ";
 
+
+		$tgl_awal = date("Y-m-01");
+		$tgl_akhir = date("Y-m-d");
+
+
+		$tgl1 = (null !== $this->input->post("tgl_awal"))?$this->input->post("tgl_awal"):$tgl_awal;
+		$tgl2 = (null !== $this->input->post("tgl_akhir"))?$this->input->post("tgl_akhir"):$tgl_akhir;
+
+		$where .= " AND LEFT(md_presensi.waktu,10) BETWEEN '$tgl1' AND '$tgl2'";
+		$where_limit .= " AND LEFT(md_presensi.waktu,10) BETWEEN '$tgl1' AND '$tgl2'";
+
+
+		$id_karyawan = (null !== $this->input->post("id_karyawan"))?$this->input->post("id_karyawan"):'';
+		if($id_karyawan!=''){
+			$where .= " AND md_presensi.id_karyawan = '$id_karyawan'";
+			$where_limit .= " AND md_presensi.id_karyawan = '$id_karyawan'";
+		}
+
+		$jenis = (null !== $this->input->post("jenis"))?$this->input->post("jenis"):'';
+		if($jenis!=''){
+			$where .= " AND md_presensi.jenis = '$jenis'";
+			$where_limit .= " AND md_presensi.jenis = '$jenis'";
+		}
+
 		$result = array();
 
 		if (isset($search)) {
 			if ($search != '') {
-				$where .= " AND (md_karyawan.nama_lengkap LIKE '%$search%' OR md_karyawan.waktu LIKE '%$search%') ";
-				$where_limit .= " AND (md_karyawan.nama_lengkap LIKE '%$search%' OR md_karyawan.waktu LIKE '%$search%') ";
+				$where .= " AND (md_karyawan.nama_lengkap LIKE '%$search%' OR md_presensi.waktu LIKE '%$search%') ";
+				$where_limit .= " AND (md_karyawan.nama_lengkap LIKE '%$search%' OR md_presensi.waktu LIKE '%$search%') ";
 
 			}
 		}
@@ -84,7 +130,7 @@ class Presensi extends CI_Controller {
 		if (isset($orders)) {
 			if ($orders != '') {
 				$order = $orders;
-				$order_column = ['md_karyawan.nama_lengkap', 'md_karyawan.waktu', 'md_karyawan.status'];
+				$order_column = ['md_karyawan.nama_lengkap', 'md_presensi.waktu', 'md_presensi.jenis'];
 				$order_clm = $order_column[$order[0]['column']];
 				$order_by = $order[0]['dir'];
 				$where .= " ORDER BY $order_clm $order_by ";
@@ -109,11 +155,36 @@ class Presensi extends CI_Controller {
 		
 		$fetch_all = $this->db->query($sql . $where_limit);
 
+		$setting = $this->m_admin->getByID("md_setting",'id_setting',1)->row();
+		$lat = $setting->lat;
+		$lang = $setting->lang;
+
 		foreach ($fetch_record_filtered->result() as $rows) {						
 			
 
 			$telatS = ($rows->jenis=="datang")?"terlambat":"pulang terlalu cepat";
       $telat = ($rows->telat==1)?"<label class='badge badge-danger'>".$telatS."</label>":'';
+      $id = encrypt_url($rows->presensi_id);
+
+      $tags = explode(",", $rows->tagging);
+      $rt = "";
+      if($tags[0]!='error'){
+	      $latitude1 = $lat;
+				$longitude1 = $lang;
+				$latitude2 = $tags[0];
+				$longitude2 = $tags[1];
+
+				$radius = 1; // Radius dalam kilometer
+
+				$distance = haversineDistance($latitude1, $longitude1, $latitude2, $longitude2);
+
+				if ($distance > $radius) $rt = "<label class='badge badge-danger'>Di luar Radius</label>";
+					else $rt = "";
+			}
+
+			if (!is_null($rows->trans) && $rows->trans==1) $rst = "<label class='badge badge-danger'>rejected</label>";
+					else $rst = "";
+
 
 			$sub_array = array();
 			$sub_array[] = $index;			
@@ -123,6 +194,8 @@ class Presensi extends CI_Controller {
 			$sub_array[] = $rows->kesehatan;
 			$sub_array[] = $rows->tagging;
 			$sub_array[] = "<img src='assets/uploads/presensi/$rows->foto' width='50px'>";			
+			$sub_array[] = "<a onclick=\"return confirm('Anda yakin?')\" href='transaksi/presensi/hapus/$id' class='btn btn-danger btn-sm'><i class='fa fa-trash'></i></a>
+			<a onclick=\"return confirm('Anda yakin?')\" href='transaksi/presensi/reject/$id' class='btn btn-warning btn-sm'><i class='fa fa-times'></i></a>";			
 			$result[] = $sub_array;
 			$index++;
 		}
@@ -134,6 +207,22 @@ class Presensi extends CI_Controller {
 		);
 		echo json_encode($output);
 
+	}
+	public function reject($id){
+		$id = decrypt_url($id);
+		$data['trans'] = 1;
+		$data['updated_at'] = waktu();
+		$this->m_admin->update("md_presensi",$data,"presensi_id",$id);
+		$_SESSION['pesan'] 		= "Presensi Reject";
+		$_SESSION['tipe'] 		= "success";									
+		echo "<meta http-equiv='refresh' content='0; url=".base_url()."transaksi/presensi'>";							
+	}
+	public function hapus($id){
+		$id = decrypt_url($id);		
+		$this->m_admin->delete("md_presensi","presensi_id",$id);
+		$_SESSION['pesan'] 		= "Presensi Dihapus";
+		$_SESSION['tipe'] 		= "success";									
+		echo "<meta http-equiv='refresh' content='0; url=".base_url()."transaksi/presensi'>";							
 	}
 	public function save()
 	{		
