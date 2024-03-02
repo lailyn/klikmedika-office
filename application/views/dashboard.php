@@ -58,7 +58,7 @@
       
          
 
-    </div>
+    
 
     <div class="row">
       <div class="col-md-12 col-lg-6 grid-margin" >
@@ -78,6 +78,15 @@
           </div>
         </div>      
       </div>
+    </div>
+
+    <div class="col-md-12 col-lg-12 grid-margin" >
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Perbandingan Prospek Client</h4>
+          <div class="grafik_banding" style="width:100%; height:400px;"></div>          
+        </div>
+      </div>      
     </div>
 
     <div class="col-md-12 col-lg-12 grid-margin" >
@@ -109,7 +118,102 @@
 
   <script src="https://unpkg.com/rc-year-calendar@latest/dist/rc-year-calendar.umd.min.js"></script>
   <script type="text/javascript">
-    
+  $(document).ready(function() {
+    var chart1; // globally available
+    $(document).ready(function() {
+      chart1 = new Highcharts.Chart({
+       chart: {
+        renderTo: 'grafik_banding',
+        type: 'column'
+      },
+    title: {
+        text: 'Grafik Prospek Client'
+    },    
+    xAxis: {
+        categories: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec'
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Rupiah'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>Rp. {point.y:.0f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [
+
+    {
+        name: 'Prospek',
+        data: [        
+          <?php
+          $data = "";
+          for ($i=1; $i <= 12; $i++) {             
+            $i = sprintf("%02s", $i);
+            $th = date("Y");
+            $thb = $th."-".$i;
+            $cek = $this->db->query("SELECT COUNT(id) AS jum FROM md_prospek WHERE LEFT(tgl_daftar,7) = '$thb'");
+            if(!is_null($cek->row()->jum)) $jum = $cek->row()->jum;
+              else $jum = 0;
+            if($data=="") $data = $jum;
+              else $data .= ",".$jum;                        
+          }           
+          echo $data;
+          ?>
+        ]
+        // data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+
+    }, {
+        name: 'Client',
+        data: [
+          <?php
+          $data = "";
+          for ($i=1; $i <= 12; $i++) { 
+            if(strlen($i)==1) $i = "0".$i;
+            $th = date("Y");
+            $thb = $th."-".$i;
+            $cek = $this->db->query("SELECT COUNT(id) AS jum FROM md_client WHERE LEFT(tgl_daftar,7) = '$thb'");
+            if(!is_null($cek->row()->jum)) $jum = $cek->row()->jum;
+              else $jum = 0;
+            if($data=="") $data = $jum;
+              else $data .= ",".$jum;                        
+          }           
+          echo $data;
+          ?>
+
+        ]
+
+    }
+
+    ]
+    });
+  });
+});
   $('.grafik').highcharts({
     <?php 
     $tgl_akhir2 = date("Y-m-d");   
