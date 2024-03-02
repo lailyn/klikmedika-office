@@ -168,7 +168,7 @@ class Presensi extends CI_Controller {
 
       $tags = explode(",", $rows->tagging);
       $rt = "";
-      if($tags[0]!='error'){
+      if($tags[0]!='error' && !is_null($rows->tagging)){
 	      $latitude1 = $lat;
 				$longitude1 = $lang;
 				$latitude2 = $tags[0];
