@@ -84,7 +84,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Perbandingan Prospek Client</h4>
-          <div class="grafik_banding" style="width:100%; height:400px;"></div>          
+          <div id="grafik_banding"></div>          
         </div>
       </div>      
     </div>
@@ -149,7 +149,7 @@
     yAxis: {
         min: 0,
         title: {
-            text: 'Rupiah'
+            text: 'Client'
         }
     },
     tooltip: {
