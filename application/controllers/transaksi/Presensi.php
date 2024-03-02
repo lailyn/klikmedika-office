@@ -165,21 +165,22 @@ class Presensi extends CI_Controller {
 			$telatS = ($rows->jenis=="datang")?"terlambat":"pulang terlalu cepat";
       $telat = ($rows->telat==1)?"<label class='badge badge-danger'>".$telatS."</label>":'';
       $id = encrypt_url($rows->presensi_id);
-
-      $tags = explode(",", $rows->tagging);
       $rt = "";
-      if($tags[0]!='error' && !is_null($rows->tagging)){
-	      $latitude1 = $lat;
-				$longitude1 = $lang;
-				$latitude2 = $tags[0];
-				$longitude2 = $tags[1];
+      if(!is_null($rows->tagging)){
+	      $tags = explode(",", $rows->tagging);	      
+	      if($tags[0]!='error'){
+		      $latitude1 = $lat;
+					$longitude1 = $lang;
+					$latitude2 = $tags[0];
+					$longitude2 = $tags[1];
 
-				$radius = 1; // Radius dalam kilometer
+					$radius = 1; // Radius dalam kilometer
 
-				$distance = haversineDistance($latitude1, $longitude1, $latitude2, $longitude2);
+					$distance = haversineDistance($latitude1, $longitude1, $latitude2, $longitude2);
 
-				if ($distance > $radius) $rt = "<label class='badge badge-danger'>Di luar Radius</label>";
-					else $rt = "";
+					if ($distance > $radius) $rt = "<label class='badge badge-danger'>Di luar Radius</label>";
+						else $rt = "";
+				}
 			}
 
 			if (!is_null($rows->trans) && $rows->trans==1) $rst = "<label class='badge badge-danger'>rejected</label>";
