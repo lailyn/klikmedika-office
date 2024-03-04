@@ -424,8 +424,7 @@
                       <th>Nama Lengkap</th>                                                              
                       <th>Bagian</th>                      
                       <th>Gapok</th>                                                                                                                                                  
-                      <th>Tunjangan</th>                                                                
-                      <th>Lainnya</th>                                                                
+                      <th>Tunjangan</th>                                                                                                                                                  
                       <th>Total</th>                                                                
                       <th width="10%"></th>
                     </tr>
@@ -459,9 +458,11 @@
                     if($isi->tunj_anak!=0) $tunjangan .= "<br>Anak: ".mata_uang($isi->tunj_anak);
                     if($isi->tunj_istri!=0) $tunjangan .= "<br>Istri: ".mata_uang($isi->tunj_istri);
 
-                    $lainnya = 0;
-                    $cek = $this->db->query("SELECT SUM(nominal) AS jum FROM md_penggajian_detail WHERE no_faktur = '$isi->no_faktur'");
-                    if($cek->num_rows()>0) $lainnya = $cek->row()->jum;
+                    $lainnyaTambah = 0;$lainnyaKurang = 0;
+                    $cekTambah = $this->db->query("SELECT SUM(nominal) AS jum FROM md_penggajian_detail WHERE jenis = '+' AND no_faktur = '$isi->no_faktur'");
+                    $cekKurang = $this->db->query("SELECT SUM(nominal) AS jum FROM md_penggajian_detail WHERE jenis = '-' AND no_faktur = '$isi->no_faktur'");
+                    if($cekTambah->num_rows()>0) $lainnyaTambah = $cekTambah->row()->jum;
+                    if($cekKurang->num_rows()>0) $lainnyaKurang = $cekKurang->row()->jum;
                     echo "
                     <tr>
                       <td>$no</td>
@@ -471,9 +472,8 @@
                       <td>$nama_karyawan</td>                      
                       <td>$bagian</td>                      
                       <td>".mata_uang($isi->gaji_pokok)."</td>                      
-                      <td>$tunjangan</td>
-                      <td>".mata_uang($lainnya)."</td>
-                      <td>".mata_uang($isi->total_gaji + $lainnya)."</td>"; ?>
+                      <td>$tunjangan</td>                      
+                      <td>".mata_uang($isi->total_gaji + $lainnyaTambah - $lainnyaKurang)."</td>"; ?>
                       <td>                        
                         <a onclick="return confirm('Anda yakin?')" href="payroll/penggajian/delete?id=<?php echo $isi->no_faktur ?>" class="btn btn-danger btn-sm <?=$hapus?>" title="Hapus"> Hapus</a>                                                      
                         <a href="payroll/penggajian/review?id=<?php echo $isi->id_penggajian ?>" class="btn btn-success btn-sm <?=$er?>" title="Review"> Review</a>                                                      
