@@ -83,12 +83,12 @@ class Penggajian extends CI_Controller {
 		$pk				= $this->pk;	
 		$id_user = $this->session->id_user;
 		$bln = $this->input->post("bln");
-		$cek_gaji = $this->db->query("SELECT * FROM md_penggajian WHERE bln = '$bln'");
-		if($cek_gaji->num_rows()>0){
-			$_SESSION['pesan'] 		= "Maaf, gaji bulan tsb sudah pernah digenerate!";
-			$_SESSION['tipe'] 		= "danger";						
-			echo "<script>history.go(-1);</script>";
-		}else{
+		// $cek_gaji = $this->db->query("SELECT * FROM md_penggajian WHERE bln = '$bln'");
+		// if($cek_gaji->num_rows()>0){
+		// 	$_SESSION['pesan'] 		= "Maaf, gaji bulan tsb sudah pernah digenerate!";
+		// 	$_SESSION['tipe'] 		= "danger";						
+		// 	echo "<script>history.go(-1);</script>";
+		// }else{
 			$cek_kary = $this->db->query("SELECT * FROM md_karyawan WHERE status = 1 
 					AND id_karyawan NOT IN (SELECT id_karyawan FROM md_penggajian WHERE bln = '$bln') 
 					ORDER BY id_karyawan ASC");
@@ -118,7 +118,7 @@ class Penggajian extends CI_Controller {
 						$this->m_admin->insert("md_penggajian",$data);
 					}
 				}
-			}
+			// }
 			
 			$_SESSION['pesan'] 		= "Berhasil Generate Data Gaji";
 			$_SESSION['tipe'] 		= "success";						
