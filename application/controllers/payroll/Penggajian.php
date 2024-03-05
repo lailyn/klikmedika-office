@@ -118,13 +118,13 @@ class Penggajian extends CI_Controller {
 						$this->m_admin->insert("md_penggajian",$data);
 					}
 				}
-			// }
+			}
 			
 			$_SESSION['pesan'] 		= "Berhasil Generate Data Gaji";
 			$_SESSION['tipe'] 		= "success";						
 			die();
 			echo "<meta http-equiv='refresh' content='0; url=".base_url()."payroll/penggajian'>";					
-		}
+		// }
 	}	
 	public function review()
 	{								
