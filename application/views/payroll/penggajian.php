@@ -231,10 +231,10 @@
                 border-collapse: collapse;
                /*border-collapse: separate;*/
               }
-              .table-bordered tr td {
+              .table-bordered td {
                 border: 0.01em solid black;
                 padding-left: 6px;
-                padding-right: 6px;
+                padding-right: 6px;                
               }
               body{
                 font-family: "Arial";
@@ -248,7 +248,8 @@
         <table border="0" width="100%">
           <tr>
             
-            <td colspan="7" align="center" width="60%">
+            <td colspan="2" align="center" width="60%">
+              <img src="assets/im493/<?=$setting->logo?>" width="10%">
               <h2><u><?=$setting->perusahaan?></u></h2>
               <?=$setting->alamat?> <br> 
               Tlpn : <?=$setting->no_hp?> email: <?=$setting->email?> <br>
@@ -257,37 +258,36 @@
             
           </tr>
           <tr>
-            <td align="center" colspan="7"><hr></td>
+            <td align="center" colspan="2"><hr></td>
           </tr>
           <tr>
-            <td align="center" colspan="7"><b><u>Slip Gaji Karyawan</u></b></td>
+            <td align="center" colspan="2"><b><u>Slip Gaji Karyawan</u></b></td>
           </tr>
           <tr>
-            <td align="center" colspan="7"><b>Periode <?= $row->bln ?></b></td>
+            <td align="center" colspan="2"><b>Periode <?= $row->bln ?></b></td>
           </tr>
 
           <tr>
-            <td width="15%">Nama Karyawan</td>
-            <td colspan="6">: <?= $nama_karyawan ?></td>
+            <td width="20%">Nama Karyawan</td>
+            <td>: <?= $nama_karyawan ?></td>
           </tr>          
           <tr>
-            <td>Status</td>
-            <?php $bagian; if($bagian=='Dokter') $sta = "Dokter Mitra";
-              else $sta = "Tenaga TKS"; ?>
-            <td colspan="6">: <?=  $sta ?></td>
+            <td>Jabatan</td>            
+            <td>: <?=  $bagian ?></td>
+          </tr>
+        </table>
+    
+        <table class="table-bordered" align="center" width="90%">
+          <tr>
+            <td align="center" colspan="3"><b><br>PENERIMAAN <br></b></td>
+            <td align="center" colspan="3"><b><br>POTONGAN <br></b></td>
           </tr>
           <tr>
-            <td colspan="3"><b><br>PENGHASILAN <br></b></td>
-            <td width="5%"></td>
-            <td colspan="3"><b><br>POTONGAN <br></b></td>
-          </tr>
-          <tr>
-            <td width="10%">Gaji Pokok</td>
+            <td>Gaji Pokok</td>
             <td width="1%">:</td>
-            <td width="10%" align="right">Rp <?= mata_uang_help($row->gaji_pokok); ?></td>
-            <td width="2%"></td>
+            <td align="right">Rp <?= mata_uang_help($row->gaji_pokok); ?></td>
             
-            <td colspan="3" rowspan="4"  width="30%">
+            <td colspan="3" rowspan="3">
               <?php 
               $tp=0;
               $sql = $this->db->get_where("md_penggajian_detail",array("no_faktur"=>$row->no_faktur, "jenis"=>"-"));
@@ -303,16 +303,11 @@
               }
               ?>
             </td>            
-          </tr>
+          </tr>                
           <tr>
-            <td width="10%"></td>
-            <td width="1%"></td>
-            <td width="35%" align="right"></td>
-          </tr>          
-          <tr>
-            <td width="10%">Tunj Transport</td>
-            <td width="1%">:</td>
-            <td width="35%" align="right">Rp <?= mata_uang_help($row->tunj_transport); ?></td>
+            <td width="30%">Tunj Transport</td>
+            <td>:</td>
+            <td align="right">Rp <?= mata_uang_help($row->tunj_transport); ?></td>
           </tr>
           <tr>
             <td><b>Tambahan</b></td>
@@ -334,50 +329,38 @@
               ?>
             </td>
           </tr>
+          
           <tr>
-            <td colspan=""></td>
-            <td width="1%"></td>
-            <td width="35%" align="right"><hr></td>
-            <td></td>
-            <td width="20%"></td>
-            <td width="1%"></td>
-            <td width="35%" align="right"><hr></td>
-          </tr>
-          <tr>
-            <td colspan=""><b>Total</b></td>
+            <td><b>Total</b></td>
             <td width="1%">:</td>
-            <td width="35%" align="right"><b>Rp <?= mata_uang_help($a = $row->total_gaji + $ta); ?></b></td>
-            <td></td>
+            <td width="35%" align="right"><b>Rp <?= mata_uang_help($a = $row->total_gaji + $ta); ?></b></td>                  
             <td width="20%"><b>Total</b></td>
             <td width="1%">:</td>
             <td width="35%" align="right"><b>Rp <?= mata_uang_help($b = $tp); ?></b></td>
+          </tr>    
+        </table>
+        
+        <table border="0">
+
+          <tr>
+            <td align="center" colspan="2"><br></td>
           </tr>
           <tr>
-            <td align="center" colspan="7"><br></td>
-          </tr>
+            <td align="center" style="background-color: yellow;" colspan="2"><b>TOTAL PENERIMAAN GAJI (TAKE HOME PAY) : Rp <?= mata_uang_help($a-$b) ?></b></td>
+          </tr>         
           <tr>
-            <td align="center" style="background-color: yellow;" colspan="7"><b>PENERIMAAN BERSIH : Rp <?= mata_uang_help($a-$b) ?></b></td>
-          </tr>
+            <td>
+              Jambi, <?php echo date("d-m-Y"); ?> <br>
+              Disetujui Oleh
+            </td>
+            <td><br><br><br><br><br><br><br><br><br></td>
+          </tr> 
           <tr>
-            <td align="center" colspan="7"><br></td>
+            <td>
+              <u><?=$setting->nama_pimpinan?></u>
+            </td>
           </tr>
-          <tr>
-            <td colspan="2"></td>
-            <td>Bag Keuangan</td>
-            <td></td>
-            <td colspan="3">Keterangan:</td>
-          </tr>
-          <tr>
-            <td colspan="2"></td>
-            <td><br><br><br></td>
-            <td></td>
-            <td rowspan="2" colspan="3"><?php echo ($row->keterangan!="")?$row->keterangan:"-"; ?></td>
-          </tr>
-          <tr>
-            <td colspan="2"></td>
-            <td><b>Finance Dept.</b></td>
-            <td></td>            
-          </tr>
+                             
         </table>
         </body>
       </html>
