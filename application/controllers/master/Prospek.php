@@ -144,6 +144,7 @@ class Prospek extends CI_Controller {
 		$data['keterangan'] 			= $this->input->post('keterangan');																		
 		$data['jenis'] 			= $this->input->post('jenis');																		
 		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');
+		$data['status_prospek'] 			= $this->input->post('status_prospek');
 		$data['created_at'] 			= $waktu;		
 		$data['created_by'] 			= $id_user;
 		
@@ -185,8 +186,7 @@ class Prospek extends CI_Controller {
 	    	}
 				$data['logo']	= $this->upload->file_name;
 			}
-		}
-		$id 			= $this->input->post('id');		
+		}		
 
 		$id_kel 			= $this->input->post('id_kelurahan');
 		if($id_kel!=""){				
@@ -200,6 +200,7 @@ class Prospek extends CI_Controller {
 		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');																		
 		$data['keterangan'] 			= $this->input->post('keterangan');																		
 		$data['jenis'] 			= $this->input->post('jenis');																		
+		$data['status_prospek'] 			= $this->input->post('status_prospek');		
 		$data['updated_at'] 			= $waktu;				
 		$data['updated_by'] 			= $id_user;		
 		

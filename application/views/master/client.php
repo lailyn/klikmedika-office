@@ -144,7 +144,13 @@
                       <div class="col-sm-4">                          
                         <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->no_mou : "" ; ?>" name="no_mou" placeholder="No MoU" class="form-control form-control-sm " />                                                                        
                       </div>
-                    </div>                                                                               
+                    </div> 
+                    <div class="form-group row">
+                      <label class="col-sm-2 col-form-label-sm">Tgl Invoice</label>
+                      <div class="col-sm-2">                        
+                        <input type="number" required value="<?php echo $tampil = ($row!='') ? $row->tgl_invoice : "" ; ?>" name="tgl_invoice" placeholder="Tgl Invoice" class="form-control form-control-sm " />
+                      </div>                                                                                                    
+                    </div>                                                                              
                   </div>   
                 </div>
                 <div class="row">
@@ -194,6 +200,7 @@
                       <th>Jenis</th>                                                                                       
                       <th>Nama PIC</th>                                                                                                                                                                     
                       <th>Langganan</th>                                                             
+                      <th>Tgl Invoice</th>                                                             
                       <th>Tgl Daftar</th>                                                             
                       <th>Tgl Aktif</th>                                                             
                       <th>Tgl Kadaluarsa</th>                                                                                                         
@@ -227,6 +234,7 @@
                       <td>$isi->jenis</td>                                            
                       <td>$isi->nama_lengkap</td>                                                                  
                       <td>$isi->langganan</td>                                                                  
+                      <td>$isi->tgl_invoice</td>                                                                  
                       <td>".tgl_indo($isi->tgl_daftar)."</td>                        
                       <td>".tgl_indo($isi->tgl_aktif)."</td>                        
                       <td>".tgl_indo($isi->tgl_kadaluarsa)."</td>                        

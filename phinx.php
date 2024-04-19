@@ -12,7 +12,7 @@ return
         'production' => [
             'adapter' => 'mysql',
             'host' => 'localhost',
-            'name' => 'production_db',
+            'name' => 'dbs_ciptareka',
             'user' => 'root',
             'pass' => '',
             'port' => '3306',
@@ -21,7 +21,7 @@ return
         'development' => [
             'adapter' => 'mysql',
             'host' => 'localhost',
-            'name' => 'development_db',
+            'name' => 'dbs_ciptareka',
             'user' => 'root',
             'pass' => '',
             'port' => '3306',
@@ -30,7 +30,7 @@ return
         'testing' => [
             'adapter' => 'mysql',
             'host' => 'localhost',
-            'name' => 'testing_db',
+            'name' => 'dbs_ciptareka',
             'user' => 'root',
             'pass' => '',
             'port' => '3306',

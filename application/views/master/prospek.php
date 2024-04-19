@@ -52,7 +52,8 @@
                   <div class="col-12">                
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Nama Faskes</label>
-                      <div class="col-sm-8">                        
+                      <div class="col-sm-8">         
+                        <?php echo $form_id ?>               
                         <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->nama_faskes : "" ; ?>" name="nama_faskes" placeholder="Nama Faskes" class="form-control form-control-sm " />
                       </div>                                                                                
                     </div>
@@ -64,7 +65,7 @@
                       </div>                                                                              
                       <label class="col-sm-1 col-form-label-sm">Foto</label>
                       <div class="col-sm-3">                          
-                        <input type="file" name="logo" required class="form-control form-control-sm " />                                                                        
+                        <input type="file" name="logo" class="form-control form-control-sm " />                                                                        
                       </div>
                     </div>
                     <div class="form-group row">                      
@@ -104,7 +105,17 @@
                       </div>                                          
                     </div>                         
                     <div class="form-group row">
-                      
+                      <label class="col-sm-2 col-form-label-sm">Status Prospek</label>
+                      <div class="col-sm-3">                          
+                        <select class="form-control form-control-sm" required name="status_prospek">
+                          <?php echo $tampil = ($row!='') ? $row->status_prospek : "" ; ?>
+                          <option <?=($tampil=="")?'selected':'';?> value="">- choose -</option>
+                          <option <?=($tampil=="deal")?'selected':'';?> value="deal">Deal</option>
+                          <option <?=($tampil=="hot")?'selected':'';?> value="hot">Hot Prospek</option>
+                          <option <?=($tampil=="cold")?'selected':'';?> value="cold">Cold Prospek</option>
+                          <option <?=($tampil=="cancel")?'selected':'';?> value="cancel">Cancel</option>
+                        </select>
+                      </div>
                     </div> 
                     <div class="form-group row">                      
                       <label class="col-sm-2 col-form-label-sm">Keterangan</label>
@@ -161,6 +172,7 @@
                       <th>Nama PIC</th>                                                                                                                                                                                           
                       <th>Tgl Prospek</th>                                                                                   
                       <th>Keterangan</th>                                                                                   
+                      <th>Status</th>                                                                                   
                       <th width="10%"></th>
                     </tr>
                   </thead>
@@ -171,6 +183,19 @@
                       ->order_by("p.id","desc")
                       ->get("md_prospek p");                  
                   foreach ($sql->result() as $isi) {
+                    if($isi->status_prospek=="hot"){
+                      $bg = "yellow";
+                      $status = "Hot Prospek";
+                    }elseif($isi->status_prospek=="cold"){
+                      $bg = "aqua";
+                      $status = "Cold Prospek";
+                    }elseif($isi->status_prospek=="deal"){
+                      $bg = "green";
+                      $status = "Deal";
+                    }elseif($isi->status_prospek=="cancel"){
+                      $bg = "red";
+                      $status = "Cancel";
+                    }
                                          
 
                     echo
@@ -183,6 +208,7 @@
                       <td>$isi->nama_lengkap</td>                                                                                        
                       <td>".tgl_indo($isi->tgl_daftar)."</td>                        
                       <td>$isi->keterangan</td>                                                                                        
+                      <td bgcolor='$bg'>$status</td>                                                                                        
                       <td>
                             <a href=\"master/prospek/delete?id=$isi->id\" onclick=\"return confirm('Anda yakin?')\" class=\"btn btn-danger btn-sm\" title=\"Hapus\"><i class=\"fa fa-trash\"></i></a>                          
                             <a href=\"master/prospek/edit?id=$isi->id\" class=\"btn btn-primary btn-sm\" title=\"Edit\"><i class=\"fa fa-edit\"></i></a>

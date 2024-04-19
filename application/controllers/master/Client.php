@@ -149,6 +149,7 @@ class Client extends CI_Controller {
 		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');																
 		$data['tgl_aktif'] 			= $this->input->post('tgl_aktif');																
 		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
+		$data['tgl_invoice'] 			= $this->input->post('tgl_invoice');																		
 		$data['created_at'] 			= $waktu;		
 		$data['created_by'] 			= $id_user;
 		
@@ -209,6 +210,7 @@ class Client extends CI_Controller {
 		$data['tgl_daftar'] 			= $this->input->post('tgl_daftar');																
 		$data['tgl_aktif'] 			= $this->input->post('tgl_aktif');																
 		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
+		$data['tgl_invoice'] 			= $this->input->post('tgl_invoice');																		
 		$data['updated_at'] 			= $waktu;				
 		$data['updated_by'] 			= $id_user;		
 		
