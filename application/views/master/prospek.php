@@ -195,6 +195,8 @@
                     }elseif($isi->status_prospek=="cancel"){
                       $bg = "red";
                       $status = "Cancel";
+                    }else{
+                      $bg = "";$status = "";
                     }
                                          
 
