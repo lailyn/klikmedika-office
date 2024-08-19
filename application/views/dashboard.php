@@ -58,7 +58,7 @@
       
          
 
-    
+    <?php if($this->session->id_user_type==1){ ?>
 
     <div class="row">
       <div class="col-md-12 col-lg-6 grid-margin" >
@@ -106,6 +106,8 @@
         </div>
       </div>      
     </div>
+
+    <?php } ?>
 
   </div>  
   <base href="<?php echo base_url(); ?>" />
