@@ -70,6 +70,7 @@
                   $sql = $this->db->select("p.*")                      
                       ->order_by("p.id","desc")
                       ->where("p.id_brand",1)
+                      ->where("p.status",1)
                       ->get("md_client p"); 
                   $cekInvoice="";$cekCr=""; $lama = "";                
                   foreach ($sql->result() as $isi) {
