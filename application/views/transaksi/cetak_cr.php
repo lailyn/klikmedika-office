@@ -9,8 +9,9 @@ function mata_uang($a){
 }
 $kode = decrypt_url($kode);
 $setting = $this->m_admin->getByID("md_setting","id_setting",1)->row();
-$cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.alamat, md_client.nama_faskes FROM md_invoice
+$cek_data = $this->db->query("SELECT md_invoice.*, md_brand.bg_cr, md_client.no_mou, md_client.alamat, md_client.nama_faskes FROM md_invoice
   LEFT JOIN md_client ON md_invoice.id_client = md_client.id
+  LEFT JOIN md_brand ON md_invoice.id_brand = md_brand.id
   WHERE md_invoice.kode = '$kode'")->row();
 ?>
 <!DOCTYPE html>
@@ -29,7 +30,7 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.a
           margin-right: 0.2cm;
           margin-bottom: 0.5cm;
           margin-top: 0.5cm;     
-          background-image: url("<?php echo base_url() ?>/assets/bg-cr.png");                               
+          background-image: url("<?php echo base_url() ?>/assets/uploads/sites/<?=$cek_data->bg_cr?>");                               
         }
         .text-center{text-align: center;}
         .bold{font-weight: bold;}        
@@ -51,7 +52,7 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.a
       </td>      
     </tr>
     <tr>
-      <td><br><br></td>
+      <td><br><br><br></td>
     </tr>
     <tr>
       <td align="center" colspan="5">
@@ -63,7 +64,7 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.a
     </tr>
     <tr>
       <td colspan="5">
-        Bukti Pembayaran Berlangganan Sistem RME <br>
+        Bukti Pembayaran <br>
         <b><?php echo $cek_data->nama_faskes ?></b><br>
         <?php echo $cek_data->alamat ?>
       </td>
@@ -73,7 +74,7 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.a
       <td colspan="5"> <br> 
         <table border="0" class="table table-bordered" width="100%">
           <tr>
-            <th style="padding-top: 10px;padding-bottom: 10px;">Nomor Kontrak</th>            
+            <th style="padding-top: 10px;padding-bottom: 10px;">No.Ref Transaksi</th>            
             <th>Nomor Invoice</th>                        
             <th>Tanggal Pembayaran</th>                                    
           </tr>      
@@ -83,7 +84,7 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.a
             </td>
           </tr>
           <tr>
-            <td align="center"><?=$cek_data->no_mou?></td>
+            <td align="center"><?=$cek_data->no_ref?></td>
             <td align="center"><?=$cek_data->kode?></td>
             <td align="center"><?=tgl_indo($cek_data->tgl_invoice)?></td>
           </tr>
@@ -99,9 +100,11 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.no_mou, md_client.a
     <tr>
       <td colspan="5">
         <b>
-        Pembayaran RME <br>
+        <?php echo $cek_data->keterangan ?> <br>
         <?php echo $cek_data->nama_faskes ?></b><br>
+        <?php if($cek_data->id_brand==1){ ?>
         Periode <?php echo $cek_data->periode ?>
+        <?php } ?>
       </td>
     </tr>  
     <tr>

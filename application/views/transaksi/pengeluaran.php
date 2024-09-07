@@ -228,10 +228,10 @@
                       <th width="5%">No</th>
                       <th width="15%"></th>                      
                       <th>Kode Transaksi</th>                      
-                      <th>Tanggal</th>                      
-                      <th>Data Penyewaan</th>                      
+                      <th>Tanggal</th>                                            
                       <th>Kategori</th>
                       <th>Uraian</th>   
+                      <th>Detail</th>   
                       <th>Total</th>  
                     </tr>
                   </thead>
@@ -242,7 +242,13 @@
                     INNER JOIN md_pengeluaran_kategori ON md_pengeluaran.id_kategori = md_pengeluaran_kategori.id
                     ORDER BY md_pengeluaran.id_pengeluaran DESC");
                   foreach($cek->result() AS $row){
-                    $penyewaan="-";
+                    
+                    $detail="";
+                    $cekDetail = $this->m_admin->getByID("md_pengeluaran_detail","kode_pengeluaran",$row->kode_pengeluaran);
+                    foreach($cekDetail->result() AS $dr){
+                      if($detail!="") $detail.=", ";
+                      $detail.=$dr->uraian;
+                    }
                     
                     echo "
                     <tr>
@@ -254,10 +260,10 @@
                       </td>
                       <?php echo "
                       <td><a href='transaksi/pengeluaran/detail?id=$row->id_pengeluaran'>$row->kode_pengeluaran</a></td>
-                      <td>$row->tgl</td>
-                      <td>$penyewaan</td>
+                      <td>$row->tgl</td>                      
                       <td>$row->kategori</td>
                       <td>$row->uraian</td>
+                      <td>$detail</td>
                       <td>".mata_uang($row->total)."</td>
                     </tr>
                     ";

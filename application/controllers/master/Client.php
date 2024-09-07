@@ -138,7 +138,9 @@ class Client extends CI_Controller {
 
 		$data['kode_faskes'] 			= $this->input->post('kode_faskes');								
 		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');								
-		$data['langganan'] 			= $this->input->post('langganan');								
+		$data['langganan'] 			= $this->input->post('langganan');
+		$data['keterangan'] 			= $this->input->post('keterangan');																
+		$data['id_brand'] 			= $this->input->post('id_brand');								
 		$data['no_mou'] 			= $this->input->post('no_mou');								
 		$data['nama_faskes'] 			= $this->input->post('nama_faskes');								
 		$data['status'] 			= $this->input->post('status');								
@@ -199,6 +201,8 @@ class Client extends CI_Controller {
 			$data['id_kelurahan'] = $this->input->post('id_kelurahan');
 		}				
 		$data['kode_faskes'] 			= $this->input->post('kode_faskes');								
+		$data['keterangan'] 			= $this->input->post('keterangan');								
+		$data['id_brand'] 			= $this->input->post('id_brand');								
 		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');								
 		$data['langganan'] 			= $this->input->post('langganan');								
 		$data['nama_faskes'] 			= $this->input->post('nama_faskes');								

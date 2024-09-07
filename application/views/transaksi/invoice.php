@@ -217,7 +217,24 @@
                         <input type="hidden" name="ppn" value="<?= $ppnN ?>">                        
                         <input type="text" value="<?php echo $tampil = ($row!='') ? $row->kode : "" ; ?>" readonly name="kode" placeholder="Auto" class="form-control form-control-sm  form-control form-control-sm -sm" />                        
                       </div>                                                                              
-                    </div>                                                                                                   
+                    </div>    
+                    <div class="form-group row">
+                      <label class="col-sm-4 col-form-label-sm">Brand</label>
+                      <div class="col-sm-8">                                             
+                        <select <?=$read2?> class="form-control form-control-sm select2" required name="id_brand">                      
+                          <option value="">- pilih -</option>
+                          <?php                                       
+                          $dt_user = $this->db->query("SELECT * FROM md_brand ORDER BY id ASC");                   
+                          foreach ($dt_user->result() as $isi) { 
+                            $id_brand = ($row!='') ? $row->id_brand : '';
+                            if($isi->id==$id_brand) $rt = "selected";
+                              else $rt = "";                             
+                            echo "<option $rt value='$isi->id'>$isi->brand</option>";
+                          }
+                          ?>
+                        </select>
+                      </div>                                                                              
+                    </div>                                                                                               
                     <div class="form-group row">
                       <label class="col-sm-4 col-form-label-sm">Tgl Invoice</label>
                       <div class="col-sm-8">                        
@@ -225,6 +242,16 @@
                       </div>                                                                              
                     </div>                    
                     <div class="form-group row">
+                      <label class="col-sm-4 col-form-label-sm">Langganan</label>
+                      <div class="col-sm-8">                        
+                        <select onchange="cekLama()" id="lama"  class="form-control form-control-sm" name="lama" required>
+                          <option <?=($row!='' && $row->lama==1)?'selected':'';?> value="1">1 Bulan</option>
+                          <option <?=($row!='' && $row->lama==6)?'selected':'';?> value="6">6 Bulan</option>
+                          <option <?=($row!='' && $row->lama==12)?'selected':'';?> value="12">12 Bulan</option>
+                        </select>
+                      </div>                                                                                                    
+                    </div>                    
+                    <div class="form-group row" id="periode">
                       <label class="col-sm-4 col-form-label-sm">Periode</label>
                       <div class="col-sm-8">                        
                         <input type="month" <?=$read?> name="periode" placeholder="Periode" value="<?php echo $tampil = ($row!='') ? $row->periode : date("Y-m") ; ?>" class="form-control form-control-sm" />                        
@@ -290,6 +317,12 @@
                         <label class="col-sm-4 col-form-label-sm">Bukti Transfer</label>
                         <div class="col-sm-8">
                           <input type="file" required class="form-upload" name="bukti">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-4 col-form-label-sm">No.Ref Transaksi</label>
+                        <div class="col-sm-8">
+                          <input type="text" required placeholder="No.Ref" class="form-control form-control-sm" name="no_ref">
                         </div>
                       </div>
 
@@ -369,6 +402,7 @@
                       <th width="5%">No</th>
                       <th width="5%"></th>                      
                       <th>No Invoice</th>                      
+                      <th>Brand</th>                                               
                       <th>Client</th>                                               
                       <th>Catatan</th>                           
                       <th>Tgl Invoice</th>
@@ -384,6 +418,9 @@
 
                     $cek_user = $this->m_admin->getByID("md_client","id",$isi->id_client);
                     $user = ($cek_user->num_rows()>0) ? $cek_user->row()->nama_faskes : "" ;                    
+
+                    $cek_brand = $this->m_admin->getByID("md_brand","id",$isi->id_brand);
+                    $brand = ($cek_brand->num_rows()>0) ? $cek_brand->row()->brand : "" ;                    
                     
                     $cr = "display:none;";
                     if($isi->status==1){      
@@ -428,6 +465,7 @@
                         </div>  
                       </td>
                       <td><a href='$link'>$isi->kode</a></td>
+                      <td>$brand</td>                                                                
                       <td>$user</td>                                                                
                       <td>$isi->keterangan</td>                      
                       <td>$isi->tgl_invoice</td>
@@ -467,6 +505,7 @@
                       <th width="5%">No</th>
                       <th width="5%"></th>                      
                       <th>No Invoice</th>                      
+                      <th>Brand</th>                                               
                       <th>Client</th>                                               
                       <th>Catatan</th>                           
                       <th>Tgl Invoice</th>
@@ -483,6 +522,9 @@
 
                     $cek_user = $this->m_admin->getByID("md_client","id",$isi->id_client);
                     $user = ($cek_user->num_rows()>0) ? $cek_user->row()->nama_faskes : "" ;                    
+
+                    $cek_brand = $this->m_admin->getByID("md_brand","id",$isi->id_brand);
+                    $brand = ($cek_brand->num_rows()>0) ? $cek_brand->row()->brand : "" ;                    
                     
                     if($isi->status==1){      
                       $edit = $approval = $hapus = "";
@@ -529,6 +571,7 @@
                         </div>  
                       </td>
                       <td><a href='$link'>$isi->kode</a></td>
+                      <td>$brand</td>                                                                
                       <td>$user</td>                                                                
                       <td>$isi->keterangan</td>                      
                       <td>$isi->tgl_invoice</td>
@@ -560,5 +603,14 @@ function cekResi(){
   }else{
     $("#dataResi").hide();
   }
+}
+function cekLama(){
+  var lama = $("#lama").val();  
+  if(lama==1){
+    $("#periode").show();
+  }else{
+    $("#periode").hide();
+  }
+  
 }
 </script>

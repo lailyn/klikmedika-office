@@ -52,10 +52,10 @@ class Penggajian extends CI_Controller {
 		$data['mode']		= "view";				
 		$data['bln']		= "";				
 		if(is_null($history)){ 
-			$data['dt_penggajian'] = $this->m_admin->getByID("md_penggajian","status","input");
+			$data['dt_penggajian'] = $this->db->query("SELECT * FROM md_penggajian WHERE status='input' ORDER BY id_penggajian DESC");			
 			$data['history'] = null;
 		}else{
-			$data['dt_penggajian'] = $this->m_admin->getByID("md_penggajian","status","approved");
+			$data['dt_penggajian'] = $this->db->query("SELECT * FROM md_penggajian WHERE status='approved' ORDER BY id_penggajian DESC");			
 			$data['history'] = $history;
 		}
 		$this->template($data);	
@@ -121,8 +121,7 @@ class Penggajian extends CI_Controller {
 			}
 			
 			$_SESSION['pesan'] 		= "Berhasil Generate Data Gaji";
-			$_SESSION['tipe'] 		= "success";						
-			die();
+			$_SESSION['tipe'] 		= "success";									
 			echo "<meta http-equiv='refresh' content='0; url=".base_url()."payroll/penggajian'>";					
 		// }
 	}	

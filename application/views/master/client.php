@@ -95,6 +95,9 @@
                           <option <?php if($tampil=="praktik-mandiri") echo 'selected' ?> value="praktik-mandiri">Praktik Mandiri</option>                          
                           <option <?php if($tampil=="lab") echo 'selected' ?> value="lab">Laboratorium</option>                          
                           <option <?php if($tampil=="puskesmas") echo 'selected' ?> value="puskesmas">Puskesmas</option>                          
+                          <option <?php if($tampil=="pemda") echo 'selected' ?> value="pemda">Pemda</option>                          
+                          <option <?php if($tampil=="instansi-swasta") echo 'selected' ?> value="instansi-swasta">Instansi Swasta</option>                          
+                          <option <?php if($tampil=="lainnya") echo 'selected' ?> value="lainnya">Lainnya</option>                          
                         </select>
                       </div>                      
                                                             
@@ -149,8 +152,31 @@
                       <label class="col-sm-2 col-form-label-sm">Tgl Invoice</label>
                       <div class="col-sm-2">                        
                         <input type="number" required value="<?php echo $tampil = ($row!='') ? $row->tgl_invoice : "" ; ?>" name="tgl_invoice" placeholder="Tgl Invoice" class="form-control form-control-sm " />
-                      </div>                                                                                                    
-                    </div>                                                                              
+                      </div>      
+                      <label class="col-sm-1 col-form-label-sm">Brand</label>
+                      <div class="col-sm-4">
+                        <select <?=$read2?> class="form-control form-control-sm select2" required name="id_brand">                      
+                          <option value="">- pilih -</option>
+                          <?php                                       
+                          $dt_user = $this->db->query("SELECT * FROM md_brand ORDER BY id ASC");                   
+                          foreach ($dt_user->result() as $isi) { 
+                            $id_brand = ($row!='') ? $row->id_brand : '';
+                            if($isi->id==$id_brand) $rt = "selected";
+                              else $rt = "";                             
+                            echo "<option $rt value='$isi->id'>$isi->brand</option>";
+                          }
+                          ?>
+                        </select>
+                      </div>                                                                                              
+                    </div>  
+                    <div class="form-group row">
+                      <label class="col-sm-2 col-form-label-sm">Keterangan</label>
+                      <div class="col-sm-10">                        
+                        <textarea id="summernote2" <?php echo $read2 ?> name="keterangan" id="exampleTextarea1" class="form-control form-control-sm " rows="15">
+                          <?php echo $tampil = ($row!='') ? $row->keterangan : "" ; ?>
+                        </textarea>
+                      </div>                                          
+                    </div>                                                                                 
                   </div>   
                 </div>
                 <div class="row">
@@ -189,12 +215,11 @@
           <div class="card-body">            
             <div class="box">                            
               <div class="table-responsive">
-                <table id="example" class="table" style="width:100%">
+                <table id="example" class="table table-responsive" style="width:100%">
                   <thead>
                     <tr>
-                      <th width="5%">No</th>                      
-                      <th width="10%"></th>                      
-                      <th>Nama Faskes</th>                                                                                       
+                      <th width="5%">No</th>                                                                
+                      <th>Nama Instansi</th>                                                                                       
                       <th>Alamat</th>                                                                                       
                       <th>No HP</th>                                                                                       
                       <th>Jenis</th>                                                                                       
@@ -204,6 +229,7 @@
                       <th>Tgl Daftar</th>                                                             
                       <th>Tgl Aktif</th>                                                             
                       <th>Tgl Kadaluarsa</th>                                                                                                         
+                      <th>Brand</th>                                                                                                         
                       <th width="10%"></th>
                     </tr>
                   </thead>
@@ -224,10 +250,12 @@
                       $gambar = $isi->logo;
                     }
 
+                    $cek_brand = $this->m_admin->getByID("md_brand","id",$isi->id_brand);
+                    $brand = ($cek_brand->num_rows()>0) ? $cek_brand->row()->brand : "" ;                    
+
                     echo
                       "<tr>
-                      <td>$no</td>                      
-                      <td><img src='assets/uploads/sites/$gambar' width='100%'></td>                      
+                      <td>$no</td>                                            
                       <td><a href='master/client/detail?id=$isi->id'>$isi->nama_faskes $status</a></td>                      
                       <td>$isi->alamat</td>                                            
                       <td>$isi->no_hp</td>                                            
@@ -238,6 +266,7 @@
                       <td>".tgl_indo($isi->tgl_daftar)."</td>                        
                       <td>".tgl_indo($isi->tgl_aktif)."</td>                        
                       <td>".tgl_indo($isi->tgl_kadaluarsa)."</td>                        
+                      <td>$brand</td>                        
                       <td>
                             <a href=\"master/client/delete?id=$isi->id\" onclick=\"return confirm('Anda yakin?')\" class=\"btn btn-danger btn-sm\" title=\"Hapus\"><i class=\"fa fa-trash\"></i></a>                          
                             <a href=\"master/client/edit?id=$isi->id\" class=\"btn btn-primary btn-sm\" title=\"Edit\"><i class=\"fa fa-edit\"></i></a>

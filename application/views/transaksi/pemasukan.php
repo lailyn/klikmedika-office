@@ -116,11 +116,7 @@
                       </div>
                     </div>                                        
                                                                                                                                
-                    
-                    <?php if($mode=="tambah_detail" OR $mode=="detail"){ ?>                                                    
-                      <hr>
-                      <?php include("detail.php"); ?>
-                    <?php } ?>
+                                        
                   </div>   
                 </div>
                 <div class="row">
@@ -245,10 +241,10 @@
                     echo "
                     <tr>
                       <td>$no</td>"; ?>
-                      <td class="<?=$rt?>">
-                        <a href="transaksi/pemasukan/delete?id=<?php echo $row->id_pemasukan ?>" onclick="return confirm('Anda yakin?')" class="btn btn-danger btn-xs" title="Hapus"><i class="fa fa-trash"></i></a>                          
-                        <a href="transaksi/pemasukan/edit?id=<?php echo $row->id_pemasukan ?>" class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>                                                      
-                        <a href="transaksi/pemasukan/tambah_detail?id=<?php echo $row->id_pemasukan ?>" class="btn btn-warning btn-xs" title="Bayar"><i class="fa fa-list"></i></a>                                                      
+                      <td>
+                        <a href="transaksi/pemasukan/delete?id=<?php echo $row->id_pemasukan ?>" onclick="return confirm('Anda yakin?')" class="btn btn-danger btn-xs <?=$rt?>" title="Hapus"><i class="fa fa-trash"></i></a>                          
+                        <a href="transaksi/pemasukan/edit?id=<?php echo $row->id_pemasukan ?>" class="btn btn-primary btn-xs <?=$rt?>" title="Edit"><i class="fa fa-edit"></i></a>                                                      
+                        <a href="transaksi/pemasukan/tambah_detail?id=<?php echo $row->id_pemasukan ?>" class="btn btn-warning btn-xs <?=$rt?>" title="Bayar"><i class="fa fa-list"></i></a>                                                      
                       </td>
                       <?php echo "
                       <td><a href='transaksi/pemasukan/detail?id=$row->id_pemasukan'>$row->kode_pemasukan</a></td>

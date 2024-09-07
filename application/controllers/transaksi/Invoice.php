@@ -289,7 +289,9 @@ class Invoice extends CI_Controller {
 		$data['periode'] 			= $this->input->post("periode");		
 		$data['keterangan'] 			= $this->input->post("keterangan");				
 		$data['id_karyawan'] 		= $this->input->post("id_karyawan");		
+		$data['id_brand'] 		= $this->input->post("id_brand");		
 		$data['id_client'] 	= $this->input->post("id_client");		
+		$data['lama'] 	= $this->input->post("lama");		
 						
 		$data['kode'] 			= $kode =  $this->_create_kode(10,$id_user,"");				
 		$data['status'] 			= 1;
@@ -320,6 +322,7 @@ class Invoice extends CI_Controller {
 			}
 		}
 
+		$data2['no_ref'] = $this->input->post("no_ref");
 		$data2['payment_status'] = 1;
 		$data2['updated_at'] = waktu();
 		$data2['updated_by'] = $this->session->id_user;
@@ -348,7 +351,9 @@ class Invoice extends CI_Controller {
 		$data['periode'] 			= $this->input->post("periode");		
 		$data['keterangan'] 			= $this->input->post("keterangan");				
 		$data['id_karyawan'] 		= $this->input->post("id_karyawan");		
+		$data['id_brand'] 		= $this->input->post("id_brand");		
 		$data['id_client'] 	= $this->input->post("id_client");				
+		$data['lama'] 	= $this->input->post("lama");
 		$data['ppn'] 			= $this->input->post("ppn");		
 		$data['updated_at'] 			= waktu();				
 		$data['updated_by'] 			= $id_user = $this->session->id_user;

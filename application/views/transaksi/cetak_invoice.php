@@ -9,8 +9,9 @@ function mata_uang($a){
 }
 $kode = decrypt_url($kode);
 $setting = $this->m_admin->getByID("md_setting","id_setting",1)->row();
-$cek_data = $this->db->query("SELECT md_invoice.*, md_client.alamat, md_client.nama_faskes FROM md_invoice
+$cek_data = $this->db->query("SELECT md_invoice.*, md_brand.bg_invoice, md_client.alamat, md_client.nama_faskes FROM md_invoice
   LEFT JOIN md_client ON md_invoice.id_client = md_client.id
+  LEFT JOIN md_brand ON md_invoice.id_brand = md_brand.id
   WHERE md_invoice.kode = '$kode'")->row();
 ?>
 <!DOCTYPE html>
@@ -29,7 +30,7 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_client.alamat, md_client.n
           margin-right: 0.2cm;
           margin-bottom: 0.5cm;
           margin-top: 0.5cm;     
-          background-image: url("<?php echo base_url() ?>/assets/bg-invoice.png");                               
+          background-image: url("<?php echo base_url() ?>/assets/uploads/sites/<?=$cek_data->bg_invoice?>");                               
         }
         .text-center{text-align: center;}
         .bold{font-weight: bold;}

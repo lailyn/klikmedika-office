@@ -265,6 +265,13 @@
             type: "POST"
         }
       } );
+      $("#brand_dt").DataTable( {
+        serverSide: true,
+        ajax: {
+            url: "<?php echo site_url("master/brand/ajax_list")?>",
+            type: "POST"
+        }
+      } );
 
 
       var presensi_1 = $("#presensi_1").val();
