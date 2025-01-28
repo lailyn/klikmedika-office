@@ -214,8 +214,8 @@
                     <div class="form-group row">
                       <label class="col-sm-4 col-form-label-sm">No Invoice</label>
                       <div class="col-sm-8">                        
-                        <input type="text" name="total" id="totalFix" value="<?= $gtotal ?>">
-                        <input type="text" name="ppn" id="ppnFix" value="<?= $ppnN ?>">                        
+                        <input type="hidden" name="total" id="totalFix" value="<?= $gtotal ?>">
+                        <input type="hidden" name="ppn" id="ppnFix" value="<?= $ppnN ?>">                        
                         <input type="text" value="<?php echo $tampil = ($row!='') ? $row->kode : "" ; ?>" readonly name="kode" placeholder="Auto" class="form-control form-control-sm  form-control form-control-sm -sm" />                        
                       </div>                                                                              
                     </div>    
