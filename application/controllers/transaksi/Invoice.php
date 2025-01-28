@@ -286,6 +286,7 @@ class Invoice extends CI_Controller {
 		}
 		$data['total'] 			= $gtotal;
 		$data['ppn'] 			= $this->input->post("ppn");		
+		$data['ppnkan'] 			= $this->input->post("ppnkan");		
 		$data['periode'] 			= $this->input->post("periode");		
 		$data['keterangan'] 			= $this->input->post("keterangan");				
 		$data['id_karyawan'] 		= $this->input->post("id_karyawan");		
@@ -307,7 +308,19 @@ class Invoice extends CI_Controller {
 
 						
 	}
-
+	public function cari_ppn(){
+		$subtotal = $this->input->post("subtotal");
+		$ppnkan = $this->input->post("ppnkan");
+		if($ppnkan==1){
+			$ppn = $this->m_admin->getByID("md_setting","id_setting",1)->row()->ppn;
+      $ppnN = $subtotal * ($ppn / 100);			      
+      $total = $subtotal + $ppnN;
+		}else{
+			$ppnN = 0;
+			$total = $subtotal;
+		}
+		echo $ppnN."|".$total;
+	}
 	public function uploadBukti($kode){
 		$get = $this->m_admin->getByID("md_invoice","kode",$kode)->row();		
 
@@ -355,8 +368,10 @@ class Invoice extends CI_Controller {
 		$data['id_client'] 	= $this->input->post("id_client");				
 		$data['lama'] 	= $this->input->post("lama");
 		$data['ppn'] 			= $this->input->post("ppn");		
+		$data['ppnkan'] 			= $this->input->post("ppnkan");		
 		$data['updated_at'] 			= waktu();				
 		$data['updated_by'] 			= $id_user = $this->session->id_user;
+		
 		$this->m_admin->update("md_invoice",$data,"kode",$kode);	
 		$this->db->query("UPDATE md_invoice_detail SET status = 1 WHERE status = 0 AND updated_by = '$id_user'");				
 		$_SESSION['pesan'] 		= "Transaksi berhasil disimpan";

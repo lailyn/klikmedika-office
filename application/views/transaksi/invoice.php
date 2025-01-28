@@ -1,4 +1,4 @@
-<body onload="cekResi()">
+<body onload="cekResi();cekPpn();">
 
       <?php                       
 		if (isset($_SESSION['pesan']) && $_SESSION['pesan'] <> '') {                    
@@ -142,19 +142,18 @@
                         <th colspan="4">Sub Total</th>
                         <th><?= $tqty ?></th>
                         <th><?= mata_uang($tdiskon) ?></th>
-                        <th><?= mata_uang($ttotal) ?></th>
+                        <th>
+                          <!-- <?= mata_uang($ttotal) ?> -->
+                          <input type="text" class="form-control form-control-sm" id="subtotal" readonly value="<?=$ttotal?>">              
+                        </th>
                         <th></th>
                       </tr>
                       <tr>  
                         <th colspan="4">PPN</th>
                         <th></th>
                         <th></th>
-                        <th>
-                          <?php 
-                          $ppn = $this->m_admin->getByID("md_setting","id_setting",1)->row()->ppn;
-                          $ppnN = $ttotal * ($ppn / 100);
-                          echo mata_uang_help($ppnN);
-                          ?>                          
+                        <th>                                    
+                          <input type="text" class="form-control form-control-sm" readonly id="ppn" value="<?php echo $ppnN = ($row!='') ? $row->ppn : 0 ; ?>">          
                         </th>
                         <th></th>
                       </tr>
@@ -162,7 +161,9 @@
                         <th colspan="4">Total</th>
                         <th></th>
                         <th></th>
-                        <th><?= mata_uang($gtotal = $ttotal + $ppnN) ?></th>
+                        <th>                          
+                          <input type="text" class="form-control form-control-sm" readonly id="total" name="total" value="<?=$gtotal = $ttotal + $ppnN?>">              
+                        </th>
                         <th></th>
                       </tr>
                     </thead>
@@ -213,8 +214,8 @@
                     <div class="form-group row">
                       <label class="col-sm-4 col-form-label-sm">No Invoice</label>
                       <div class="col-sm-8">                        
-                        <input type="hidden" name="total" value="<?= $gtotal ?>">
-                        <input type="hidden" name="ppn" value="<?= $ppnN ?>">                        
+                        <input type="text" name="total" id="totalFix" value="<?= $gtotal ?>">
+                        <input type="text" name="ppn" id="ppnFix" value="<?= $ppnN ?>">                        
                         <input type="text" value="<?php echo $tampil = ($row!='') ? $row->kode : "" ; ?>" readonly name="kode" placeholder="Auto" class="form-control form-control-sm  form-control form-control-sm -sm" />                        
                       </div>                                                                              
                     </div>    
@@ -304,6 +305,15 @@
                       </div>                                                                              
                     </div>
                     <div class="form-group row">
+                      <label class="col-sm-4 col-form-label-sm">Tambahkan PPN?</label>
+                      <div class="col-sm-4">                        
+                        <select class="form-control form-control-sm" onchange="cekPpn()" id="ppnkan" name="ppnkan">
+                          <option <?=($row!='' && $row->ppnkan==0)?'selected':'';?> value="0">Tidak</option>
+                          <option <?=($row!='' && $row->ppnkan==1)?'selected':'';?> value="1">Ya</option>
+                        </select>
+                      </div>                                                                              
+                    </div>        
+                    <div class="form-group row">
                       <label class="col-sm-4 col-form-label-sm">Catatan</label>
                       <div class="col-sm-8">                        
                         <textarea <?=$read?>  rows="2" class="form-control textarea" name="keterangan">                        
@@ -358,7 +368,7 @@
                       <div class="form-group row">
                         <label class="col-sm-4 col-form-label-sm"></label>
                         <div class="col-sm-8">
-                          <button onclick="return confirm('Pastikan semua data sudah benar! Lanjutkan?')" name="submit" value="bayar" class="btn btn-success" type="submit"> <i class="fa fa-save"></i> <?=$tombol?></button>
+                          <button onclick="return confirm('Pastikan semua data sudah benar! Lanjutkan?')" name="submit" value="bayar" class="btn btn-success" type="submit"> <i class="fa fa-save"></i> <?=$tombol?></button>                          
                         </div>
                       </div>
                     <?php } ?>
@@ -367,6 +377,7 @@
                       <label class="col-sm-4 col-form-label-sm"></label>
                       <div class="col-sm-8">
                         <button onclick="return confirm('Pastikan semua data sudah benar! Lanjutkan?')" name="submit" value="update" class="btn btn-success" type="submit"> <i class="fa fa-save"></i> <?=$tombol?></button>
+                        <a href="transaksi/invoice" class="btn btn-danger">Tutup</a>
                       </div>
                     </div>
 
@@ -596,6 +607,23 @@
   <?php } ?>
 
 <script type="text/javascript">
+function cekPpn(){
+  var ppnkan = $("#ppnkan").val();  
+  var subtotal = $("#subtotal").val();  
+  $.ajax({
+      url : "<?php echo site_url('transaksi/invoice/cari_ppn')?>",
+      type:"POST",
+      data:"ppnkan="+ppnkan+"&subtotal="+subtotal,            
+      cache:false,
+      success:function(msg){                
+          data=msg.split("|");          
+          $("#ppn").val(data[0]);                          
+          $("#ppnFix").val(data[0]);                          
+          $("#total").val(data[1]);                          
+          $("#totalFix").val(data[1]);                          
+      }
+  }) 
+}
 function cekResi(){
   var order_s = $("#order_status").val();  
   if(order_s==3){
