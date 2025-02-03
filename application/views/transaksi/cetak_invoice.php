@@ -102,21 +102,25 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_brand.bg_invoice, md_clien
           </tr>
           <?php $subs += $sub; } ?> 
           <tr>
-            <td align='right' colspan="4"><b>Total</b></td>
+            <td align='right' colspan="4"><b>Sub Total</b></td>
             <td align='right'><b><?php echo mata_uang($subs) ?></b></td>            
-          </tr>        
-          <?php if(!is_null($cek_data->ppn) && $cek_data->ppn>0){ ?>
-          <tr>
-            <td align='right' colspan="4"><b>PPN 11%</b></td>
-            <td align='right'><b><?php echo mata_uang($cek_data->ppn) ?></b></td>            
-          </tr>        
-          <?php } ?>
+          </tr>     
           <?php if(!is_null($cek_data->diskon) && $cek_data->diskon>0){ ?>
           <tr>
             <td align='right' colspan="4"><b>Diskon</b></td>
             <td align='right'><b><?php echo mata_uang($cek_data->diskon) ?></b></td>            
           </tr>  
-          <?php } ?>
+          <tr>
+            <td align='right' colspan="4"><b>Total</b></td>
+            <td align='right'><b><?php echo mata_uang($subs - $cek_data->diskon) ?></b></td>            
+          </tr>  
+          <?php } ?>   
+          <?php if(!is_null($cek_data->ppn) && $cek_data->ppn>0){ ?>
+          <tr>
+            <td align='right' colspan="4"><b>PPN 11%</b></td>
+            <td align='right'><b><?php echo mata_uang($cek_data->ppn) ?></b></td>            
+          </tr>        
+          <?php } ?>          
           <tr>
             <td align='right' colspan="4"><b>Grand Total</b></td>
             <td align='right'><b><?php echo mata_uang($cek_data->total) ?></b></td>            

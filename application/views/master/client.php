@@ -73,6 +73,16 @@
                       </div>
                     </div>
                     <div class="form-group row">
+                      <label class="col-sm-2 col-form-label-sm">No NPWP</label>
+                      <div class="col-sm-5">                        
+                        <input type="text" required value="<?php echo $tampil = ($row!='') ? $row->no_npwp : "" ; ?>" name="no_npwp" placeholder="No NPWP" class="form-control form-control-sm " />
+                      </div>                                                                              
+                      <label class="col-sm-1 col-form-label-sm">Kartu NPWP</label>
+                      <div class="col-sm-3">                          
+                        <input type="file" name="npwp" class="form-control form-control-sm " />                                                                        
+                      </div>
+                    </div> 
+                    <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Kode</label>
                       <div class="col-sm-2">
                         <?php echo $form_id ?>
@@ -168,7 +178,7 @@
                           ?>
                         </select>
                       </div>                                                                                              
-                    </div>  
+                    </div>                     
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Keterangan</label>
                       <div class="col-sm-10">                        
@@ -222,6 +232,7 @@
                       <th>Nama Instansi</th>                                                                                       
                       <th>Alamat</th>                                                                                       
                       <th>No HP</th>                                                                                       
+                      <th>NPWP</th>                                                                                       
                       <th>Jenis</th>                                                                                       
                       <th>Nama PIC</th>                                                                                                                                                                     
                       <th>Langganan</th>                                                             
@@ -250,6 +261,12 @@
                       $gambar = $isi->logo;
                     }
 
+                    if(!isset($isi->npwp) AND $isi->npwp==""){
+                      $npwp = "";
+                    }else{
+                      $npwp = "<br><a class='badge badge-danger' href='assets/uploads/sites/$isi->npwp'>kartu npwp</a>";
+                    }
+
                     $cek_brand = $this->m_admin->getByID("md_brand","id",$isi->id_brand);
                     $brand = ($cek_brand->num_rows()>0) ? $cek_brand->row()->brand : "" ;                    
 
@@ -259,6 +276,7 @@
                       <td><a href='master/client/detail?id=$isi->id'>$isi->nama_faskes $status</a></td>                      
                       <td>$isi->alamat</td>                                            
                       <td>$isi->no_hp</td>                                            
+                      <td>$isi->no_npwp $npwp</td>                                            
                       <td>$isi->jenis</td>                                            
                       <td>$isi->nama_lengkap</td>                                                                  
                       <td>$isi->langganan</td>                                                                  

@@ -311,13 +311,14 @@ class Invoice extends CI_Controller {
 	public function cari_ppn(){
 		$subtotal = $this->input->post("subtotal");
 		$ppnkan = $this->input->post("ppnkan");
-		if($ppnkan==1){
+		$diskon = (!is_null($this->input->post("diskon")))?$this->input->post("diskon"):0;
+		if($ppnkan==1){			
 			$ppn = $this->m_admin->getByID("md_setting","id_setting",1)->row()->ppn;
-      $ppnN = $subtotal * ($ppn / 100);			      
-      $total = $subtotal + $ppnN;
+      $ppnN = ($subtotal-$diskon) * ($ppn / 100);			      
+      $total = ($subtotal-$diskon) + $ppnN;
 		}else{
 			$ppnN = 0;
-			$total = $subtotal;
+			$total = $subtotal - $diskon;
 		}
 		echo $ppnN."|".$total;
 	}
@@ -353,13 +354,13 @@ class Invoice extends CI_Controller {
 		$id_user = $this->session->id_user;		
 		$kode 			= $this->input->post("kode");				
 		$data['tgl_invoice'] 			= $this->input->post("tgl_invoice")." ".$jam;				
-		$total = $this->input->post("total");		
+		$gtotal = $this->input->post("total");		
 		$data['diskon'] 			= $diskon = $this->input->post("diskon");		
-		if($diskon!='' && $diskon>0){
-			$gtotal = $total - $diskon;
-		}else{
-			$gtotal = $total;
-		}
+		// if($diskon!='' && $diskon>0){
+		// 	$gtotal = $total - $diskon;
+		// }else{
+		// 	$gtotal = $total;
+		// }
 		$data['total'] 			= $gtotal;
 		$data['periode'] 			= $this->input->post("periode");		
 		$data['keterangan'] 			= $this->input->post("keterangan");				

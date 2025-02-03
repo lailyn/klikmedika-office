@@ -261,7 +261,7 @@
                     <div class="form-group row">
                       <label class="col-sm-4 col-form-label-sm">Diskon</label>
                       <div class="col-sm-8">                        
-                        <input type="number" <?=$read?> name="diskon" placeholder="Diskon" value="<?php echo $tampil = ($row!='') ? $row->diskon : '' ; ?>" class="form-control form-control-sm" />                        
+                        <input type="number" <?=$read?> name="diskon" id="diskon" placeholder="Diskon" value="<?php echo $tampil = ($row!='') ? $row->diskon : '' ; ?>" class="form-control form-control-sm" />                        
                       </div>                                                                                                    
                     </div>                    
                     <div class="form-group row">
@@ -610,10 +610,11 @@
 function cekPpn(){
   var ppnkan = $("#ppnkan").val();  
   var subtotal = $("#subtotal").val();  
+  var diskon = $("#diskon").val();  
   $.ajax({
       url : "<?php echo site_url('transaksi/invoice/cari_ppn')?>",
       type:"POST",
-      data:"ppnkan="+ppnkan+"&subtotal="+subtotal,            
+      data:"ppnkan="+ppnkan+"&subtotal="+subtotal+"&diskon="+diskon,            
       cache:false,
       success:function(msg){                
           data=msg.split("|");          

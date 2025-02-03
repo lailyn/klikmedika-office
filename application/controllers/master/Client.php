@@ -135,6 +135,16 @@ class Client extends CI_Controller {
 				$data['logo']	= $this->upload->file_name;
 			}
 		}
+		$err2 = "";
+    if(!empty($_FILES['npwp']['name'])){
+			$this->upload->initialize($config);
+			if(!$this->upload->do_upload('npwp')){
+				$err2 = $this->upload->display_errors();				
+			}else{
+				$err2 = "";				
+				$data['npwp']	= $this->upload->file_name;
+			}
+		}
 
 		$data['kode_faskes'] 			= $this->input->post('kode_faskes');								
 		$data['nama_lengkap'] 			= $this->input->post('nama_lengkap');								
@@ -152,10 +162,11 @@ class Client extends CI_Controller {
 		$data['tgl_aktif'] 			= $this->input->post('tgl_aktif');																
 		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
 		$data['tgl_invoice'] 			= $this->input->post('tgl_invoice');																		
+		$data['no_npwp'] 			= $this->input->post('no_npwp');																		
 		$data['created_at'] 			= $waktu;		
 		$data['created_by'] 			= $id_user;
 		
-		if($err!=""){
+		if($err!="" && $err2!=""){
 			$_SESSION['pesan'] 		= $err;
 			$_SESSION['tipe'] 		= "danger";						
 			echo "<script>history.go(-1)</script>";
@@ -194,6 +205,21 @@ class Client extends CI_Controller {
 				$data['logo']	= $this->upload->file_name;
 			}
 		}
+
+		$err2 = "";
+    if(!empty($_FILES['npwp']['name'])){
+			$this->upload->initialize($config);
+			if(!$this->upload->do_upload('npwp')){
+				$err2 = $this->upload->display_errors();				
+			}else{
+				$err2 = "";
+				$row = $this->m_admin->getByID("md_client","id",$id)->row();
+	    	if(isset($row->npwp)){
+	    		unlink('assets/uploads/sites/'.$row->npwp);         	    		
+	    	}
+				$data['npwp']	= $this->upload->file_name;
+			}
+		}
 		$id 			= $this->input->post('id');		
 
 		$id_kel 			= $this->input->post('id_kelurahan');
@@ -215,10 +241,11 @@ class Client extends CI_Controller {
 		$data['tgl_aktif'] 			= $this->input->post('tgl_aktif');																
 		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
 		$data['tgl_invoice'] 			= $this->input->post('tgl_invoice');																		
+		$data['no_npwp'] 			= $this->input->post('no_npwp');																		
 		$data['updated_at'] 			= $waktu;				
 		$data['updated_by'] 			= $id_user;		
 		
-		if($err!=""){
+		if($err!="" && $err2!=""){
 			$_SESSION['pesan'] 		= $err;
 			$_SESSION['tipe'] 		= "danger";						
 			echo "<script>history.go(-1)</script>";
