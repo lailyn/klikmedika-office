@@ -100,7 +100,7 @@
                         <div class="col-sm-2">                          
                           <input type="text" readonly value="<?php echo $tampil = ($row!='') ? mata_uang($row->tunj_makan) : "" ; ?>" name="tunj_makan" placeholder="Tunj Makan" class="form-control form-control-sm " />
                         </div>                
-                        <?php if($bagian=="Tim IT"){ ?>
+                        <?php if($bagian=="Tim IT" OR $bagian=="CEO"){ ?>
                           <label class="col-sm-2 col-form-label-sm text-right">Fee Tim IT</label>
                           <div class="col-sm-2">                          
                             <input type="text" readonly value="<?php echo $tampil = ($row!='') ? $feeIT : "" ; ?>" name="feeIT" placeholder="Fee Tim IT" class="form-control form-control-sm " />
