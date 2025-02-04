@@ -992,6 +992,19 @@ class M_admin extends CI_Model{
   		$this->db->query("UPDATE md_dokter SET saldo = saldo + '$bagian' WHERE id_dokter = '$id_dokter'");
   	}
   }  
+  public function getFee($bg)
+  {
+  	$hasil = 0;
+  	$cek = $this->db->query("SELECT SUM(md_invoice_detail.total) AS total FROM md_invoice_detail
+  		JOIN md_invoice ON md_invoice_detail.kode = md_invoice.kode
+  		WHERE md_invoice.status = 1 AND md_invoice.id_brand = 1");
+  	if($cek->num_rows()>0){
+  		$total = $cek->row()->total * 0.2;
+  		$hasil = $total / $bg;
+  	}
+
+  	return $hasil;
+  }
 }	
 
 ?>

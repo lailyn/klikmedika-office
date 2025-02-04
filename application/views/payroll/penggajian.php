@@ -49,6 +49,10 @@
           $bagian = ($dt->num_rows()>0)?$dt->row()->bagian:"";
         }
 			}
+
+
+      $feeIT=$this->m_admin->getFee(2);
+
 			?>
 
       <div class="row">
@@ -95,7 +99,13 @@
                         <label class="col-sm-2 col-form-label-sm text-right">Tunj Makan</label>
                         <div class="col-sm-2">                          
                           <input type="text" readonly value="<?php echo $tampil = ($row!='') ? mata_uang($row->tunj_makan) : "" ; ?>" name="tunj_makan" placeholder="Tunj Makan" class="form-control form-control-sm " />
-                        </div>                               
+                        </div>                
+                        <?php if($bagian=="Tim IT"){ ?>
+                          <label class="col-sm-2 col-form-label-sm text-right">Fee Tim IT</label>
+                          <div class="col-sm-2">                          
+                            <input type="text" readonly value="<?php echo $tampil = ($row!='') ? $feeIT : "" ; ?>" name="feeIT" placeholder="Fee Tim IT" class="form-control form-control-sm " />
+                          </div>               
+                        <?php } ?>
                       </div>
                       <div class="form-group row">                        
                         <label class="col-sm-2 col-form-label-sm text-right">Tunj Istri</label>
