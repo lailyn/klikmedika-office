@@ -120,7 +120,12 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_brand.bg_invoice, md_clien
             <td align='right' colspan="4"><b>PPN 11%</b></td>
             <td align='right'><b><?php echo mata_uang($cek_data->ppn) ?></b></td>            
           </tr>        
-          <?php } ?>          
+          <?php }else{ ?>          
+          <tr>
+            <td align='right' colspan="4"><b>PPN</b></td>
+            <td align='right'><b>-</b></td>            
+          </tr>        
+          <?php } ?>
           <tr>
             <td align='right' colspan="4"><b>Grand Total</b></td>
             <td align='right'><b><?php echo mata_uang($cek_data->total) ?></b></td>            
