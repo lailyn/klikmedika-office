@@ -225,7 +225,7 @@ class Client extends CI_Controller {
 		$data['no_npwp'] 			= $this->input->post('no_npwp');																		
 		$data['lama'] 			= $this->input->post('lama');																		
 		$data['nominal'] 			= $this->input->post('nominal');																		
-		$data['karyawan_id'] 			= $this->input->post('karyawan_id');																		
+		$data['id_karyawan'] 			= $this->input->post('id_karyawan');																		
 		$data['created_at'] 			= $waktu;		
 		$data['created_by'] 			= $id_user;
 		
@@ -307,7 +307,7 @@ class Client extends CI_Controller {
 		$data['no_npwp'] 			= $this->input->post('no_npwp');
 		$data['lama'] 			= $this->input->post('lama');																		
 		$data['nominal'] 			= $this->input->post('nominal');																		
-		$data['karyawan_id'] 			= $this->input->post('karyawan_id');																																				
+		$data['id_karyawan'] 			= $this->input->post('id_karyawan');																																				
 		$data['updated_at'] 			= $waktu;				
 		$data['updated_by'] 			= $id_user;		
 		
