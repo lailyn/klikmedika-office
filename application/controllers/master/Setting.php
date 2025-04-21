@@ -100,6 +100,21 @@ class Setting extends CI_Controller {
 				$data['banner']	= $this->upload->file_name;
 			}
 		}
+
+		$err4 = "";
+    if(!empty($_FILES['ttdceo']['name'])){
+			$this->upload->initialize($config);
+			if(!$this->upload->do_upload('ttdceo')){
+				$err4 = $this->upload->display_errors();				
+			}else{
+				$err4 = "";
+				$row = $this->m_admin->getByID("md_setting","id_setting",1)->row();
+	    	if(isset($row->ttdceo)){
+	    		unlink('assets/im493/'.$row->ttdceo);         	    		
+	    	}
+				$data['ttdceo']	= $this->upload->file_name;
+			}
+		}
 		
 		$data['nama_pimpinan'] 			= $this->input->post('nama_pimpinan');				
 		$data['alamat'] 			= $this->input->post('alamat');						
@@ -117,13 +132,14 @@ class Setting extends CI_Controller {
 		$data['admin'] 			= $this->input->post('admin');								
 		$data['pass_karyawan'] 			= $this->input->post('pass_karyawan');								
 		$data['pass_konsumen'] 			= $this->input->post('pass_konsumen');								
-		if($err=="" AND $err2=="" AND $err3==""){
+		$data['template_kontrak_cucikan'] 			= $this->input->post('template_kontrak_cucikan');								
+		if($err=="" AND $err2=="" AND $err3=="" AND $err4==""){
 			$this->m_admin->update($tabel,$data,$pk,1);					
 			$_SESSION['pesan'] 		= "Data berhasil diubah";
 			$_SESSION['tipe'] 		= "success";						
 			echo "<meta http-equiv='refresh' content='0; url=".base_url()."master/Setting'>";					
 		}else{
-			$_SESSION['pesan'] 		= $err."<br>".$err2."<br>".$err3;
+			$_SESSION['pesan'] 		= $err."<br>".$err2."<br>".$err3."<br>".$err4;
 			$_SESSION['tipe'] 		= "danger";						
 			echo "<script>history.go(-1)</script>";
 		}

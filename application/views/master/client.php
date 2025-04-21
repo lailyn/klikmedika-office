@@ -13,7 +13,7 @@
 		?>
 
 		<?php 
-		if($set=="insert" AND $mode!='import'){
+		if($set=="insert" AND $mode!='kontrak'){
 			if($mode == 'insert'){
 				$read = "";
 				$read2 = "";
@@ -51,9 +51,9 @@
                 <div class="row">
                   <div class="col-12">                
                     <div class="form-group row">
-                      <label class="col-sm-2 col-form-label-sm">Nama Faskes</label>
+                      <label class="col-sm-2 col-form-label-sm">Nama Instansi</label>
                       <div class="col-sm-8">                        
-                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->nama_faskes : "" ; ?>" name="nama_faskes" placeholder="Nama Faskes" class="form-control form-control-sm " />
+                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->nama_faskes : "" ; ?>" name="nama_faskes" placeholder="Nama Instansi" class="form-control form-control-sm " />
                       </div>                                                          
                       <div class="form-check mx-sm-2">
                         <label class="form-check-label">
@@ -106,6 +106,7 @@
                           <option <?php if($tampil=="lab") echo 'selected' ?> value="lab">Laboratorium</option>                          
                           <option <?php if($tampil=="puskesmas") echo 'selected' ?> value="puskesmas">Puskesmas</option>                          
                           <option <?php if($tampil=="pemda") echo 'selected' ?> value="pemda">Pemda</option>                          
+                          <option <?php if($tampil=="laundry") echo 'selected' ?> value="laundry">Laundry</option>                          
                           <option <?php if($tampil=="instansi-swasta") echo 'selected' ?> value="instansi-swasta">Instansi Swasta</option>                          
                           <option <?php if($tampil=="lainnya") echo 'selected' ?> value="lainnya">Lainnya</option>                          
                         </select>
@@ -123,11 +124,26 @@
                     </div>     
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label">Kelurahan</label>
-                      <div class="col-sm-10">                        
+                      <div class="col-sm-5">                        
                         <select id="id_kelurahan" class="form-control form-control-sm js-select2" <?php echo $read2 ?> name="id_kelurahan">                        
                           <option value="">Ketik Kata Kunci</option>
                         </select>
-                      </div>                    
+                      </div>              
+                      <label class="col-sm-1 col-form-label-sm">Marketing</label>
+                      <div class="col-sm-4">
+                        <select <?=$read2?> class="form-control form-control-sm select2" required name="id_karyawan">                      
+                          <option value="">- pilih -</option>
+                          <?php                                       
+                          $dt_user = $this->db->query("SELECT * FROM md_karyawan ORDER BY id_karyawan ASC");                   
+                          foreach ($dt_user->result() as $isi) { 
+                            $id_karyawan = ($row!='') ? $row->id_karyawan : '';
+                            if($isi->id_karyawan==$id_karyawan) $rt = "selected";
+                              else $rt = "";                             
+                            echo "<option $rt value='$isi->id_karyawan'>$isi->nama_lengkap</option>";
+                          }
+                          ?>
+                        </select>
+                      </div>      
                     </div>
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Tgl Daftar</label>
@@ -153,6 +169,16 @@
                           <option <?php if($tampil=="pasca-bayar") echo 'selected' ?> value="pasca-bayar">Pasca Bayar</option>                                                    
                         </select>
                       </div>
+                      <label class="col-sm-1 col-form-label-sm">Lama (bulan)</label>
+                      <div class="col-sm-2">                          
+                        <select class="form-control form-control-sm" <?php echo $read2 ?> name="lama">                        
+                          <?php $tampil = ($row!='') ? $row->lama : "" ; ?>                          
+                          <option <?php if($tampil=="") echo 'selected' ?> value="">- choose -</option>                          
+                          <option <?php if($tampil=="3") echo 'selected' ?> value="3">3</option>                          
+                          <option <?php if($tampil=="6") echo 'selected' ?> value="6">6</option>                                                    
+                          <option <?php if($tampil=="12") echo 'selected' ?> value="12">12</option>                                                    
+                        </select>
+                      </div>
                       <label class="col-sm-1 col-form-label-sm">No MoU Terakhir</label>
                       <div class="col-sm-4">                          
                         <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->no_mou : "" ; ?>" name="no_mou" placeholder="No MoU" class="form-control form-control-sm " />                                                                        
@@ -162,7 +188,11 @@
                       <label class="col-sm-2 col-form-label-sm">Tgl Invoice</label>
                       <div class="col-sm-2">                        
                         <input type="number" required value="<?php echo $tampil = ($row!='') ? $row->tgl_invoice : "" ; ?>" name="tgl_invoice" placeholder="Tgl Invoice" class="form-control form-control-sm " />
-                      </div>      
+                      </div>   
+                      <label class="col-sm-1 col-form-label-sm">Nominal</label>
+                      <div class="col-sm-2">                          
+                        <input type="number" required value="<?php echo $tampil = ($row!='') ? $row->nominal : "" ; ?>" name="nominal" placeholder="Nominal" class="form-control form-control-sm " />                        
+                      </div>   
                       <label class="col-sm-1 col-form-label-sm">Brand</label>
                       <div class="col-sm-4">
                         <select <?=$read2?> class="form-control form-control-sm select2" required name="id_brand">                      
@@ -208,7 +238,9 @@
       </div>
     </div>
 
-    
+    <?php }elseif($mode=="kontrak"){ ?>
+
+      <?php include "kontrakCucikan.php"; ?>
 
     <?php }else{ ?>
 
@@ -270,6 +302,9 @@
                     $cek_brand = $this->m_admin->getByID("md_brand","id",$isi->id_brand);
                     $brand = ($cek_brand->num_rows()>0) ? $cek_brand->row()->brand : "" ;                    
 
+                    $kontrak = "d-none";
+                    if($isi->jenis=="laundry") $kontrak = "";
+
                     echo
                       "<tr>
                       <td>$no</td>                                            
@@ -286,8 +321,14 @@
                       <td>".tgl_indo($isi->tgl_kadaluarsa)."</td>                        
                       <td>$brand</td>                        
                       <td>
-                            <a href=\"master/client/delete?id=$isi->id\" onclick=\"return confirm('Anda yakin?')\" class=\"btn btn-danger btn-sm\" title=\"Hapus\"><i class=\"fa fa-trash\"></i></a>                          
-                            <a href=\"master/client/edit?id=$isi->id\" class=\"btn btn-primary btn-sm\" title=\"Edit\"><i class=\"fa fa-edit\"></i></a>
+                        <div class='btn-group'>
+                          <button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
+                          <div class='dropdown-menu'>
+                            <a href=\"master/client/delete?id=$isi->id\" onclick=\"return confirm('Anda yakin?')\" class='dropdown-item'>Hapus</a>
+                            <a href=\"master/client/edit?id=$isi->id\" class='dropdown-item'>Edit</a>
+                            <a href=\"master/client/generate?id=$isi->id\" class='dropdown-item $kontrak'>Generate Surat Kontrak</a>                
+                          </div>
+                        </div>                            
                       </td>
                       </tr>";
                       $no++;

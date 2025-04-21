@@ -130,6 +130,12 @@
                         <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->alamat : "" ; ?>" name="alamat" placeholder="Alamat Perusahaan" class="form-control form-control-sm " />
                       </div>                                          
                     </div>
+                    <div class="form-group row">
+                      <label class="col-sm-2 col-form-label-sm">Template Kontrak Cucikan</label>
+                      <div class="col-sm-10">
+                        <textarea id="summernote1" name="template_kontrak_cucikan"><?=($row!='')?$row->template_kontrak_cucikan:'';?></textarea>                        
+                      </div>                                          
+                    </div>
                     
 
                     
@@ -152,6 +158,24 @@
                         <input type="file" name="banner" class="form-control form-control-sm ">                          
                         </div>                        
                         <div <?php echo $rt ?> class='col-sm-1'><img width="80px" src="assets/im493/<?php echo $banner ?>">                                              
+                      </div>
+                      <label class="col-sm-2 col-form-label-sm">TTD CEO</label>
+                      <?php 
+                      $rt = "style=display:none";
+                      $ttdceo="";
+                      if($mode!="insert"){ 
+                        $rt = "";
+                        if(!isset($row->ttdceo) OR $row->ttdceo==""){
+                          $ttdceo = "user.png";
+                        }else{
+                          $ttdceo = $row->ttdceo;
+                        }
+                      }
+                      ?>
+                        <div class='col-sm-3'>
+                        <input type="file" name="ttdceo" class="form-control form-control-sm ">                          
+                        </div>                        
+                        <div <?php echo $rt ?> class='col-sm-1'><img width="80px" src="assets/im493/<?php echo $ttdceo ?>">                                              
                       </div>
                     </div>
                     <div class="form-group row">

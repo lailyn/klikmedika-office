@@ -1005,6 +1005,16 @@ class M_admin extends CI_Model{
 
   	return $hasil;
   }
+
+	function cekTtd($id, $tipe){
+		$ttd = null;
+		$cekReg = $this->m_admin->getByID("md_client","id",$id)->row();
+		if($tipe=="ttd_client"){
+			$ttd = $cekReg->ttd_client;		
+		}		
+
+		return $ttd;
+	}
 }	
 
 ?>

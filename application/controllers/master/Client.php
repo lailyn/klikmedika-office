@@ -75,7 +75,67 @@ class Client extends CI_Controller {
 		$data['mode']		= "insert";									
 		$this->template($data);	
 	}
+	public function generate(){	
+		$id = $this->input->get("id");		
+		$data['file'] = $data['isi']  = "kontrakCucikan";
+		$data['title']	= "Generate Kontrak";
+		$data['bread']	= $this->bread;
+		$tabel	= $this->tables;
+		$pk			= $this->pk;		
+		$data['set']		= "insert";
+		$data['mode']		= "kontrak";		
+		$data['dt_client'] = $this->db->query("SELECT * FROM md_client 			
+			WHERE md_client.id = '$id'");
+		$this->template($data);
 	
+	}
+	public function ttd_client()
+	{
+		$signature = $this->input->post('signature1');
+		$id = $this->input->post("id");
+
+		$data['ttd_client'] = $signature;
+		$data['status_ttd'] = 1;
+		$data['updated_by'] = $this->session->id_user;
+		$data['updated_at'] = waktu();		
+
+		$cekData = $this->db->query("SELECT ttd_client FROM md_client WHERE id = '$id'")->row()->ttd_client;
+		if(is_null($cekData)){
+			$this->m_admin->update("md_client", $data, "id", $id);			
+		}
+	}
+	public function resetTTDClient()
+	{		
+		$id = $this->input->post("id");
+		$data['ttd_client'] = NULL;
+		$data['status_ttd'] = 0;
+		$data['updated_by'] = $this->session->id_user;
+		$data['updated_at'] = waktu();		
+		$this->m_admin->update("md_client", $data, "id", $id);
+	}
+	public function cetakKontrak()
+	{
+		$waktu 		= gmdate("Y-m-d H:i:s", time() + 60 * 60 * 7);
+		ob_clean();
+		ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 900);
+		$mpdf = new \Mpdf\Mpdf();
+		$mpdf->allow_charset_conversion = true;  // Set by default to TRUE
+		$mpdf->charset_in               = 'UTF-8';
+		$mpdf->autoLangToFont           = true;
+
+		$data['id'] = $id = $this->input->get('id');
+		$data['set']	= "cetak";
+		$data['jenis'] = "change";
+		$data['setting'] = $this->m_admin->getByID("md_setting", "id_setting", 1)->row();
+
+		$data['client'] = $this->db->query("SELECT * FROM md_client 			
+			WHERE md_client.id = '$id'")->row();
+		// $this->load->view('master/cetak_kontrak', $data);      		
+		$html = $this->load->view('master/cetak_kontrak', $data, true);
+		$mpdf->WriteHTML($html);
+		$mpdf->Output();
+	}
 	public function delete()
 	{		
 		$tabel			= $this->tables;

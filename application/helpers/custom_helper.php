@@ -4,6 +4,10 @@
  *
  */
 //encrypt
+function cekTtd($no_reg,$tipe){
+  $ci =& get_instance();
+  return $ci->m_admin->cekTtd($no_reg,$tipe);
+}
 function haversineDistance($lat1, $lon1, $lat2, $lon2) {
     // Convert degrees to radians
     $lat1 = deg2rad($lat1);
