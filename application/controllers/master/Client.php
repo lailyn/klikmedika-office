@@ -223,6 +223,9 @@ class Client extends CI_Controller {
 		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
 		$data['tgl_invoice'] 			= $this->input->post('tgl_invoice');																		
 		$data['no_npwp'] 			= $this->input->post('no_npwp');																		
+		$data['lama'] 			= $this->input->post('lama');																		
+		$data['nominal'] 			= $this->input->post('nominal');																		
+		$data['karyawan_id'] 			= $this->input->post('karyawan_id');																		
 		$data['created_at'] 			= $waktu;		
 		$data['created_by'] 			= $id_user;
 		
@@ -301,7 +304,10 @@ class Client extends CI_Controller {
 		$data['tgl_aktif'] 			= $this->input->post('tgl_aktif');																
 		$data['tgl_kadaluarsa'] 			= $this->input->post('tgl_kadaluarsa');																
 		$data['tgl_invoice'] 			= $this->input->post('tgl_invoice');																		
-		$data['no_npwp'] 			= $this->input->post('no_npwp');																		
+		$data['no_npwp'] 			= $this->input->post('no_npwp');
+		$data['lama'] 			= $this->input->post('lama');																		
+		$data['nominal'] 			= $this->input->post('nominal');																		
+		$data['karyawan_id'] 			= $this->input->post('karyawan_id');																																				
 		$data['updated_at'] 			= $waktu;				
 		$data['updated_by'] 			= $id_user;		
 		
