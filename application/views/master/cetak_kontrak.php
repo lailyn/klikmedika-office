@@ -7,8 +7,8 @@
     <style>
       @media print {
         @page {
-          size: 21cm 40cm; /* lebar x tinggi → contoh F4 atau lebih panjang */
-          margin: 1cm;
+          size: 21cm 160cm; /* lebar x tinggi → contoh F4 atau lebih panjang */
+          margin: 1.5cm 2cm 1.5cm 2cm;
         }
 
         body {
@@ -71,7 +71,7 @@
         echo $suratAsli;
         ?>
   </div>
-  <table width="80%" border="0" align="">      
+  <table width="100%" border="0" align="">      
     <tr>
       <td><i></i></td>   
       <td align="center">Jambi, <?php echo gmdate(" d F Y", time()+60*60*7); ?></td>
@@ -80,22 +80,19 @@
     <tr>
       <td></td>
       <td align="center"><?=$setting->perusahaan?></td>
-    </tr>    
-    <tr>
-      <td colspan="2"><br></td>
-    </tr>
+    </tr>        
     <tr>
       <td align="center">
         <div>
-          <p style="margin-top: 10px;">PIHAK KEDUA</p>
+          <p style="margin-top: 10px;">PIHAK KEDUA</p><br>
           <img width="250px" id="signatureImage" src="<?=cekTtd($isinya->id,"ttd_client")?>" alt="TTD Client">
           <p style="margin-top: 10px;"><?=$isinya->nama_lengkap?></p>
         </div>                      
       </td>
       <td align="center">  
         <div>
-          <p style="margin-top: 10px;">PIHAK PERTAMA</p>
-          <img width="250px" id="signatureImage" src="assets/im493/<?=$setting->ttdceo?>" alt="TTD CEO">
+          <p style="margin-top: 10px;">PIHAK PERTAMA</p><br>
+          <img width="150px" id="signatureImage" src="assets/im493/<?=$setting->ttdceo?>" alt="TTD CEO">
           <p style="margin-top: 10px;">Lailyn Puad, S.Kom., M.Kom.</p>
         </div>                      
 
