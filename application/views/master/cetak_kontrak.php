@@ -21,18 +21,9 @@
 <body onload="printPage()">
   <table border="0" width="100%" align="center">
     <tr>   
-      <td>
-        <img width="150px" src="assets/im493/<?php echo $setting->logo ?>">
-      </td>
-      <td></td>   
-      <td></td>   
-      <td width="40%" align="right">        
-          <p class="text-center">
-            <?php echo $setting->alamat ?><br>
-            <strong>Telp :</strong> <?php echo $setting->no_telp ?>  
-            <strong>Email:</strong> <?php echo $setting->email ?> <br>
-            <strong>Website :</strong> <?php echo $setting->url ?>
-          </p>
+      <td colspan="4">
+        <?php $dts = $this->m_admin->getByID("md_brand","id",$client->id_brand)->row(); ?>
+        <img src="assets/uploads/sites/<?php echo $dts->bg_header ?>">
       </td>      
     </tr>
     <tr>

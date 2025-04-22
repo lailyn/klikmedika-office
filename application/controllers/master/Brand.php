@@ -65,8 +65,8 @@ class Brand extends CI_Controller {
 			$row[] = "<a href='master/brand/detail?id=$isi->id'>$isi->brand </a>";						
 			$row[] = $isi->pimpinan;			
 			$row[] = $isi->email." <br> ".$isi->no_hp;			
-			$row[] = $isi->website;			
-			$row[] = $isi->alamat;		
+			$row[] = $isi->website;						
+			$row[] = "<img width='50%' src='assets/uploads/sites/$isi->bg_header'>";		
 			$row[] = "<img width='50%' src='assets/uploads/sites/$isi->logo'>";		
 			$row[] = "<img width='50%' src='assets/uploads/sites/$isi->bg_invoice'>";		
 			$row[] = "<img width='50%' src='assets/uploads/sites/$isi->bg_cr'>";		
@@ -172,6 +172,16 @@ class Brand extends CI_Controller {
 				$data['bg_cr']	= $this->upload->file_name;
 			}
 		}
+
+		if(!empty($_FILES['bg_header']['name'])){
+			$this->upload->initialize($config);
+			if(!$this->upload->do_upload('bg_header')){
+				$err = $this->upload->display_errors();				
+			}else{
+				$err = "";				
+				$data['bg_header']	= $this->upload->file_name;
+			}
+		}
 		
 		$data['brand'] 			= $this->input->post('brand');						
 		$data['email'] 			= $this->input->post('email');				
@@ -244,6 +254,20 @@ class Brand extends CI_Controller {
 	    		unlink('assets/uploads/sites/'.$row->bg_cr);         	    		
 	    	}
 				$data['bg_cr']	= $this->upload->file_name;
+			}
+		}
+
+		if(!empty($_FILES['bg_header']['name'])){
+			$this->upload->initialize($config);
+			if(!$this->upload->do_upload('bg_header')){
+				$err = $this->upload->display_errors();				
+			}else{
+				$err = "";
+				$row = $this->m_admin->getByID("md_client","id",$id)->row();
+	    	if(isset($row->bg_header)){
+	    		unlink('assets/uploads/sites/'.$row->bg_header);         	    		
+	    	}
+				$data['bg_header']	= $this->upload->file_name;
 			}
 		}
 		$data['brand'] 			= $this->input->post('brand');						

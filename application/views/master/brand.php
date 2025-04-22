@@ -92,6 +92,12 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-sm-2 col-form-label-sm">Header Surat</label>
+                      <div class="col-sm-4">                        
+                        <input type="file" name="bg_header" class="form-control form-control-sm " />                                                                        
+                      </div>
+                    </div>
+                    <div class="form-group row">
                       <label class="col-sm-2 col-form-label-sm">Bg Invoice</label>
                       <div class="col-sm-4">                        
                         <input type="file" name="bg_invoice" class="form-control form-control-sm " />                                                                        
@@ -157,7 +163,7 @@
                       <th>Logo</th>                                       
                       <th>Kontak</th>                                       
                       <th>Web</th>                 
-                      <th>Alamat</th>                                    
+                      <th>Header</th>                                    
                       <th>Logo</th>                                    
                       <th>Bg Invoice</th>                                    
                       <th>Bg CR</th>                                    
