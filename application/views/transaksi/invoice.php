@@ -424,7 +424,7 @@
                   </thead>
                   <tbody> 
                   <?php 
-                  $no=1;
+                  $no=1;$id_user_type=$this->session->id_user_type;
                   foreach ($dt_invoice->result() as $isi) {                                        
 
                     $cek_user = $this->m_admin->getByID("md_client","id",$isi->id_client);
@@ -452,7 +452,11 @@
                     if($isi->payment_status==1){
                       $konfirmasi = "display:none;";
                       $status = "<label class='badge badge-primary'>Konfirmasi Bayar</label>";
-                    }                                      
+                    }       
+
+
+                    if($id_user_type==1) $approval = "";
+                      else $approval = "display:none;";                               
                     
 
                     $id = encrypt_url($isi->id);
@@ -469,7 +473,7 @@
                             <a href='transaksi/invoice/cetak/$kode' class='dropdown-item'>Cetak Invoice</a>                            
                             <a href='transaksi/invoice/detail/$kode' class='dropdown-item'>Detail</a>                            
                             <a href='transaksi/invoice/approval/$kode' class='dropdown-item' style='$approval'>Approve</a>                            
-                            <a href='transaksi/invoice/delete/$kode' class='dropdown-item' style='$hapus'>Hapus</a>                            
+                            <a href='transaksi/invoice/delete/$kode' class='dropdown-item' style='$hapus' onclick=\"return confirm('Anda yakin ingin menghapus data ini?')\">Hapus</a>
                             <a href='transaksi/invoice/edit/$kode' class='dropdown-item' style='$edit'>Edit</a>                            
                             <a href='transaksi/invoice/customerReceipt/$kode' class='dropdown-item' style='$cr'>Customer Receipt</a>                            
                           </div>
