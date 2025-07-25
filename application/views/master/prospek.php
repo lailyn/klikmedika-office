@@ -51,10 +51,10 @@
                 <div class="row">
                   <div class="col-12">                
                     <div class="form-group row">
-                      <label class="col-sm-2 col-form-label-sm">Nama Faskes</label>
+                      <label class="col-sm-2 col-form-label-sm">Nama Instansi</label>
                       <div class="col-sm-8">         
                         <?php echo $form_id ?>               
-                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->nama_faskes : "" ; ?>" name="nama_faskes" placeholder="Nama Faskes" class="form-control form-control-sm " />
+                        <input type="text" <?php echo $read ?> value="<?php echo $tampil = ($row!='') ? $row->nama_faskes : "" ; ?>" name="nama_faskes" placeholder="Nama Instansi" class="form-control form-control-sm " />
                       </div>                                                                                
                     </div>
                     
@@ -86,6 +86,10 @@
                           <option <?php if($tampil=="praktik-mandiri") echo 'selected' ?> value="praktik-mandiri">Praktik Mandiri</option>                          
                           <option <?php if($tampil=="lab") echo 'selected' ?> value="lab">Laboratorium</option>                          
                           <option <?php if($tampil=="puskesmas") echo 'selected' ?> value="puskesmas">Puskesmas</option>                          
+                          <option <?php if($tampil=="pemda") echo 'selected' ?> value="pemda">Pemda</option>                          
+                          <option <?php if($tampil=="laundry") echo 'selected' ?> value="laundry">Laundry</option>                          
+                          <option <?php if($tampil=="instansi-swasta") echo 'selected' ?> value="instansi-swasta">Instansi Swasta</option>                          
+                          <option <?php if($tampil=="lainnya") echo 'selected' ?> value="lainnya">Lainnya</option>                          
                         </select>
                       </div>     
 
@@ -165,7 +169,7 @@
                   <thead>
                     <tr>
                       <th width="5%">No</th>                                            
-                      <th>Nama Faskes</th>                                                                                       
+                      <th>Nama Instansi</th>                                                                                       
                       <th>Alamat</th>                                                                                       
                       <th>No HP</th>                                                                                       
                       <th>Jenis</th>                                                                                       
