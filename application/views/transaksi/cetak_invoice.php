@@ -69,8 +69,10 @@ $cek_data = $this->db->query("SELECT md_invoice.*, md_brand.bg_invoice, md_clien
       <td valign="top">
         <b>No Invoice: </b> <?=$kode?> <br>
         <b>Tgl Invoice: </b> <?=tgl_indo($cek_data->tgl_invoice)?> <br>                      
-        <b>Tgl Jatuh Tempo: </b> <?=tgl_indo(manipulate_time($cek_data->tgl_invoice,'days','5','+','Y-m-d'))?> <br>        
-        <b>Periode: </b> <?=$cek_data->periode?> <br>        
+        <b>Tgl Jatuh Tempo: </b> <?=tgl_indo(manipulate_time($cek_data->tgl_invoice,'days','10','+','Y-m-d'))?> <br>        
+        <?php if($cek_data->periode!=''){ ?>
+          <b>Periode: </b> <?=$cek_data->periode?> <br>        
+        <?php } ?>
       </td>      
     </tr>
     
