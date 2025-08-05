@@ -212,7 +212,7 @@
                       <td>$isi->no_hp</td>                                            
                       <td>$isi->jenis</td>                                            
                       <td>$isi->nama_lengkap</td>                                                                                        
-                      <td>".tgl_indo($isi->tgl_daftar)."</td>                        
+                      <td>$isi->tgl_daftar</td>                        
                       <td>$isi->keterangan</td>                                                                                        
                       <td bgcolor='$bg'>$status</td>                                                                                        
                       <td>
