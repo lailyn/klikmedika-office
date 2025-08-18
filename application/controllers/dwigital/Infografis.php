@@ -30,6 +30,12 @@ class Infografis extends CI_Controller
 		if ($name == "") {
 			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "m4suk4dm1n?denied'>";
 		} else {
+			$auth = $this->m_admin->user_auth($this->page, $set);
+			if ($name == "") {
+				echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "adm1nb3rrk4h'>";
+			} elseif ($auth == 'false') {
+				echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "denied'>";
+			}
 			$this->load->view('back_template/header', $data);
 			$this->load->view('back_template/aside');
 			$this->load->view($this->page);

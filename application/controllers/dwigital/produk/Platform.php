@@ -32,7 +32,7 @@ class Platform extends CI_Controller
 	protected function template($data)
 	{
 		$name = $this->session->userdata('nama');
-		$auth = $this->m_admin->user_auth($this->file, $data['set']);
+		$auth = $this->m_admin->user_auth($this->page, $data['set']);
 		if ($name == "") {
 			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "m4suk4dm1n'>";
 		} elseif ($auth == 'false') {

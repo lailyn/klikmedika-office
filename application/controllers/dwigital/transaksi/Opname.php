@@ -35,7 +35,7 @@ class Opname extends CI_Controller {
 		$name = $this->session->userdata('nama');
 		if($data['set']=='delete' OR $data['set']=='edit' OR $data['set']=='view') $set=$data['set'];
 			else $set = "insert";
-		$auth = $this->m_admin->user_auth($this->file,$set);						
+		$auth = $this->m_admin->user_auth($this->page,$set);						
 		if($name==""){
 			echo "<meta http-equiv='refresh' content='0; url=".base_url()."adm1nb3rrk4h'>";
 		}elseif($auth=='false'){		
