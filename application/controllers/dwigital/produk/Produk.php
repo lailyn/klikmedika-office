@@ -4,14 +4,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Produk extends CI_Controller
 {
 
-	var $tables =   "md_produk";
+	var $tables =   "dwigital_produk";
 	var $page		=		"dwigital/produk/produk";
-	var $file		=		"dwigital_produk_produk";
+	var $file		=		"produk";
 	var $pk     =   "id_produk";
 	var $title  =   "Produk";
 	var $bread	=   "<ol class='breadcrumb'>
 	<li class='breadcrumb-item'><a>Master Produk</a></li>										
-	<li class='breadcrumb-item active'><a href='master/produk'>Produk</a></li>										
+	<li class='breadcrumb-item active'><a href='dwigital/produk/produk'>Produk</a></li>										
 	</ol>";
 
 
@@ -30,7 +30,6 @@ class Produk extends CI_Controller
 		//===== Load Library =====
 		$this->load->library('upload');
 	}
-
 	protected function template($data)
 	{
 		$name = $this->session->userdata('nama');
@@ -85,7 +84,6 @@ class Produk extends CI_Controller
 		$data['mode']		= "insert";
 		$this->template($data);
 	}
-
 	public function ajax_list()
 	{
 		$starts = (null !== $this->input->post("start")) ? $this->input->post("start") : 0;
@@ -127,7 +125,7 @@ class Produk extends CI_Controller
 			}
 		}
 
-		$sql = "SELECT * FROM dwigital_produk JOIN dwigital_produk_kategori ON dwigital_produk.id_produk_kategori = dwigital_produk_kategori.id ";
+		$sql = "SELECT dwigital_produk.*, dwigital_produk_kategori.nama nama_kategori FROM dwigital_produk JOIN dwigital_produk_kategori ON dwigital_produk.id_produk_kategori = dwigital_produk_kategori.id ";
 
 		$index = 1;
 		$fetch_record_filtered = $this->db->query($sql . $where);
@@ -151,9 +149,9 @@ class Produk extends CI_Controller
 
 			$sub_array = array();
 			$sub_array[] = $index;
-			$sub_array[] = "<a href='master/produk/detail?id=$id'>$rows->nama_produk </a>";
+			$sub_array[] = "<a href='dwigital/produk/detail?id=$id'>$rows->nama_produk </a>";
 			$sub_array[] = $rows->kode_produk;
-			$sub_array[] = $rows->nama;
+			$sub_array[] = $rows->nama_kategori;
 			$sub_array[] = $cekStok;
 			$sub_array[] = $rows->sat_kecil;
 			$sub_array[] = mata_uang_help($rows->harga_beli);
@@ -163,8 +161,8 @@ class Produk extends CI_Controller
 						<div class='btn-group'>
 			  <button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
 			  <div class='dropdown-menu'>
-				<a href=\"master/produk/delete?id=$id\" onclick=\"return confirm('Anda yakin?')\" class='dropdown-item'>Hapus</a>
-				<a href=\"master/produk/edit?id=$id\" class='dropdown-item'>Edit</a>                
+				<a href=\"dwigital/produk/delete?id=$id\" onclick=\"return confirm('Anda yakin?')\" class='dropdown-item'>Hapus</a>
+				<a href=\"dwigital/produk/edit?id=$id\" class='dropdown-item'>Edit</a>                
 			  </div>
 			</div>";
 			$result[] = $sub_array;
@@ -243,7 +241,7 @@ class Produk extends CI_Controller
 				];
 
 
-				$this->m_admin->insert('md_produk', $simpandata);
+				$this->m_admin->insert('dwigital_produk', $simpandata);
 				$id_produk = $this->db->insert_id();
 				if ($rowData[7] > 0) {
 					$this->m_admin->updateStock($id_produk, $rowData[7], "+", "import", "import");
@@ -330,7 +328,7 @@ class Produk extends CI_Controller
 
 		$id 			= $this->input->post('id');
 		$config = $this->m_admin->set_upload_options('./assets/pr0duk/', 'jpg|png|jpeg', '1000');
-		$row = $this->m_admin->getByID("md_produk", "id_produk", $id)->row();
+		$row = $this->m_admin->getByID("dwigital_produk", "id_produk", $id)->row();
 
 		$err = "";
 		if (!empty($_FILES['gambar']['name'])) {
@@ -408,9 +406,9 @@ class Produk extends CI_Controller
 	public function resetStok($id)
 	{
 		$no = 1;
-		$cek = $this->m_admin->getByID("md_produk", "id_klinik", $id);
+		$cek = $this->m_admin->getByID("dwigital_produk", "id_klinik", $id);
 		foreach ($cek->result() as $rt) {
-			$cekStok = cekStokDwigital($rt->id_produk);
+			$cekStok = cekStok($rt->id_produk);
 			if ($cekStok == 0) {
 				$ref = "import" . date("Ymd");
 				$this->m_admin->updateStock($rt->id_produk, $rt->stok, $id, "+", $ref, "import");
@@ -418,40 +416,5 @@ class Produk extends CI_Controller
 			}
 		}
 		echo $no;
-	}
-	function get_autocomplete()
-	{
-		$id_klinik = cekKlinik();
-		if (isset($_GET['term'])) {
-			$id  = $_GET['term'];
-
-			$cekSetting = $this->m_admin->getByID("md_setting", "id_setting", id_setting())->row();
-			if ($cekSetting->stok_produk == 1) {
-				$result = $this->db->query("SELECT md_produk.* FROM md_produk 
-				INNER JOIN md_realStock ON md_realStock.id_produk = md_produk.id_produk
-				WHERE md_produk.id_klinik = '$id_klinik' AND md_realStock.stock > 0 
-				AND md_produk.nama_produk LIKE '%$id%' AND md_produk.status = 1")->result();
-			} else {
-				$result = $this->db->query("SELECT * FROM md_produk WHERE id_klinik = '$id_klinik' AND nama_produk LIKE '%$id%' AND status = 1")->result();
-			}
-
-			$arr_result = []; // Pastikan array kosong sebelum digunakan
-			if (count($result) > 0) {
-				foreach ($result as $row) {
-					if (is_null($row->harga_resep) || $row->harga_resep == 0 || $row->harga_resep == "") {
-						$harga = $row->harga;
-					} else {
-						$harga = $row->harga_resep;
-					}
-
-					$arr_result[] = array(
-						'label' => $row->id_produk . "//" . $row->kode_produk . "//" . $row->nama_produk . " @ " . $row->sat_kecil,
-						'harga' => $harga,
-					);
-				}
-			}
-
-			echo json_encode($arr_result); // Output semua hasil JSON setelah loop selesai
-		}
 	}
 }
