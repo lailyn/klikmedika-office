@@ -4,148 +4,161 @@
  *
  */
 //encrypt
-function cekTtd($no_reg,$tipe){
-  $ci =& get_instance();
-  return $ci->m_admin->cekTtd($no_reg,$tipe);
+function cekTtd($no_reg, $tipe)
+{
+  $ci = &get_instance();
+  return $ci->m_admin->cekTtd($no_reg, $tipe);
 }
-function haversineDistance($lat1, $lon1, $lat2, $lon2) {
-    // Convert degrees to radians
-    $lat1 = deg2rad($lat1);
-    $lon1 = deg2rad($lon1);
-    $lat2 = deg2rad($lat2);
-    $lon2 = deg2rad($lon2);
+function haversineDistance($lat1, $lon1, $lat2, $lon2)
+{
+  // Convert degrees to radians
+  $lat1 = deg2rad($lat1);
+  $lon1 = deg2rad($lon1);
+  $lat2 = deg2rad($lat2);
+  $lon2 = deg2rad($lon2);
 
-    // Haversine formula
-    $dlat = $lat2 - $lat1;
-    $dlon = $lon2 - $lon1;
-    $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlon / 2) * sin($dlon / 2);
-    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+  // Haversine formula
+  $dlat = $lat2 - $lat1;
+  $dlon = $lon2 - $lon1;
+  $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlon / 2) * sin($dlon / 2);
+  $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
-    // Earth radius in kilometers (use 3959 for miles)
-    $radius = 6371;
+  // Earth radius in kilometers (use 3959 for miles)
+  $radius = 6371;
 
-    // Calculate the distance
-    $distance = $radius * $c;
+  // Calculate the distance
+  $distance = $radius * $c;
 
-    return $distance;
+  return $distance;
 }
 if (!function_exists('post_method')) {
-    function encr()
-    {
-        return "";
-    }
+  function encr()
+  {
+    return "";
+  }
 }
 function pref()
 {
-    return "62";
+  return "62";
 }
 function slugAdmin()
 {
-    return "m4suk4dm1n";
+  return "m4suk4dm1n";
 }
-function tgl_indo($tanggal){
-    $bulan = array (
-      1 =>   'Januari',
-      'Februari',
-      'Maret',
-      'April',
-      'Mei',
-      'Juni',
-      'Juli',
-      'Agustus',
-      'September',
-      'Oktober',
-      'November',
-      'Desember'
-    );
-    $pecahkan = explode('-', $tanggal);
-    
-    // variabel pecahkan 0 = tanggal
-    // variabel pecahkan 1 = bulan
-    // variabel pecahkan 2 = tahun
-   
-    return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+function tgl_indo($tanggal)
+{
+  $bulan = array(
+    1 =>   'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  );
+  $pecahkan = explode('-', $tanggal);
+
+  // variabel pecahkan 0 = tanggal
+  // variabel pecahkan 1 = bulan
+  // variabel pecahkan 2 = tahun
+
+  return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+}
+function bulan_indo($tanggal)
+{
+  $bulan = array(
+    1 =>   'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  );
+  $pecahkan = explode('-', $tanggal);
+
+  return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+}
+function manipulate_time($tgl, $jenis, $lama, $op, $format = null)
+{
+  if (is_null($format)) {
+    $tgl_baru = date("Y-m-d h:i:s", strtotime("" . $op . $lama . " " . $jenis . "", strtotime($tgl)));
+  } else {
+    $tgl_baru = date($format, strtotime("" . $op . $lama . " " . $jenis . "", strtotime($tgl)));
   }
-function bulan_indo($tanggal){
-    $bulan = array (
-      1 =>   'Januari',
-      'Februari',
-      'Maret',
-      'April',
-      'Mei',
-      'Juni',
-      'Juli',
-      'Agustus',
-      'September',
-      'Oktober',
-      'November',
-      'Desember'
-    );
-    $pecahkan = explode('-', $tanggal);    
-   
-    return $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+  return $tgl_baru;
+}
+function waktu()
+{
+  return gmdate("Y-m-d H:i:s", time() + 60 * 60 * 7);
+}
+function jam()
+{
+  return gmdate("H:i:s", time() + 60 * 60 * 7);
+}
+function tgl()
+{
+  return gmdate("Y-m-d", time() + 60 * 60 * 7);
+}
+function hitung_umur($tanggal_lahir)
+{
+  $birthDate = new DateTime($tanggal_lahir);
+  $today = new DateTime("today");
+  if ($birthDate > $today) {
+    exit("0 tahun 0 bulan 0 hari");
   }
-function manipulate_time($tgl,$jenis,$lama,$op,$format=null){    
-    if(is_null($format)){
-        $tgl_baru = date("Y-m-d h:i:s", strtotime("".$op.$lama." ".$jenis."", strtotime($tgl)));
-    }else{
-        $tgl_baru = date($format, strtotime("".$op.$lama." ".$jenis."", strtotime($tgl)));
-    }
-    return $tgl_baru;
+  $y = $today->diff($birthDate)->y;
+  $m = $today->diff($birthDate)->m;
+  $d = $today->diff($birthDate)->d;
+  return $y;
 }
-function waktu(){
-    return gmdate("Y-m-d H:i:s", time() + 60 * 60 * 7);     
+function mata_uang_help($a)
+{
+  if (is_numeric($a) and $a != 0 and $a != "") {
+    return number_format($a, 0, ',', '.');
+  } else {
+    return $a;
+  }
 }
-function jam(){
-    return gmdate("H:i:s", time() + 60 * 60 * 7);       
+function setMenu($id)
+{
+  $ci = &get_instance();
+  return $ci->m_admin->user_menu($id);
 }
-function tgl(){
-    return gmdate("Y-m-d", time() + 60 * 60 * 7);       
-}   
-function hitung_umur($tanggal_lahir){
-    $birthDate = new DateTime($tanggal_lahir);
-    $today = new DateTime("today");
-    if ($birthDate > $today) { 
-        exit("0 tahun 0 bulan 0 hari");
-    }
-    $y = $today->diff($birthDate)->y;
-    $m = $today->diff($birthDate)->m;
-    $d = $today->diff($birthDate)->d;
-    return $y;
-}
-function mata_uang_help($a){      
-    if(is_numeric($a) AND $a != 0 AND $a != ""){
-      return number_format($a, 0, ',', '.');
-    }else{
-      return $a;
-    }
-}
-function setMenu($id){
-    $ci =& get_instance();
-    return $ci->m_admin->user_menu($id);
-}
-function do_resize($file_path = null, $width = null, $height = null) {
-  $ci =& get_instance();
+function do_resize($file_path = null, $width = null, $height = null)
+{
+  $ci = &get_instance();
   $ci->load->library('image_lib');
   $config = [
-      'image_library'  => 'gd2',
-      'source_image'   => $file_path,
-      'create_thumb'   => false,
-      'maintain_ratio' => true,
-      'width'          => $width,
-      'height'         => $height,
-  ]; 
+    'image_library'  => 'gd2',
+    'source_image'   => $file_path,
+    'create_thumb'   => false,
+    'maintain_ratio' => true,
+    'width'          => $width,
+    'height'         => $height,
+  ];
   $ci->image_lib->initialize($config);
   $ci->image_lib->resize();
 }
-function datatableFilter($table, $columns_search = [], $columns_order = [], $tables_join = [], $custom_select = null, $custom_where = [], $limit = false, $nolimit = false){
-  $ci =& get_instance();
+function datatableFilter($table, $columns_search = [], $columns_order = [], $tables_join = [], $custom_select = null, $custom_where = [], $limit = false, $nolimit = false)
+{
+  $ci = &get_instance();
 
-  if($custom_select) $ci->db->select($custom_select);
+  if ($custom_select) $ci->db->select($custom_select);
 
   foreach ($tables_join as $table_join) {
-    if(is_array($table_join)){
-      if(array_key_exists(0, $table_join)){
+    if (is_array($table_join)) {
+      if (array_key_exists(0, $table_join)) {
         $parent = reset($table_join);
         $table_join = key($table_join);
 
@@ -156,12 +169,11 @@ function datatableFilter($table, $columns_search = [], $columns_order = [], $tab
 
         $ci->db->join($table_join, "{$parent}.id_{$table_join} = {$table_join}.id");
       }
-    }
-    else $ci->db->join($table_join, "{$table}.id_{$table_join} = {$table_join}.id");
+    } else $ci->db->join($table_join, "{$table}.id_{$table_join} = {$table_join}.id");
   }
 
   foreach ($custom_where as $where) {
-    if(is_array($where)){
+    if (is_array($where)) {
       $key = reset($where);
       $value = key($where);
       $ci->db->where($value, $key);
@@ -170,23 +182,37 @@ function datatableFilter($table, $columns_search = [], $columns_order = [], $tab
 
   $i = 0;
   foreach ($columns_search as $item) {
-    if($_POST['search']['value']) {
-        if($i===0){
-            $ci->db->group_start();
-            $ci->db->like($item, $_POST['search']['value']);
-        } else $ci->db->or_like($item, $_POST['search']['value']);
+    if ($_POST['search']['value']) {
+      if ($i === 0) {
+        $ci->db->group_start();
+        $ci->db->like($item, $_POST['search']['value']);
+      } else $ci->db->or_like($item, $_POST['search']['value']);
 
-        if(count($columns_search) - 1 == $i) $ci->db->group_end();
+      if (count($columns_search) - 1 == $i) $ci->db->group_end();
     }
     $i++;
   }
 
-  if(isset($_POST['order'])) {
-      if(!empty($columns_order) && !empty($columns_order[$_POST['order']['0']['column']])) $ci->db->order_by($columns_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+  if (isset($_POST['order'])) {
+    if (!empty($columns_order) && !empty($columns_order[$_POST['order']['0']['column']])) $ci->db->order_by($columns_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
   }
 
-  if(!$nolimit) if($_POST['length'] != -1) $ci->db->limit($_POST['length'], $_POST['start']);  
-  if($limit) $ci->db->limit($limit);
+  if (!$nolimit) if ($_POST['length'] != -1) $ci->db->limit($_POST['length'], $_POST['start']);
+  if ($limit) $ci->db->limit($limit);
   return $ci->db->get($table)->result();
 }
-?>
+
+if (!function_exists('cekStokDwigital')) {
+  function cekStokDwigital($id)
+  {
+    $CI = &get_instance();
+    $CI->load->model('m_admin');
+    return $CI->m_admin->cekStokDwigital($id);
+  }
+}
+
+function send_json($array)
+{
+  echo json_encode($array);
+  die;
+}

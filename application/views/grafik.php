@@ -8,7 +8,8 @@
             <h3>
               <?php               
               $dt = date("Y-m");
-              $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM md_pemasukan")->row()->jum;              
+              $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM md_pemasukan")->row()->jum;
+              $jum1 += $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai' AND LEFT(tgl,7) = '$dt'")->row()->jum; 
               echo "Rp ". mata_uang($jum1);
               ?> 
             </h3>
@@ -38,7 +39,8 @@
             <h3>
               <?php 
               $dt = date("Y-m-d");
-              $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM md_pemasukan WHERE tgl = '$dt'")->row()->jum;              
+              $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM md_pemasukan WHERE tgl = '$dt'")->row()->jum;            
+              $jum1 += $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai' AND tgl = '$dt'")->row()->jum;            
               echo "Rp ". mata_uang((!is_null($jum1))?$jum1:0);
               ?> 
             </h3>
@@ -53,8 +55,12 @@
             <h3>
               <?php 
               $dt = date("Y-m");
-              $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM md_pemasukan WHERE LEFT(tgl,7) = '$dt'")->row()->jum;              
-              echo "Rp ". mata_uang((!is_null($jum1))?$jum1:0);
+              $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM md_pemasukan WHERE LEFT(tgl,7) = '$dt'")->row()->jum;
+              $total_jum = (!is_null($jum1))?$jum1:0;
+              $dwigital_cart = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai' AND LEFT(tgl,7) = '$dt'")->row()->jum;
+              if(!is_null($dwigital_cart)) $total_jum += $dwigital_cart;
+              else $total_jum += 0;
+              echo "Rp ". mata_uang($total_jum);
               ?> 
             </h3>
             <p> Pendapatan Bulan Ini</p>
@@ -135,7 +141,9 @@
     $tgl_awal2 = manipulate_time($tgl_akhir2,"days",30,"-","Y-m-d");  
     $cari_data = $this->db->query("SELECT LEFT(bulan,7) as month, SUM(jum) as grand_total
               FROM (                  
-                  SELECT SUM(total) AS jum, tgl AS bulan FROM md_pemasukan GROUP BY LEFT(bulan,7)                                    
+                  SELECT SUM(total) AS jum, tgl AS bulan FROM md_pemasukan GROUP BY LEFT(bulan,7)
+                  UNION
+                  SELECT SUM(total) AS jum, tgl AS bulan FROM dwigital_cart WHERE status='selesai' GROUP BY LEFT(bulan,7)
               ) as combined_data GROUP BY month");
     ?>
     chart: {
@@ -282,7 +290,11 @@
             $thb = $th."-".$i;
             $cek = $this->db->query("SELECT SUM(total) AS jum FROM md_pemasukan WHERE LEFT(tgl,7) = '$thb'");
             if(!is_null($cek->row()->jum)) $jum = $cek->row()->jum;
-              else $jum = 20;
+            else $jum = 20;
+            $dwigital_cart = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai' AND LEFT(tgl,7) = '$thb'");
+            if(!is_null($dwigital_cart->row()->jum)) $jum += $dwigital_cart->row()->jum;
+            else $jum += 0; 
+
             if($data=="") $data = $jum;
               else $data .= ",".$jum;                        
           }           

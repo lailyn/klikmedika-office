@@ -33,6 +33,15 @@
   <link rel="stylesheet" href="assets/backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="assets/backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="assets/backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <!-- Vue JS Related -->
+  <script src="assets/backend/js/vue/qs.min.js" type="text/javascript"></script>
+  <script src="assets/backend/js/vue/vue.min.js" type="text/javascript"></script>
+  <script src="assets/backend/js/vue/axios.min.js" type="text/javascript"></script>
+  <script src="assets/backend/js/vue/accounting.js" type="text/javascript"></script>
+  <script src="assets/backend/js/vue/vue-numeric.min.js" type="text/javascript"></script>
+  <script src="assets/backend/js/lodash.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="assets/backend/js/moment.min.js"></script>
 </head>
 <?php if($isi=='penyewaan'){ ?>
 <body class="hold-transition sidebar-mini sidebar-collapse">
