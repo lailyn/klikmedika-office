@@ -155,12 +155,12 @@ class Penjualan extends CI_Controller
 			$stock = "";
 			if ($setting->stok_produk == 1) {
 				$cekStok = cekStokDwigital($rows->id_produk);
-				if ($cekStok > 0) {
-					$stock = "<label class='badge badge-info'>sisa $cekStok</label>";
-					$tombol = "<a href=\"dwigital/transaksi/penjualan/saveProduk/$rows->id_produk/$noReg\" class='btn btn-sm btn-warning'>Pilih ($cekStok)</a>";
-				} else {
-					$tombol = "<a onclick=\"return confirm('Silakan re-stock terlebih dulu!')\" class='btn btn-sm btn-danger'>Kosong</a>";
-				}
+				// if ($cekStok > 0) {
+				// 	$stock = "<label class='badge badge-info'>sisa $cekStok</label>";
+				// 	$tombol = "<a href=\"dwigital/transaksi/penjualan/saveProduk/$rows->id_produk/$noReg\" class='btn btn-sm btn-warning'>Pilih ($cekStok)</a>";
+				// } else {
+				// 	$tombol = "<a onclick=\"return confirm('Silakan re-stock terlebih dulu!')\" class='btn btn-sm btn-danger'>Kosong</a>";
+				// }
 			} else {
 				$tombol = "<a href=\"dwigital/transaksi/penjualan/saveProduk/$rows->id_produk/$noReg\" class='btn btn-sm btn-warning'>Pilih</a>";
 			}
@@ -195,13 +195,13 @@ class Penjualan extends CI_Controller
 
 			$stock = "";
 			if ($setting->stok_produk == 1) {
-				$cekStok = cekStokDwigital($isi->id_produk);
-				if ($cekStok > 0) {
-					$stock = "<label class='badge badge-info'>sisa $cekStok</label>";
-					$tombol = "<a href=\"dwigital/transaksi/penjualan/saveProduk/$isi->id_produk/$noReg\" class='btn btn-sm btn-warning'>Pilih ($cekStok)</a>";
-				} else {
-					$tombol = "<a onclick=\"return confirm('Silakan re-stock terlebih dulu!')\" class='btn btn-sm btn-danger'>Kosong</a>";
-				}
+				// $cekStok = cekStokDwigital($isi->id_produk);
+				// if ($cekStok > 0) {
+				// 	$stock = "<label class='badge badge-info'>sisa $cekStok</label>";
+				// 	$tombol = "<a href=\"dwigital/transaksi/penjualan/saveProduk/$isi->id_produk/$noReg\" class='btn btn-sm btn-warning'>Pilih ($cekStok)</a>";
+				// } else {
+				// 	$tombol = "<a onclick=\"return confirm('Silakan re-stock terlebih dulu!')\" class='btn btn-sm btn-danger'>Kosong</a>";
+				// }
 			} else {
 				$tombol = "<a href=\"dwigital/transaksi/penjualan/saveProduk/$isi->id_produk/$noReg\" class='btn btn-sm btn-warning'>Pilih</a>";
 			}
@@ -262,7 +262,7 @@ class Penjualan extends CI_Controller
 
 		$cekStok = cekStokDwigital($produk->id_produk);
 		if ($cekStok < $qty) {
-			send_json(['status' => 0, 'message' => 'Stok tidak mencukupi. Stok tersedia : ' . $cekStok]);
+			// send_json(['status' => 0, 'message' => 'Stok tidak mencukupi. Stok tersedia : ' . $cekStok]);
 		}
 
 		if ((string)$produk->sat_kecil != '') {
@@ -335,11 +335,11 @@ class Penjualan extends CI_Controller
 		if (isset($qty)) {
 			$cekStok = cekStokDwigital($produk->id_produk);
 			if ($cekStok < (int)$qty) {
-				send_json([
-					'status' => 0,
-					'message' => 'Stok tidak mencukupi. Stok tersedia : ' . $cekStok,
-					'data' => $list_cart
-				]);
+				// send_json([
+				// 	'status' => 0,
+				// 	'message' => 'Stok tidak mencukupi. Stok tersedia : ' . $cekStok,
+				// 	'data' => $list_cart
+				// ]);
 			}
 			if ($qty < 1) {
 				$qty = 1;
@@ -473,11 +473,11 @@ class Penjualan extends CI_Controller
 
 		$cekDetail = $this->m_admin->getByID("dwigital_cart_detail", "no_faktur", $no_faktur);
 		foreach ($cekDetail->result() as $amb) {
-			$cekStok = $this->m_admin->getByID("dwigital_produk_real_stock", "id_produk", $amb->id_produk)->row()->stock - $amb->qty;
+			// $cekStok = $this->m_admin->getByID("dwigital_produk_real_stock", "id_produk", $amb->id_produk)->row()->stock - $amb->qty;
 			$keterangan = "Penjualan POS";
-			$this->m_admin->updateStockDwigital($amb->id_produk, $amb->qty, $cekStok, "-", $no_faktur, "restock", $tgl, $keterangan);
+			// $this->m_admin->updateStockDwigital($amb->id_produk, $amb->qty, $cekStok, "-", $no_faktur, "restock", $tgl, $keterangan);
 		}
-		
+
 		$_SESSION['pesan'] 		= "Transaksi berhasil disimpan";
 		$_SESSION['tipe'] 		= "success";
 		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/transaksi/penjualan'>";

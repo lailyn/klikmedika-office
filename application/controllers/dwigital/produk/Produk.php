@@ -244,7 +244,7 @@ class Produk extends CI_Controller
 				$this->m_admin->insert('dwigital_produk', $simpandata);
 				$id_produk = $this->db->insert_id();
 				if ($rowData[7] > 0) {
-					$this->m_admin->updateStock($id_produk, $rowData[7], "+", "import", "import");
+					// $this->m_admin->updateStock($id_produk, $rowData[7], "+", "import", "import");
 				}
 			}
 		}
@@ -309,7 +309,7 @@ class Produk extends CI_Controller
 			$id_produk = $this->db->insert_id();
 
 			$keterangan = "updateStockAwal " . waktu();
-			if ($stok > 0) $this->m_admin->updateStock($id_produk, $stok, $stok, $id_klinik, "+", $keterangan, "stokAwal", tgl(), $keterangan, $noBatch, $expDate);
+			// if ($stok > 0) $this->m_admin->updateStock($id_produk, $stok, $stok, $id_klinik, "+", $keterangan, "stokAwal", tgl(), $keterangan, $noBatch, $expDate);
 
 			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "master/produk'>";
 		} else {
@@ -367,7 +367,7 @@ class Produk extends CI_Controller
 			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "master/produk'>";
 
 			$keterangan = "updateStockAwal " . waktu();
-			if ($stok > 0) $this->m_admin->updateStock($id, $stok, $stok, "+", $keterangan, "stokAwal", tgl(), $keterangan);
+			// if ($stok > 0) $this->m_admin->updateStock($id, $stok, $stok, "+", $keterangan, "stokAwal", tgl(), $keterangan);
 		} else {
 			$_SESSION['pesan'] 		= "Data gagal disimpan " . $err;
 			$_SESSION['tipe'] 		= "danger";
@@ -403,6 +403,7 @@ class Produk extends CI_Controller
 		$data['mode']		= "detail";
 		$this->template($data);
 	}
+	
 	public function resetStok($id)
 	{
 		$no = 1;
@@ -411,7 +412,7 @@ class Produk extends CI_Controller
 			$cekStok = cekStok($rt->id_produk);
 			if ($cekStok == 0) {
 				$ref = "import" . date("Ymd");
-				$this->m_admin->updateStock($rt->id_produk, $rt->stok, $id, "+", $ref, "import");
+				// $this->m_admin->updateStock($rt->id_produk, $rt->stok, $id, "+", $ref, "import");
 				$no++;
 			}
 		}
