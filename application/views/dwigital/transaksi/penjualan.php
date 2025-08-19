@@ -503,7 +503,7 @@
         }
 
         if ($row->id_user != 0) {
-          $cek_user = $this->m_admin->getByID("md_pasien", "id_pasien", $row->id_user);
+          $cek_user = $this->m_admin->getByID("md_user", "id_user", $row->id_user);
           $customer = ($cek_user->num_rows() > 0) ? $cek_user->row()->nama_lengkap : "";
         } else {
           $customer = "Walk in Customer";

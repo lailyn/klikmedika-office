@@ -6,7 +6,7 @@ class Produk extends CI_Controller
 
 	var $tables =   "dwigital_produk";
 	var $page		=		"dwigital/produk/produk";
-	var $file		=		"produk";
+	var $file		=		"dwigital/produk/produk/produk";
 	var $pk     =   "id_produk";
 	var $title  =   "Produk";
 	var $bread	=   "<ol class='breadcrumb'>
