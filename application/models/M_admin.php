@@ -1094,7 +1094,7 @@ class M_admin extends CI_Model
 
 	public function updateStockDwigital($id_produk, $qty, $saldo, $jenis = NULL, $reference_id = NULL, $tipe = NULL, $tgl = NULL, $keterangan = NULL)
 	{
-		$cekDouble = $this->db->query("SELECT * FROM dwigital_stockLog WHERE id_produk = '$id_produk'
+		$cekDouble = $this->db->query("SELECT * FROM dwigital_stocklog WHERE id_produk = '$id_produk'
 			AND reference_id = '$reference_id' AND tipe = '$tipe'");
 
 		if ($cekDouble->num_rows() == 0) {
@@ -1120,7 +1120,7 @@ class M_admin extends CI_Model
 			$datas['created_at'] = waktu();
 			$datas['created_by'] = $this->session->id_user;
 
-			$this->m_admin->insert("dwigital_stockLog", $datas);
+			$this->m_admin->insert("dwigital_stocklog", $datas);
 			if ($tipe == "stokAwal") {
 				$cekStok = $this->db->query("SELECT * FROM dwigital_produk_real_stock WHERE id_produk = '$id_produk'");
 				$data['id_produk'] = $id_produk;
