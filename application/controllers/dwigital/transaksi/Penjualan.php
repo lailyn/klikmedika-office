@@ -723,7 +723,9 @@ class Penjualan extends CI_Controller
 			$last_id_import = $this->db->select_max('id_import')->get('dwigital_cart')->row()->id_import;
 			$this->db->trans_begin();
 			$last_id_import++;
+			$no_faktur = [];
 			foreach ($data as $x => $rowData) {
+
 				if ($x == 0) {
 					continue;
 				}
@@ -749,6 +751,7 @@ class Penjualan extends CI_Controller
 						'created_at' => waktu()
 					];
 					$id_platform = $last_id_platform;
+					$all_platforms[] = $insert_platform;
 				}
 
 				$cari = $rowData[2];
@@ -770,11 +773,21 @@ class Penjualan extends CI_Controller
 						'harga_beli' => $rowData[3]
 					];
 					$id_product = $last_id_product;
+					$all_products[] = $insert_product;
 				}
 
 				$total = $rowData[3] * $rowData[4];
+
+				if (isset($no_faktur[$tahun_bulan])) {
+					$new_no_faktur = $no_faktur[$tahun_bulan] + 1;
+					$no_faktur[$tahun_bulan] = $new_no_faktur;
+				} else {
+					$new_no_faktur = $this->get_faktur($tahun_bulan);
+					$no_faktur[$tahun_bulan] = $new_no_faktur;
+				}
+
 				$insert_cart = [
-					'no_faktur' => $this->get_faktur($tahun_bulan),
+					'no_faktur' => $new_no_faktur,
 					'tgl' => $tanggal,
 					'total' => $total,
 					'nominal' => $total,

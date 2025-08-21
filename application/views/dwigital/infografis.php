@@ -25,7 +25,7 @@ usort($list_data_platforms, function ($a, $b) {
         <h3>
           <?php
           $dt = date("Y-m");
-          $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai' AND LEFT(tgl,7) = '$dt'")->row()->jum;
+          $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai'")->row()->jum;
           echo "Rp " . mata_uang($jum1);
           ?>
         </h3>
