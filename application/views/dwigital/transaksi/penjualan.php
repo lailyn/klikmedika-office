@@ -677,7 +677,7 @@
                             $customer = "Walk in Customer";
                           }
 
-                          $platform = $this->db->where("id", $isi->id_platform)->get("dwigital_platform")->row()->nama??'';
+                          $platform = $this->db->where("id", $isi->id_platform)->get("dwigital_platform")->row()->nama ?? '';
 
                           $pembayaran = "d-none";
                           $hapus = "d-none";
@@ -813,4 +813,44 @@
            });
          });
        </script>
+     <?php } elseif ($set == 'insert' and $mode == 'import') {
+      ?>
+
+       <div class="row">
+         <div class="col-12 grid-margin">
+           <div class="card">
+             <div class="card-header">
+               <h4 class="card-title">
+                 <a href="dwigital/produk/produk" class="btn btn-warning btn-sm"><i class="fa fa-chevron-left"></i> Kembali</a>
+               </h4>
+             </div>
+             <div class="card-body">
+               <form action="dwigital/transaksi/penjualan/importExcel" method="POST" enctype="multipart/form-data" class="form-sample">
+                 <div class="row">
+                   <div class="col-12">
+                     <div class="form-group row">
+                       <label class="col-sm-2 col-form-label-sm">Upload</label>
+                       <div class="col-sm-8">
+                         <input type="file" name="file" class="form-control form-control-sm" />
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="row">
+                   <div class="col-12">
+                     <hr>
+                     <div class="row">
+                       <div class="col-md-6">
+                         <button type="submit" class="btn btn-primary">Save</button>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </form>
+             </div>
+           </div>
+         </div>
+       </div>
+
+
      <?php } ?>

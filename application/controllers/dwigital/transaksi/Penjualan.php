@@ -393,9 +393,11 @@ class Penjualan extends CI_Controller
 		return $this->m_penjualan->getDetailCartBelumSelesai($filter);
 	}
 
-	public function get_faktur()
+	public function get_faktur($tgl = '')
 	{
-		$tgl = date("Y-m");
+		if ($tgl == '') {
+			$tgl = date("Y-m");
+		}
 		$rd = rand(11, 99);
 		$q = $this->db->query("SELECT MAX(RIGHT(no_faktur,6)) AS kd_max FROM dwigital_cart WHERE LEFT(created_at,7) = '$tgl' ORDER BY id_cart DESC LIMIT 0,1");
 		$kd = "";
@@ -669,5 +671,163 @@ class Penjualan extends CI_Controller
 		} else {
 			return $this->m_penjualan->getPenjualan($filter);
 		}
+	}
+
+	public function import()
+	{
+
+		$data['isi']    = $this->file;
+		$data['title']	= "Import " . $this->title;
+		$data['bread']	= $this->bread;
+		$data['set']		= "insert";
+		$data['mode']		= "import";
+		$this->template($data);
+	}
+
+	public function download()
+	{
+		$this->load->view('master/template_produk');
+	}
+
+	public function importExcel()
+	{
+		$id_user = $this->session->userdata("id_user");
+
+		$config = $this->m_admin->set_upload_options('./excel/', 'xlsx', '10000');
+		$err = "";
+		if (!empty($_FILES['file']['name'])) {
+			$this->upload->initialize($config);
+			if (!$this->upload->do_upload('file')) {
+				$err = $this->upload->display_errors();
+				$_SESSION['pesan'] 		= $err;
+				$_SESSION['tipe'] 		= "danger";
+				echo "<script>history.go(-1)</script>";
+				exit();
+			} else {
+				$err = "";
+				$data['file'] = $fileName = $this->upload->file_name;
+			}
+
+
+			$file_excel = './excel/' . $fileName;
+
+			$render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			$spreadsheet = $render->load($file_excel);
+
+			$data = $spreadsheet->getActiveSheet()->toArray();
+
+			$all_products = $this->db->get('dwigital_produk')->result_array();
+			$all_platforms = $this->db->get('dwigital_platform')->result_array();
+			$last_id_platform = $this->db->select_max('id')->get('dwigital_platform')->row()->id;
+			$last_id_product = $this->db->select_max('id_produk')->get('dwigital_produk')->row()->id_produk;
+			$last_id_import = $this->db->select_max('id_import')->get('dwigital_cart')->row()->id_import;
+			$this->db->trans_begin();
+			$last_id_import++;
+			foreach ($data as $x => $rowData) {
+				if ($x == 0) {
+					continue;
+				}
+				$insert_platform = [];
+				$insert_product = [];
+
+				$tanggal = explode("/", $rowData[0]);
+				$tanggal = $tanggal[2] . "-" . $tanggal[1] . "-" . $tanggal[0];
+				$tahun_bulan = $tanggal[2] . "-" . $tanggal[1];
+
+				$cari = $rowData[5];
+				$hasil = array_filter($all_platforms, function ($item) use ($cari) {
+					return stripos($item['nama'], $cari) !== false; // case-insensitive
+				});
+				if (count($hasil) > 0) {
+					$hasil = reset($hasil);
+					$id_platform = $hasil['id'];
+				} else {
+					$last_id_platform++;
+					$insert_platform = [
+						'id' => $last_id_platform,
+						'nama' => $rowData[5],
+						'created_at' => waktu()
+					];
+					$id_platform = $last_id_platform;
+				}
+
+				$cari = $rowData[2];
+				$hasil = array_filter($all_products, function ($item) use ($cari) {
+					return stripos($item['nama_produk'], $cari) !== false; // case-insensitive
+				});
+				if (count($hasil) > 0) {
+					$hasil = reset($hasil);
+					$id_product = $hasil['id_produk'];
+				} else {
+					$last_id_product++;
+					$insert_product = [
+						'id_produk' => $last_id_product,
+						'nama_produk' => $rowData[2],
+						'id_produk_kategori' => 1,
+						'created_at' => waktu(),
+						'created_by' => $id_user,
+						'harga' => $rowData[3],
+						'harga_beli' => $rowData[3]
+					];
+					$id_product = $last_id_product;
+				}
+
+				$total = $rowData[3] * $rowData[4];
+				$insert_cart = [
+					'no_faktur' => $this->get_faktur($tahun_bulan),
+					'tgl' => $tanggal,
+					'total' => $total,
+					'nominal' => $total,
+					'kembalian' => 0,
+					'status' => 'selesai',
+					'status_bayar' => 2,
+					'created_at' => waktu(),
+					'payment_type' => 'manual_transfer',
+					'id_platform' => $id_platform,
+					'catatan' => $rowData[1] . ' - ' . $rowData[6],
+					'id_import' => $last_id_import,
+					'import_at' => waktu()
+				];
+
+				$insert_cart_detail = [
+					'no_faktur' => $insert_cart['no_faktur'],
+					'id_produk' => $id_product,
+					'nama_produk' => $rowData[2],
+					'harga' => $rowData[3],
+					'satuan' => $rowData[6],
+					'qty' => $rowData[4],
+					'status' => 1,
+					'id_user' => 0,
+					'updated_at' => waktu(),
+				];
+
+
+				if (count($insert_platform) > 0) {
+					$this->db->insert('dwigital_platform', $insert_platform);
+				}
+
+				if (count($insert_product) > 0) {
+					$this->db->insert('dwigital_produk', $insert_product);
+				}
+
+				$this->db->insert('dwigital_cart', $insert_cart);
+				$this->db->insert('dwigital_cart_detail', $insert_cart_detail);
+			}
+
+			if ($this->db->trans_status() === FALSE) {
+				// jika ada error rollback
+				$this->db->trans_rollback();
+				$_SESSION['pesan'] 		= "Data gagal import";
+				$_SESSION['tipe'] 		= "danger";
+			} else {
+				// jika sukses commit
+				$this->db->trans_commit();
+
+				$_SESSION['pesan'] 		= "Data berhasil import";
+				$_SESSION['tipe'] 		= "success";
+			}
+		}
+
+		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/transaksi/penjualan/import'>";
 	}
 }
