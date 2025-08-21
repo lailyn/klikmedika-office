@@ -25,8 +25,8 @@ usort($list_data_platforms, function ($a, $b) {
         <h3>
           <?php
           $dt = date("Y-m");
-          $jum1 = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai'")->row()->jum;
-          echo "Rp " . mata_uang($jum1);
+          $total_pendapatan = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai'")->row()->jum;
+          echo "Rp " . mata_uang($total_pendapatan);
           ?>
         </h3>
         <p> Total Pendapatan</p>
@@ -40,8 +40,8 @@ usort($list_data_platforms, function ($a, $b) {
         <h3>
           <?php
           $dt = date("Y-m");
-          $jum2 = $this->db->query("SELECT SUM(total) AS jum FROM md_pengeluaran WHERE id_kategori=28")->row()->jum;
-          echo "Rp " . mata_uang($jum2);
+          $total_pengeluaran = $this->db->query("SELECT SUM(total) AS jum FROM md_pengeluaran WHERE id_kategori=28")->row()->jum;
+          echo "Rp " . mata_uang($total_pengeluaran);
           ?>
         </h3>
         <p> Total Pengeluaran</p>
@@ -112,6 +112,39 @@ usort($list_data_platforms, function ($a, $b) {
     </div>
   </div>
 
+  <div class="col-lg-4 col-6">
+    <div class="small-box bg-info">
+      <div class="inner">
+        <h3>
+          <?php
+          $dt = date("Y-m");
+          $sisa_saldo = $this->db->query("SELECT SUM(sisa_saldo) AS jum FROM dwigital_saldo_platform")->row()->jum;
+          echo "Rp " . mata_uang((!is_null($sisa_saldo)) ? $sisa_saldo : 0);
+          ?>
+        </h3>
+        <p> Total Modal</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-6">
+    <div class="small-box bg-info">
+      <div class="inner">
+        <h3>Rp. <?= mata_uang($total_pendapatan - $total_pengeluaran) ?>
+        </h3>
+        <p> Bruto</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-6">
+    <div class="small-box bg-info">
+      <div class="inner">
+        <h3>Rp. <?= mata_uang(($total_pendapatan + $sisa_saldo) - $total_pengeluaran) ?>
+        </h3>
+        <p> Profit</p>
+      </div>
+    </div>
+  </div>
+
   <div class="col-md-12 col-lg-12">
     <div class="card">
       <div class="card-body">
@@ -134,7 +167,7 @@ usort($list_data_platforms, function ($a, $b) {
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Platform</h4>
-        <div id="pie_platform" style="width:100%; height:405px;"></div>
+        <div id="pie_platform" style="width:100%; height:605px;"></div>
       </div>
     </div>
   </div>
@@ -172,7 +205,7 @@ usort($list_data_platforms, function ($a, $b) {
       </div>
     </div>
   </div>
-  
+
   <div class="col-md-6 col-lg-6">
     <div class="card" style="min-height: 445px;">
       <div class="card-body">

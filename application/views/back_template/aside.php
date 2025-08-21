@@ -362,6 +362,12 @@
                       <p>Stock Opname</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="<?= site_url('dwigital/transaksi/saldo_platform') ?>" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Saldo Platform</p>
+                    </a>
+                  </li>
                 </ul>
               </li>
             </ul>
