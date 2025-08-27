@@ -119,7 +119,7 @@
                          <input type="text" readonly placeholder="Auto" class="form-control form-control-sm  form-control form-control-sm -sm" value="<?= isset($row) ? $row->no_faktur : '' ?>" />
                        </div>
                        <div class="col-sm-4">
-                         <input type="date" readonly name="tgl" placeholder="Tgl" value="<?= date("Y-m-d") ?>" class="form-control form-control-sm  form-control form-control-sm -sm" />
+                         <input type="date" name="tgl" placeholder="Tgl" value="<?= date("Y-m-d") ?>" class="form-control form-control-sm  form-control form-control-sm -sm" />
                        </div>
                      </div>
                      <div class="form-group row">
