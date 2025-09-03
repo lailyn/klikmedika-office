@@ -30,4 +30,15 @@ $route['konfirmasiPost'] = 'customer/konfirmasiPost';
 $route['keranjang-pesan'] = 'customer/keranjangPesan';
 $route['simpanPenyewaan'] = 'customer/simpanPenyewaan';
 
+
+$route['dwigital/transaksi/withdraw']                 = 'dwigital/transaksi/Withdraw/index';
+$route['dwigital/transaksi/withdraw/edit/(:any)']     = 'dwigital/transaksi/Withdraw/edit/$1';
+$route['dwigital/transaksi/withdraw/store']           = 'dwigital/transaksi/Withdraw/store';
+$route['dwigital/transaksi/withdraw/update/(:any)']   = 'dwigital/transaksi/Withdraw/update/$1';
+$route['dwigital/transaksi/withdraw/delete/(:any)']   = 'dwigital/transaksi/Withdraw/delete/$1';
+$route['dwigital/transaksi/withdraw/destroy/(:any)']  = 'dwigital/transaksi/Withdraw/destroy/$1';
+
+
+ 
+
 $route['admin'] = 'admin/admin';
