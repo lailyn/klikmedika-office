@@ -368,6 +368,12 @@
                       <p>Saldo Platform</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="<?= site_url('dwigital/transaksi/withdraw') ?>" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Withdraw</p>
+                    </a>
+                  </li>
                 </ul>
               </li>
             </ul>
