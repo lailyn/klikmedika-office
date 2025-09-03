@@ -7,3 +7,4 @@ $autoload['helper'] = array('url', 'global', 'themes', 'session','file','form','
 $autoload['config'] = array();
 $autoload['language'] = array();
 $autoload['model'] = array();
+
