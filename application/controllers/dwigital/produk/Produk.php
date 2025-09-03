@@ -149,7 +149,7 @@ class Produk extends CI_Controller
 
 			$sub_array = array();
 			$sub_array[] = $index;
-			$sub_array[] = "<a href='dwigital/produk/detail?id=$id'>$rows->nama_produk </a>";
+			$sub_array[] = "<a href='dwigital/produk/produk/detail?id=$id'>$rows->nama_produk </a>";
 			$sub_array[] = $rows->kode_produk;
 			$sub_array[] = $rows->nama_kategori;
 			$sub_array[] = $cekStok;
@@ -161,8 +161,8 @@ class Produk extends CI_Controller
 						<div class='btn-group'>
 			  <button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
 			  <div class='dropdown-menu'>
-				<a href=\"dwigital/produk/delete?id=$id\" onclick=\"return confirm('Anda yakin?')\" class='dropdown-item'>Hapus</a>
-				<a href=\"dwigital/produk/edit?id=$id\" class='dropdown-item'>Edit</a>                
+				<a href=\"dwigital/produk/produk/delete?id=$id\" onclick=\"return confirm('Anda yakin?')\" class='dropdown-item'>Hapus</a>
+				<a href=\"dwigital/produk/produk/edit?id=$id\" class='dropdown-item'>Edit</a>                
 			  </div>
 			</div>";
 			$result[] = $sub_array;
@@ -251,7 +251,7 @@ class Produk extends CI_Controller
 
 		$_SESSION['pesan'] 		= "Data berhasil import";
 		$_SESSION['tipe'] 		= "success";
-		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
+		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk/produk'>";
 	}
 	public function delete()
 	{
@@ -262,8 +262,9 @@ class Produk extends CI_Controller
 		$this->m_admin->delete($tabel, $pk, $id);
 		$_SESSION['pesan'] 	= "Data berhasil dihapus";
 		$_SESSION['tipe'] 	= "success";
-		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
+		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk/produk'>";
 	}
+
 	public function save()
 	{
 		$waktu 		= gmdate("Y-m-d H:i:s", time() + 60 * 60 * 7);
@@ -311,7 +312,7 @@ class Produk extends CI_Controller
 			$keterangan = "updateStockAwal " . waktu();
 			// if ($stok > 0) $this->m_admin->updateStock($id_produk, $stok, $stok, $id_klinik, "+", $keterangan, "stokAwal", tgl(), $keterangan, $noBatch, $expDate);
 
-			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
+			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk/produk'>";
 		} else {
 			$_SESSION['pesan'] 		= "Data gagal disimpan " . $err;
 			$_SESSION['tipe'] 		= "danger";
@@ -364,7 +365,7 @@ class Produk extends CI_Controller
 
 			$_SESSION['pesan'] 		= "Data berhasil diubah";
 			$_SESSION['tipe'] 		= "success";
-			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
+			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk/produk'>";
 
 			$keterangan = "updateStockAwal " . waktu();
 			// if ($stok > 0) $this->m_admin->updateStock($id, $stok, $stok, "+", $keterangan, "stokAwal", tgl(), $keterangan);
