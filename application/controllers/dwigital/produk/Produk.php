@@ -251,7 +251,7 @@ class Produk extends CI_Controller
 
 		$_SESSION['pesan'] 		= "Data berhasil import";
 		$_SESSION['tipe'] 		= "success";
-		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "master/produk'>";
+		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
 	}
 	public function delete()
 	{
@@ -262,7 +262,7 @@ class Produk extends CI_Controller
 		$this->m_admin->delete($tabel, $pk, $id);
 		$_SESSION['pesan'] 	= "Data berhasil dihapus";
 		$_SESSION['tipe'] 	= "success";
-		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "master/produk'>";
+		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
 	}
 	public function save()
 	{
@@ -311,7 +311,7 @@ class Produk extends CI_Controller
 			$keterangan = "updateStockAwal " . waktu();
 			// if ($stok > 0) $this->m_admin->updateStock($id_produk, $stok, $stok, $id_klinik, "+", $keterangan, "stokAwal", tgl(), $keterangan, $noBatch, $expDate);
 
-			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "master/produk'>";
+			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
 		} else {
 			$_SESSION['pesan'] 		= "Data gagal disimpan " . $err;
 			$_SESSION['tipe'] 		= "danger";
@@ -364,7 +364,7 @@ class Produk extends CI_Controller
 
 			$_SESSION['pesan'] 		= "Data berhasil diubah";
 			$_SESSION['tipe'] 		= "success";
-			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "master/produk'>";
+			echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/produk'>";
 
 			$keterangan = "updateStockAwal " . waktu();
 			// if ($stok > 0) $this->m_admin->updateStock($id, $stok, $stok, "+", $keterangan, "stokAwal", tgl(), $keterangan);
