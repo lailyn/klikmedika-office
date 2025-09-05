@@ -360,21 +360,25 @@ class M_admin extends CI_Model
 	//      }
 	//      return $akses;
 	//  }
+	// public function user_auth($menu, $mode)
+	// {
+	// 	$id_user        = $this->session->userdata("id_user");
+	// 	$id_user_type     = $this->session->userdata('id_user_type');
+	// 	$sql            = $this->db->query("SELECT * FROM md_user_type WHERE id_user_type = '$id_user_type'");
+	// 	$user_type = ($sql->num_rows() > 0) ? $sql->row()->user_type : "";
+	// 	$cek            = $this->db->query("SELECT * FROM md_user_access INNER JOIN md_menu ON md_user_access.id_menu = md_menu.id_menu 
+    //                       WHERE md_user_access.id_user_type = '$id_user_type' AND md_menu.menu_link = '$menu' 
+    //                       AND md_user_access.can_" . $mode . " = 1");
+	// 	if ($cek->num_rows() > 0 or $user_type == 'Admin' or $user_type == 'HR & Finance') {
+	// 		$akses = "true";
+	// 	} else {
+	// 		$akses = "false";
+	// 	}
+	// 	return $akses;
+	// }
 	public function user_auth($menu, $mode)
 	{
-		$id_user        = $this->session->userdata("id_user");
-		$id_user_type     = $this->session->userdata('id_user_type');
-		$sql            = $this->db->query("SELECT * FROM md_user_type WHERE id_user_type = '$id_user_type'");
-		$user_type = ($sql->num_rows() > 0) ? $sql->row()->user_type : "";
-		$cek            = $this->db->query("SELECT * FROM md_user_access INNER JOIN md_menu ON md_user_access.id_menu = md_menu.id_menu 
-                          WHERE md_user_access.id_user_type = '$id_user_type' AND md_menu.menu_link = '$menu' 
-                          AND md_user_access.can_" . $mode . " = 1");
-		if ($cek->num_rows() > 0 or $user_type == 'Admin' or $user_type == 'HR & Finance') {
-			$akses = "true";
-		} else {
-			$akses = "false";
-		}
-		return $akses;
+    	return "true"; // semua menu dan mode lolos
 	}
 	public function ambil_alamat($id_user = null, $id_alamat = null, $limit = null)
 	{

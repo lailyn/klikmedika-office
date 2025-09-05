@@ -208,6 +208,38 @@
           <?php
           $act = "";
           $show = "";
+          if (setMenu('jenis_cuti') != '' and setMenu('pengajuan_cuti') != '') {
+            $show = 'd-none';
+          } else {
+            if ($isi == 'jenis_cuti' or $isi == 'pengajuan_cuti') {
+              $act = "active";
+              $show = "menu-open";
+            }
+          }
+          ?>
+          <li class="nav-item <?php echo $show ?>">
+            <a href="#" class="nav-link <?php echo $act ?>">
+              <i class="nav-icon fas fa-folder"></i>
+              <p>Cuti<i class="right fas fa-angle-left"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a <?= setMenu('jenis_cuti') ?> href="master/jenis_cuti" class="nav-link <?php echo ($isi == 'jenis_cuti') ? 'active' : ''; ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Jenis Cuti</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a <?= setMenu('pengajuan_cuti') ?> href="transaksi/pengajuan_cuti" class="nav-link <?php echo ($isi == 'pengajuan_cuti') ? 'active' : ''; ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pengajuan Cuti</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <?php
+          $act = "";
+          $show = "";
           if (setMenu('sosmed') != '') {
             $show = 'd-none';
           } else {
