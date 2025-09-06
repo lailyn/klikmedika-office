@@ -31,3 +31,7 @@ $route['keranjang-pesan'] = 'customer/keranjangPesan';
 $route['simpanPenyewaan'] = 'customer/simpanPenyewaan';
 
 $route['admin'] = 'admin/admin';
+
+$route['transaksi/pengajuan_cuti'] = 'transaksi/pengajuan_cuti/index';
+$route['transaksi/pengajuan_cuti/riwayat'] = 'transaksi/pengajuan_cuti/riwayat';
+$route['transaksi/pengajuan_cuti/set_status/(:num)/(:any)'] = 'transaksi/pengajuan_cuti/set_status/$1/$2';

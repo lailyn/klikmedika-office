@@ -102,6 +102,18 @@ class M_admin extends CI_Model
 		$this->db->delete($tables);
 	}
 
+	public function insertData($tables, $data) {
+		$this->db->insert($tables, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function updateData($tables, $data, $pk, $id) {
+    	$this->db->where($pk, $id);
+    	$this->db->update($tables, $data);
+    	return $this->db->affected_rows();
+	}
+
+
 	function login($username, $password)
 	{
 		$sql =  "SELECT * FROM md_user WHERE (email=? OR no_hp=?) AND password = ? AND status = 1";

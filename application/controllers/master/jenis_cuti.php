@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Jenis_cuti extends CI_Controller {
 
     var $tables =   "md_jenis_cuti";		
-    var $page		=		"master/jenis_cuti";
-    var $file		=		"jenis_cuti";
+    var $page	=	"master/jenis_cuti";
+    var $file	=	"jenis_cuti";
     var $pk     =   "id_jenis_cuti";
     var $title  =   "Jenis Cuti";
     var $bread	=   "<ol class='breadcrumb'>
