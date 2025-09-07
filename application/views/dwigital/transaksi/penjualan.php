@@ -153,7 +153,24 @@
                      <div class="form-group row">
                        <label class="col-sm-4 col-form-label-sm">Catatan</label>
                        <div class="col-sm-8">
-                         <textarea class="form-control" name="catatan"><?= isset($row) ? $row->catatan : '' ?></textarea>
+                         <textarea class="form-control" name="catatan" placeholder="Nama Konsumen (Non-Platform)"><?= isset($row) ? $row->catatan : '' ?></textarea>
+                       </div>
+                      </div>
+                      <div class="form-group row">
+                       <label class="col-sm-4 col-form-label-sm">Nomor Telepon</label>
+                       <div class="col-sm-8">
+                         <textarea class="form-control" name="phone" placeholder="Nomor Telepon (Non-Platform)"><?= isset($row) ? $row->phone : '' ?></textarea>
+                       </div>
+                     </div>
+                      <div class="form-group row">
+                       <label class="col-sm-4 col-form-label-sm">Durasi Berlangganan</label>
+                       <div class="col-sm-8">
+                         <select class="form-control form-control-sm" name="durasi_langganan" required>
+                           <option value="1 bulan">1 Bulan</option>
+                           <option value="3 bulan">3 Bulan</option>
+                           <option value="6 bulan">6 Bulan</option>
+                           <option value="12 bulan">12 Bulan</option>
+                         </select>
                        </div>
                      </div>
                      <div class="form-group row">
@@ -534,14 +551,15 @@
                        <div class="col-sm-2">
                          <input type="text" readonly value="<?php echo $tampil = ($row != '') ? $customer : ""; ?>" name="username" placeholder="Nama User" class="form-control form-control-sm  form-control form-control-sm -sm" />
                        </div>
-                     </div>
-
-                     <div class="form-group row">
                        <label class="col-sm-2 col-form-label-sm">Catatan</label>
                        <div class="col-sm-10">
                          <textarea class="form-control form-control-sm  form-control form-control-sm -sm" readonly><?php echo $row->catatan ?></textarea>
                        </div>
-                     </div>
+                        <label class="col-sm-1 col-form-label-sm">Nomor Telpon</label>
+                       <div class="col-sm-2">
+                         <input type="text" readonly value="<?php echo $tampil = ($row != '') ? $row->phone : ""; ?>" name="phone" placeholder="Phone" class="form-control form-control-sm  form-control form-control-sm -sm" />
+                       </div>
+                      </div>
                      <hr>
 
                      <div class="form-group row">
@@ -666,79 +684,84 @@
                        </tr>
                      </thead>
                      <tbody>
-                       <?php
-                        $no = 1;
-                        foreach ($dt_penjualan->result() as $isi) {
+                <?php
+                $no = 1;
+                foreach ($dt_penjualan->result() as $isi) {
 
-                          if ($isi->id_user != 0) {
-                            $cek_user = $this->m_admin->getByID("md_pasien", "id_pasien", $isi->id_user);
-                            $customer = ($cek_user->num_rows() > 0) ? $cek_user->row()->nama_lengkap : "";
-                          } else {
-                            $customer = "Walk in Customer";
-                          }
+                  if ($isi->id_user != 0) {
+                    $cek_user = $this->m_admin->getByID("md_pasien", "id_pasien", $isi->id_user);
+                    $customer = ($cek_user->num_rows() > 0) ? $cek_user->row()->nama_lengkap : "";
+                  } else {
+                    $customer = "Walk in Customer";
+                  }
 
-                          $platform = $this->db->where("id", $isi->id_platform)->get("dwigital_platform")->row()->nama ?? '';
+                  $platform = !empty($isi->platform) ? html_escape($isi->platform) : "-";
 
-                          $pembayaran = "d-none";
-                          $hapus = "d-none";
-                          $edit = "d-none";
-                          if ($isi->status == "baru") {
-                            $status = "<label class='badge badge-info'>Baru</label>";
-                          } elseif ($isi->status == "hold") {
-                            $edit = "";
-                            $hapus = "";
-                            $status = "<label class='badge badge-warning'>Hold</label>";
-                          } elseif ($isi->status == "selesai") {
-                            $status = "<label class='badge badge-success'>Selesai</label>";
-                          } elseif ($isi->status == "batal") {
-                            $status = "<label class='badge badge-danger'>Batal</label>";
-                          }
+                  $pembayaran = "d-none";
+                  $hapus = "d-none";
+                  $edit = "d-none";
+                  if ($isi->status == "baru") {
+                    $status = "<label class='badge badge-info'>Baru</label>";
+                  } elseif ($isi->status == "hold") {
+                    $edit = "";
+                    $hapus = "";
+                    $status = "<label class='badge badge-warning'>Hold</label>";
+                  } elseif ($isi->status == "selesai") {
+                    $status = "<label class='badge badge-success'>Selesai</label>";
+                  } elseif ($isi->status == "batal") {
+                    $status = "<label class='badge badge-danger'>Batal</label>";
+                  }
 
-                          if ($isi->status_bayar == 0) {
-                            $status_bayar = "<label class='badge badge-info'>Input</label>";
-                          } elseif ($isi->status_bayar == 1) {
-                            $status_bayar  = "<label class='badge badge-warning'>Waiting</label>";
-                          } elseif ($isi->status_bayar == 2) {
-                            $status_bayar  = "<label class='badge badge-success'>Confirmed</label>";
-                          } elseif ($isi->status_bayar == 3) {
-                            $status_bayar  = "<label class='badge badge-danger'>Canceled</label>";
-                          }
+                  if ($isi->status_bayar == 0) {
+                    $status_bayar = "<label class='badge badge-info'>Input</label>";
+                  } elseif ($isi->status_bayar == 1) {
+                    $status_bayar  = "<label class='badge badge-warning'>Waiting</label>";
+                  } elseif ($isi->status_bayar == 2) {
+                    $status_bayar  = "<label class='badge badge-success'>Confirmed</label>";
+                  } elseif ($isi->status_bayar == 3) {
+                    $status_bayar  = "<label class='badge badge-danger'>Canceled</label>";
+                  }
 
-                          if ($isi->status == "baru" || $isi->status == "hold") $er = "";
-                          else $er = "style='display:none;'";
+                  if ($isi->status == "baru" || $isi->status == "hold") $er = "";
+                  else $er = "style='display:none;'";
 
-                          $cekTotal = $this->db->query("SELECT SUM(harga*qty) AS tot FROM dwigital_cart_detail WHERE no_faktur = '$isi->no_faktur'")->row()->tot;
+                  $cekTotal = $this->db->query("SELECT SUM(harga*qty) AS tot 
+                                                FROM dwigital_cart_detail 
+                                                WHERE no_faktur = '$isi->no_faktur'")
+                                      ->row()->tot;
 
-                          $id = encrypt_url($isi->no_faktur);
-                          $link = "dwigital/transaksi/penjualan/detail/$id";
+                  $id = encrypt_url($isi->no_faktur);
+                  $link = "dwigital/transaksi/penjualan/detail/$id";
 
-                          echo "
-                    <tr>
-                      <td>$no</td>
-                      <td>
-                        <div $er class='btn-group'>
-                          <button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
-                          <div class='dropdown-menu'>
-                            <a onclick=\"return confirm('Anda yakin?')\" href='dwigital/transaksi/penjualan/delete/$id' class='dropdown-item $hapus'>Hapus</a>                            
-                            <a href='dwigital/transaksi/penjualan/edit/$id' class='dropdown-item $edit'>Edit</a>
-                            <a href='dwigital/transaksi/penjualan/pembayaran/$id' class='dropdown-item $pembayaran'>Pembayaran</a>                                                        
-                          </div>
-                        </div>  
-                      </td>
-                      <td><a href='$link'>$isi->no_faktur</a></td>
-                      <td>$isi->tgl</td>                                          
-                      <td>$customer</td>                                          
-                      <td>$platform</td>                                          
-                      <td align='left'>" . mata_uang_help($cekTotal) . "</td>                      
-                      <td>
-                        Bayar: $status_bayar
-                        <br>Pesanan: $status
-                      </td>                      
-                    </tr>
-                    ";
-                          $no++;
-                        }
-                        ?>
+                  echo "
+                  <tr>
+                    <td>$no</td>
+                    <td>
+                      <div $er class='btn-group'>
+                        <button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
+                        <div class='dropdown-menu'>
+                          <a onclick=\"return confirm('Anda yakin?')\" href='dwigital/transaksi/penjualan/delete/$id' class='dropdown-item $hapus'>Hapus</a>                            
+                          <a href='dwigital/transaksi/penjualan/edit/$id' class='dropdown-item $edit'>Edit</a>
+                          <a href='dwigital/transaksi/penjualan/pembayaran/$id' class='dropdown-item $pembayaran'>Pembayaran</a>                                                        
+                        </div>
+                      </div>  
+                    </td>
+                    <td><a href='$link'>$isi->no_faktur</a></td>
+                    <td>$isi->tgl</td>                                          
+                    <td>$customer</td>                                          
+                    <td>$platform</td>                   
+                    <td align='left'>" . mata_uang_help($cekTotal) . "</td>                      
+                    <td>
+                      Bayar: $status_bayar
+                      <br>Pesanan: $status
+                    </td>                      
+                  </tr>
+                  ";
+                  $no++;
+                }
+                ?>
+
+
                      </tbody>
                    </table>
                  </div>
@@ -768,7 +791,11 @@
                          <th>No Faktur</th>
                          <th>Tanggal</th>
                          <th>Customer</th>
+                         <th>Produk</th>
                          <th>Platform</th>
+                         <th>Catatan</th>
+                         <th>Nomor Telepon</th>
+                         <th>Durasi Langganan</th>
                          <th>Total</th>
                          <th width="5%">#</th>
                        </tr>

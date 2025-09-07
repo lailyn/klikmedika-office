@@ -52,15 +52,33 @@ class Penjualan extends CI_Controller
 
 	public function index()
 	{
-		$data['file'] = $data['isi']    = $this->file;
-		$data['title']	= $this->title;
-		$data['bread']	= $this->bread;
-		$data['set']		= "view";
-		$data['mode']		= "view";
-		$where = " AND 1=1";
-		$data['dt_penjualan'] = $this->db->query("SELECT * FROM dwigital_cart WHERE (status <> 'batal' AND status <> 'selesai') $where ORDER BY id_cart DESC");
+		$data['file']  = $data['isi'] = $this->file;
+		$data['title'] = $this->title;
+		$data['bread'] = $this->bread;
+		$data['set']   = "view";
+		$data['mode']  = "view";
+
+		$sql = "
+			SELECT 
+				c.*,
+				COALESCE(p.nama, '-') AS platform,
+				COALESCE(u.nama_lengkap, 'Walk in Customer') AS customer
+			FROM dwigital_cart c
+			LEFT JOIN dwigital_platform p ON p.id = c.id_platform
+			LEFT JOIN md_user u ON u.id_user = c.id_user
+			WHERE (c.status <> 'batal' AND c.status <> 'selesai')
+			ORDER BY c.id_cart DESC
+		";
+
+		$data['dt_penjualan'] = $this->db->query($sql);
+
 		$this->template($data);
-	}
+	}  
+
+
+
+
+
 	public function riwayat()
 	{
 
@@ -431,20 +449,23 @@ class Penjualan extends CI_Controller
 
 	public function simpanPenjualan()
 	{
-		$id_user = $this->session->id_user;
-		$data['tgl'] 			= $tgl = $this->input->post("tgl");
-		$data['id_user'] 			= $id = $this->input->post("id_user");
-		$data['catatan'] 			= $this->input->post("catatan");
-		$data['payment_type'] 			= $this->input->post("payment_type");
-		$data['nominal'] 			= preg_replace("/[^0-9]/", "", $this->input->post("nominal"));
-		$data['kembalian'] 			= preg_replace("/[^0-9]/", "", $this->input->post("kembalian"));
-		$data['status'] 			= "selesai";
-		$data['status_bayar'] 			= 2;
-		$data['created_at'] 			= waktu();
-		$data['created_by'] 			= $id_user;
-		$data['no_faktur'] 	= $no_faktur =  $this->get_faktur();
-		$data['id_platform'] = $this->input->post("id_platform");
-		$no_faktur_en 			= $this->input->post("no_faktur");
+		$id_user               = $this->session->id_user;
+		$data['tgl']           = $tgl = $this->input->post("tgl");
+		$data['id_user']       = $id = $this->input->post("id_user");
+		$data['catatan']       = $this->input->post("catatan");
+		$data['payment_type']  = $this->input->post("payment_type");
+		$data['nominal']       = preg_replace("/[^0-9]/", "", $this->input->post("nominal"));
+		$data['kembalian']     = preg_replace("/[^0-9]/", "", $this->input->post("kembalian"));
+		$data['status']        = "selesai";
+		$data['status_bayar']  = 2;
+		$data['created_at']    = waktu();
+		$data['created_by']    = $id_user;
+		$data['no_faktur']     = $no_faktur = $this->get_faktur();
+		$data['id_platform']   = $this->input->post("id_platform");
+		$data['durasi_langganan'] = $this->input->post("durasi_langganan");
+		$data['phone']         = $this->input->post("phone");
+
+		$no_faktur_en  = $this->input->post("no_faktur");
 		$no_faktur_dec = decrypt_url((string)$no_faktur_en);
 
 		if ($no_faktur_en != '') {
@@ -456,44 +477,48 @@ class Penjualan extends CI_Controller
 			$list_cart = $this->_getDetailCartBelumSelesai();
 		}
 
+		// Hitung total + kumpulkan id_produk
 		$total = 0;
+		$id_produk_list = [];
 		foreach ($list_cart as $item) {
 			$total += $item['subtotal'];
+			$id_produk_list[] = $item['id_produk'];
 		}
-		$data['total'] = $total;
+		$data['total']     = $total;
+		$data['id_produk'] = !empty($id_produk_list) ? implode(',', $id_produk_list) : null;
 
-		// send_json($data);
+		// Simpan transaksi
 		if ((string)$no_faktur_en != '') {
 			// update hold
 			$this->m_admin->update("dwigital_cart", $data, "no_faktur", $no_faktur_dec);
-			$this->db->update("dwigital_cart_detail", ['no_faktur' => $no_faktur, 'id_user' => $id, 'status' => 1], ['no_faktur' => $no_faktur_dec, 'updated_by' => $id_user]);
+			$this->db->update(
+				"dwigital_cart_detail",
+				['no_faktur' => $no_faktur, 'id_user' => $id, 'status' => 1],
+				['no_faktur' => $no_faktur_dec, 'updated_by' => $id_user]
+			);
 		} else {
 			// new
 			$this->m_admin->insert("dwigital_cart", $data);
-			$this->db->update("dwigital_cart_detail", ['no_faktur' => $no_faktur, 'id_user' => $id, 'status' => 1], ['status' => 0, 'updated_by' => $id_user]);
+			$this->db->update(
+				"dwigital_cart_detail",
+				['no_faktur' => $no_faktur, 'id_user' => $id, 'status' => 1],
+				['status' => 0, 'updated_by' => $id_user]
+			);
 		}
 
+		// Update stok (opsional)
 		$cekDetail = $this->m_admin->getByID("dwigital_cart_detail", "no_faktur", $no_faktur);
 		foreach ($cekDetail->result() as $amb) {
-			// $cekStok = $this->m_admin->getByID("dwigital_produk_real_stock", "id_produk", $amb->id_produk)->row()->stock - $amb->qty;
 			$keterangan = "Penjualan POS";
+			// $cekStok = $this->m_admin->getByID("dwigital_produk_real_stock", "id_produk", $amb->id_produk)->row()->stock - $amb->qty;
 			// $this->m_admin->updateStockDwigital($amb->id_produk, $amb->qty, $cekStok, "-", $no_faktur, "restock", $tgl, $keterangan);
 		}
 
-		$_SESSION['pesan'] 		= "Transaksi berhasil disimpan";
-		$_SESSION['tipe'] 		= "success";
+		$_SESSION['pesan'] = "Transaksi berhasil disimpan";
+		$_SESSION['tipe']  = "success";
 		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/transaksi/penjualan'>";
-
-		// $cetakStruks 			= $this->input->post("cetakStruk");
-		// if ($cetakStruks == 1) {
-		// 	$fakturParam = encrypt_url($no_faktur);
-		// 	echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/transaksi/penjualan/cetakStruk/" . $fakturParam . "'>";
-		// } else {
-		// 	$_SESSION['pesan'] 		= "Transaksi berhasil disimpan";
-		// 	$_SESSION['tipe'] 		= "success";
-		// 	echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/transaksi/penjualan'>";
-		// }
 	}
+
 
 	public function batal()
 	{
@@ -506,24 +531,53 @@ class Penjualan extends CI_Controller
 
 	public function hold()
 	{
-		$id_user = $this->session->id_user;
-		$data['no_faktur'] 			= $no_faktur =  $this->get_faktur_hold();
-		$data['tgl'] 			= tgl();
-		$data['id_user'] 			= $id = $this->input->post("id_user");
-		$data['total'] 			= 0;
-		$data['catatan'] 			= "";
-		$data['payment_type'] 			=  "";
-		$data['nominal'] 			= 0;
-		$data['kembalian'] 			= 0;
-		$data['status'] 			= "hold";
-		$data['status_bayar'] 			= 0;
-		$data['created_at'] 			= waktu();
+		$session_user_id = $this->session->id_user;
+
+		// nomor faktur hold
+		$data['no_faktur'] = $no_faktur = $this->get_faktur_hold();
+
+		// tanggal
+		$data['tgl'] = tgl();
+
+		// ambil nilai dari form
+		$id_user_selected     = $this->input->post("id_user");
+		$id_platform_selected = $this->input->post("id_platform");
+
+		// set field cart
+		$data['id_user']      = $id_user_selected;
+		$data['id_platform']  = $id_platform_selected;  // <-- SAMA SEPERTI DI RIWAYAT
+		$data['total']        = 0;
+		$data['catatan']      = "";
+		$data['payment_type'] = "";
+		$data['nominal']      = 0;
+		$data['kembalian']    = 0;
+		$data['status']       = "hold";
+		$data['status_bayar'] = 0;
+		$data['created_at']   = waktu();
+
+		// simpan header cart (status hold)
 		$this->m_admin->insert("dwigital_cart", $data);
-		$this->db->query("UPDATE dwigital_cart_detail SET no_faktur = '$no_faktur', id_user = '$id', status = 2 WHERE status = 0 AND updated_by = '$id_user'");
-		$_SESSION['pesan'] 		= "Transaksi berhasil ditahan";
-		$_SESSION['tipe'] 		= "success";
+
+		// pindahkan detail yg masih "draft" (status=0) ke faktur hold ini
+		$this->db->update(
+			"dwigital_cart_detail",
+			[
+				'no_faktur' => $no_faktur,
+				'id_user'   => $id_user_selected,
+				'status'    => 2,              // 2 = item sudah di-hold
+				'updated_at'=> waktu()
+			],
+			[
+				'status'     => 0,
+				'updated_by' => $session_user_id
+			]
+		);
+
+		$_SESSION['pesan'] = "Transaksi berhasil ditahan";
+		$_SESSION['tipe']  = "success";
 		echo "<meta http-equiv='refresh' content='0; url=" . base_url() . "dwigital/transaksi/penjualan/add'>";
 	}
+
 
 	public function delete($id)
 	{
@@ -619,38 +673,81 @@ class Penjualan extends CI_Controller
 
 	public function fetchRiwayat()
 	{
+		// ambil data page
 		$fetch_data = $this->_makeQueryRiwayat();
-		$data = array();
 
-		$no = $this->input->post('start') + 1;
+		$data = [];
+		$no   = ((int)$this->input->post('start')) + 1;
+
 		foreach ($fetch_data->result() as $rs) {
-			$id = encrypt_url($rs->no_faktur);
-			$link = "dwigital/transaksi/penjualan/detail/$id?riwayat=1";
-			$button = "<div class='btn-group'>
-		<button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
-		<div class='dropdown-menu'> 
-			<a  onclick=\"return confirm('Anda yakin?')\" target='_blank' href=\"dwigital/transaksi/penjualan/cetakStruk/$id\" class='dropdown-item'>Cetak</a>                                                                         
-		</div>
-	</div>";
+			$id_enc     = encrypt_url($rs->no_faktur);
+			$link_edit  = "dwigital/transaksi/penjualan/edit/{$id_enc}";
+			$link_cetak = "dwigital/transaksi/penjualan/cetakStruk/{$id_enc}";
 
-			$sub_array   = array();
-			$sub_array[] = $no;
-			$sub_array[] = "<a href=$link>$rs->no_faktur</a>";
-			$sub_array[] = tgl_indo($rs->tgl);
-			$sub_array[] = $rs->customer;
-			$sub_array[] = $rs->platform;
-			$sub_array[] = mata_uang_help($rs->total);
-			$sub_array[] = $button;
-			$data[]      = $sub_array;
+			// --- AMBIL NAMA PRODUK (prioritas pakai snapshot di detail) ---
+			$produk_row = $this->db->select("
+				GROUP_CONCAT(
+				DISTINCT COALESCE(
+					NULLIF(TRIM(d.nama_produk), ''),   /* pakai nama saat transaksi */
+					p.nama_produk                      /* fallback ke master bila kosong */
+				)
+				ORDER BY COALESCE(
+					NULLIF(TRIM(d.nama_produk), ''), 
+					p.nama_produk
+				) SEPARATOR ', '
+				) AS produk
+			", false)
+			->from('dwigital_cart_detail d')
+			->join('dwigital_produk p', 'p.id_produk = d.id_produk', 'left')
+			->where('d.no_faktur', $rs->no_faktur)
+			->get()
+			->row();
+
+			$produk_list = $produk_row ? ($produk_row->produk ?: '-') : '-';
+			// --------------------------------------------------------------
+
+			$button = "
+			<div class='btn-group'>
+			<button type='button' class='btn btn-success btn-sm dropdown-toggle' data-toggle='dropdown'>Action</button>
+			<div class='dropdown-menu'>
+				<a href=\"{$link_edit}\" class='dropdown-item'>Edit</a>
+				<a target='_blank' href=\"{$link_cetak}\" class='dropdown-item'>Cetak</a>
+			</div>
+			</div>";
+
+			// URUTAN KOLOM HARUS SAMA DENGAN <thead> DI VIEW
+			$row = [];
+			$row[] = $no;
+			$row[] = "<a>{$rs->no_faktur}</a>";
+			$row[] = tgl_indo($rs->tgl);
+			$row[] = $rs->customer;
+			$row[] = $produk_list;                 // kolom PRODUK
+			$row[] = $rs->platform;
+			$row[] = $rs->catatan;
+			$row[] = $rs->phone;
+			$row[] = $rs->durasi_langganan;
+			$row[] = mata_uang_help($rs->total);
+			$row[] = $button;
+
+			$data[] = $row;
 			$no++;
 		}
-		$output = array(
-			"draw"            => intval($_POST["draw"]),
-			"recordsFiltered" => $this->_makeQueryRiwayat(true),
+
+		// hitung total dan filtered
+		$recordsFiltered = $this->_makeQueryRiwayat(true);
+		$recordsTotal    = $recordsFiltered;
+
+		$output = [
+			"draw"            => intval($_POST["draw"] ?? 1),
+			"recordsTotal"    => $recordsTotal,
+			"recordsFiltered" => $recordsFiltered,
 			"data"            => $data
-		);
+		];
 		echo json_encode($output);
 	}
+
+
+
 
 	function _makeQueryRiwayat($no_limit = null)
 	{
