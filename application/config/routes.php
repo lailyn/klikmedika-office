@@ -38,7 +38,7 @@ $route['dwigital/transaksi/withdraw/update/(:any)']   = 'dwigital/transaksi/With
 $route['dwigital/transaksi/withdraw/delete/(:any)']   = 'dwigital/transaksi/Withdraw/delete/$1';
 $route['dwigital/transaksi/withdraw/destroy/(:any)']  = 'dwigital/transaksi/Withdraw/destroy/$1';
 
-
+$route['dwigital/transaksi/monitoring']                 = 'dwigital/transaksi/monitoring/index';
  
 
 $route['admin'] = 'admin/admin';

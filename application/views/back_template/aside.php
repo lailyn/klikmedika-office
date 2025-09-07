@@ -374,6 +374,12 @@
                       <p>Withdraw</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="<?= site_url('dwigital/transaksi/monitoring') ?>" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                        <p>Monitoring</p>
+                      </a>
+                    </li>
                 </ul>
               </li>
             </ul>
