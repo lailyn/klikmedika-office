@@ -188,7 +188,7 @@ usort($list_data_platforms, function ($a, $b) {
               $list_produk = $this->db->query("SELECT nama_produk, SUM(qty) AS qty
               FROM dwigital_cart_detail
               JOIN dwigital_cart cart ON cart.no_faktur=dwigital_cart_detail.no_faktur
-              WHERE LEFT(tgl,7) = '$dt' GROUP BY id_produk ORDER BY qty DESC LIMIT 10");
+              WHERE LEFT(tgl,7) = '$dt' GROUP BY dwigital_cart_detail.id_produk ORDER BY qty DESC LIMIT 10");
               foreach ($list_produk->result_array() as $key => $produk) {
                 $no = $key + 1;
                 echo "<tr>";
@@ -224,7 +224,7 @@ usort($list_data_platforms, function ($a, $b) {
               $list_produk = $this->db->query("SELECT nama_produk, SUM(harga*qty) AS total_nominal,SUM(qty) total_qty
               FROM dwigital_cart_detail
               JOIN dwigital_cart cart ON cart.no_faktur=dwigital_cart_detail.no_faktur
-              WHERE LEFT(tgl,7) = '$dt' GROUP BY id_produk ORDER BY total_nominal DESC LIMIT 10");
+              WHERE LEFT(tgl,7) = '$dt' GROUP BY dwigital_cart_detail.id_produk ORDER BY total_nominal DESC LIMIT 10");
               foreach ($list_produk->result_array() as $key => $produk) {
                 $no = $key + 1;
                 echo "<tr>";
