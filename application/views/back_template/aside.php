@@ -380,12 +380,6 @@
                       <p>Payouts</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="<?= site_url('dwigital/transaksi/payouts/infografis') ?>" class="nav-link">
-                      <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Payouts Infografis</p>
-                    </a>
-                  </li>
                 </ul>
               </li>
             </ul>
