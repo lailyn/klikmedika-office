@@ -38,6 +38,15 @@ $route['dwigital/transaksi/withdraw/update/(:any)']   = 'dwigital/transaksi/With
 $route['dwigital/transaksi/withdraw/delete/(:any)']   = 'dwigital/transaksi/Withdraw/delete/$1';
 $route['dwigital/transaksi/withdraw/destroy/(:any)']  = 'dwigital/transaksi/Withdraw/destroy/$1';
 
+$route['dwigital/transaksi/payouts']                  = 'dwigital/transaksi/Payouts/index';
+$route['dwigital/transaksi/payouts/add']              = 'dwigital/transaksi/Payouts/add';
+$route['dwigital/transaksi/payouts/store']            = 'dwigital/transaksi/Payouts/store';
+$route['dwigital/transaksi/payouts/edit/(:any)']      = 'dwigital/transaksi/Payouts/edit/$1';
+$route['dwigital/transaksi/payouts/update/(:any)']    = 'dwigital/transaksi/Payouts/update/$1';
+$route['dwigital/transaksi/payouts/delete/(:any)']    = 'dwigital/transaksi/Payouts/delete/$1';
+$route['dwigital/transaksi/payouts/destroy/(:any)']   = 'dwigital/transaksi/Payouts/destroy/$1';
+$route['dwigital/transaksi/payouts/infografis']       = 'dwigital/transaksi/Payouts/infografis';
+
 
  
 
