@@ -55,7 +55,7 @@ class Payouts extends CI_Controller
 
         $q = $this->input->get('q', true);
 
-        $this->db->select('p.id, p.payout_to, p.amount, p.status, p.description, p.created_at');
+        $this->db->select('p.id, p.start_date, p.end_date, p.payout_to, p.amount, p.status, p.description, p.created_at');
         $this->db->from($this->tables . ' p');
         if (!empty($q)) {
             $this->db->group_start();
@@ -94,9 +94,9 @@ class Payouts extends CI_Controller
 
         // Set grand_total to 0 for add mode
         $data['grand_total'] = 0;
-        
-        // Calculate available profit
-        $data['available_profit'] = $this->calculateAvailableProfit();
+
+        // Calculate available profit (no date filtering for add mode)
+        $data['available_profit'] = 0;
 
         $this->template($data);
     }
@@ -104,8 +104,10 @@ class Payouts extends CI_Controller
     public function store()
     {
         // Set validation rules
+        $this->form_validation->set_rules('start_date', 'Tanggal Mulai', 'required');
+        $this->form_validation->set_rules('end_date', 'Tanggal Akhir', 'required|callback_check_date_range');
         $this->form_validation->set_rules('payout_to', 'Payout To', 'required|max_length[100]');
-        $this->form_validation->set_rules('amount', 'Jumlah', 'required|numeric|greater_than[0]|callback_check_profit_balance');
+        $this->form_validation->set_rules('amount', 'Jumlah', 'required|numeric|greater_than[0]');
         $this->form_validation->set_rules('status', 'Status', 'required|in_list[pending,processing,completed,failed]');
         $this->form_validation->set_rules('description', 'Deskripsi', 'max_length[500]');
 
@@ -127,7 +129,7 @@ class Payouts extends CI_Controller
 
             // Set grand_total to 0 for validation failed
             $data['grand_total'] = 0;
-            
+
             // Calculate available profit
             $data['available_profit'] = $this->calculateAvailableProfit();
 
@@ -135,6 +137,8 @@ class Payouts extends CI_Controller
         } else {
             // Validation passed, proceed with saving
             $data = array(
+                'start_date' => $this->input->post('start_date'),
+                'end_date' => $this->input->post('end_date'),
                 'payout_to' => $this->input->post('payout_to'),
                 'amount' => $this->input->post('amount'),
                 'status' => $this->input->post('status'),
@@ -159,13 +163,13 @@ class Payouts extends CI_Controller
         $data['mode']  = "edit";
 
         $data['dt_payouts'] = $this->db->select('p.*')
-             ->from($this->tables . ' p')
-             ->where('p.id', $id)
-             ->get();
+            ->from($this->tables . ' p')
+            ->where('p.id', $id)
+            ->get();
 
         // Set grand_total to 0 for edit mode
         $data['grand_total'] = 0;
-        
+
         // Calculate available profit
         $data['available_profit'] = $this->calculateAvailableProfit();
 
@@ -175,8 +179,10 @@ class Payouts extends CI_Controller
     public function update($id)
     {
         // Set validation rules
+        $this->form_validation->set_rules('start_date', 'Tanggal Mulai', 'required');
+        $this->form_validation->set_rules('end_date', 'Tanggal Akhir', 'required|callback_check_date_range');
         $this->form_validation->set_rules('payout_to', 'Payout To', 'required|max_length[100]');
-        $this->form_validation->set_rules('amount', 'Jumlah', 'required|numeric|greater_than[0]|callback_check_profit_balance');
+        $this->form_validation->set_rules('amount', 'Jumlah', 'required|numeric|greater_than[0]');
         $this->form_validation->set_rules('status', 'Status', 'required|in_list[pending,processing,completed,failed]');
         $this->form_validation->set_rules('description', 'Deskripsi', 'max_length[500]');
 
@@ -203,7 +209,7 @@ class Payouts extends CI_Controller
 
             // Set grand_total to 0 for validation failed
             $data['grand_total'] = 0;
-            
+
             // Calculate available profit
             $data['available_profit'] = $this->calculateAvailableProfit();
 
@@ -211,6 +217,8 @@ class Payouts extends CI_Controller
         } else {
             // Validation passed, proceed with updating
             $data = array(
+                'start_date' => $this->input->post('start_date'),
+                'end_date' => $this->input->post('end_date'),
                 'payout_to' => $this->input->post('payout_to'),
                 'amount' => $this->input->post('amount'),
                 'status' => $this->input->post('status'),
@@ -243,45 +251,108 @@ class Payouts extends CI_Controller
     }
 
     /**
-     * Calculate available profit (same as infografis)
+     * Calculate available profit with date filtering
+     * @param string $start_date
+     * @param string $end_date
      * @return float
      */
-    private function calculateAvailableProfit()
+    private function calculateAvailableProfit($start_date = null, $end_date = null)
     {
+        $date_filter = '';
+        if ($start_date && $end_date) {
+            $date_filter = " AND tgl BETWEEN '$start_date' AND '$end_date'";
+        }
+
         // Calculate total revenue from completed orders
-        $total_pendapatan = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai'")->row()->jum ?? 0;
-        
+        $total_pendapatan = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai' $date_filter")->row()->jum ?? 0;
+
         // Calculate total expenses from category 28
-        $total_pengeluaran = $this->db->query("SELECT SUM(total) AS jum FROM md_pengeluaran WHERE id_kategori=28")->row()->jum ?? 0;
-        
+        $total_pengeluaran = $this->db->query("SELECT SUM(total) AS jum FROM md_pengeluaran WHERE id_kategori=28 $date_filter")->row()->jum ?? 0;
+
+        // Calculate total payouts already made in this period
+        $total_payouts = 0;
+        if ($start_date && $end_date) {
+            // Payout yang periodenya overlap dengan periode yang dipilih
+            $total_payouts = $this->db->query("SELECT SUM(amount) AS jum FROM dwigital_payouts WHERE 
+                (start_date <= '$end_date' AND end_date >= '$start_date')")->row()->jum ?? 0;
+        }
+
         // Calculate remaining balance from platform
         $sisa_saldo = $this->db->query("SELECT SUM(sisa_saldo) AS jum FROM dwigital_saldo_platform")->row()->jum ?? 0;
-        
-        // Calculate total profit
-        $total_profit = ($total_pendapatan + $sisa_saldo) - $total_pengeluaran;
-        
+
+        // Calculate total profit: (Pendapatan + Sisa Saldo) - Pengeluaran - Payout yang sudah ada
+        $total_profit = ($total_pendapatan + $sisa_saldo) - $total_pengeluaran - $total_payouts;
+
         return max(0, $total_profit); // Ensure non-negative
     }
 
     /**
-     * Custom validation callback to check if payout amount exceeds available profit
-     * @param float $amount
+     * Custom validation callback to check date range
+     * @param string $end_date
      * @return bool
      */
-    public function check_profit_balance($amount)
+    public function check_date_range($end_date)
     {
-        $available_profit = $this->calculateAvailableProfit();
-        
-        if ($amount > $available_profit) {
+        $start_date = $this->input->post('start_date');
+
+        if ($start_date && $end_date && $start_date > $end_date) {
             $this->form_validation->set_message(
-                'check_profit_balance',
-                'Jumlah payout (Rp ' . number_format($amount, 0, ',', '.') . 
-                ') melebihi profit tersedia (Rp ' . number_format($available_profit, 0, ',', '.') . ')'
+                'check_date_range',
+                'Tanggal akhir harus lebih besar atau sama dengan tanggal mulai'
             );
             return FALSE;
         }
-        
+
         return TRUE;
     }
 
+
+    /**
+     * AJAX method to get filtered profit based on date range
+     */
+    public function get_filtered_profit()
+    {
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+
+        if ($start_date && $end_date) {
+            // Get detailed breakdown
+            $date_filter = " AND tgl BETWEEN '$start_date' AND '$end_date'";
+
+            // Calculate total revenue from completed orders
+            $total_pendapatan = $this->db->query("SELECT SUM(total) AS jum FROM dwigital_cart WHERE status='selesai' $date_filter")->row()->jum ?? 0;
+
+            // Calculate total expenses from category 28
+            $total_pengeluaran = $this->db->query("SELECT SUM(total) AS jum FROM md_pengeluaran WHERE id_kategori=28 $date_filter")->row()->jum ?? 0;
+
+            // Calculate total payouts already made in this period
+            $total_payouts = $this->db->query("SELECT SUM(amount) AS jum FROM dwigital_payouts WHERE 
+                (start_date <= '$end_date' AND end_date >= '$start_date') AND dwigital_payouts.status!='failed'")->row()->jum ?? 0;
+
+            // Calculate actual remaining balance: Pemasukan - Pengeluaran - Payout yang sudah ada
+            $sisa_saldo = $total_pendapatan - $total_pengeluaran - $total_payouts;
+            $sisa_saldo = max(0, $sisa_saldo); // Ensure non-negative
+
+            $response = [
+                'success' => true,
+                'breakdown' => [
+                    'pendapatan' => $total_pendapatan,
+                    'pengeluaran' => $total_pengeluaran,
+                    'payouts_existing' => $total_payouts,
+                    'sisa_saldo' => $sisa_saldo
+                ]
+            ];
+
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($response));
+        } else {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'success' => false,
+                    'message' => 'Start date and end date are required'
+                ]));
+        }
+    }
 }

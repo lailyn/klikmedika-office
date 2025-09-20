@@ -10,7 +10,7 @@ final class CreateDwigitalPayouts extends AbstractMigration
     {
         $this->table('dwigital_payouts')
             ->addColumn('platform_id', 'integer', ['limit' => 10, 'null' => false])
-            ->addColumn('amount', 'decimal', ['precision' => 15, 'scale' => 2, 'null' => false])
+            ->addColumn('amount', 'integer', ['limit' => 10, 'null' => false])
             ->addColumn('status', 'string', ['limit' => 20, 'default' => 'pending'])
             ->addColumn('description', 'text', ['null' => true])
             ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
