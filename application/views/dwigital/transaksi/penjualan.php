@@ -782,6 +782,61 @@
                <h4 class="card-title"><a href="dwigital/transaksi/penjualan" class="btn btn-warning btn-sm"><i class="fa fa-chevron-left"></i> Kembali</a></h4>
              </div>
              <div class="card-body">
+               <!-- Filter Section -->
+               <div class="row mb-3">
+                 <div class="col-md-12">
+                   <div class="card">
+                     <div class="card-body">
+                       <form id="filterForm" method="POST">
+                         <div class="row">
+                           <div class="col-md-3">
+                             <label for="start_date">Tanggal Mulai:</label>
+                             <input type="date" id="start_date" name="start_date" class="form-control" value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : '' ?>">
+                           </div>
+                           <div class="col-md-3">
+                             <label for="end_date">Tanggal Akhir:</label>
+                             <input type="date" id="end_date" name="end_date" class="form-control" value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : '' ?>">
+                           </div>
+                            <div class="col-md-3">
+                              <label for="id_platform">Platform:</label>
+                              <select name="id_platform" id="id_platform" class="form-control">
+                                <option value="">Semua Platform</option>
+                                <?php
+                                $dt_platform = $this->m_admin->getAll("dwigital_platform");
+                                foreach ($dt_platform->result() as $key => $value) {
+                                  $selected = (isset($_POST['id_platform']) && $_POST['id_platform'] == $value->id) ? 'selected' : '';
+                                  echo "<option value='$value->id' $selected>$value->nama</option>";
+                                }
+                                ?>
+                              </select>
+                            </div>
+                           <div class="col-md-3">
+                             <label>&nbsp;</label>
+                             <div>
+                               <button type="button" id="filterBtn" class="btn btn-primary btn-sm">
+                                 <i class="fa fa-filter"></i> Filter
+                               </button>
+                               <button type="button" id="resetBtn" class="btn btn-secondary btn-sm">
+                                 <i class="fa fa-refresh"></i> Reset
+                               </button>
+                             </div>
+                           </div>
+                           <div class="col-md-3">
+                             <label>&nbsp;</label>
+                             <div>
+                               <button type="button" id="exportBtn" class="btn btn-success btn-sm">
+                                 <i class="fa fa-download"></i> Export Excel
+                               </button>
+                             </div>
+                           </div>
+                         </div>
+                       </form>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               <!-- End Filter Section -->
+               
                <div class="box">
                  <div class="table-responsive">
                    <table id="serverside-tables" class="table table-striped" style="width:100%">
@@ -802,6 +857,26 @@
                      </thead>
                    </table>
                  </div>
+                 
+                 <!-- Subtotal Section -->
+                 <div class="row mt-3">
+                   <div class="col-md-12">
+                     <div class="card">
+                       <div class="card-body">
+                         <div class="row">
+                           <div class="col-md-6">
+                             <h5>Ringkasan Penjualan</h5>
+                           </div>
+                           <div class="col-md-6 text-right">
+                             <h5>Total Transaksi: <span id="totalTransactions" class="badge badge-info">0</span></h5>
+                             <h4>Total Penjualan: <span id="totalSales" class="text-success">Rp 0</span></h4>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                 <!-- End Subtotal Section -->
                </div>
              </div>
            </div>
@@ -810,8 +885,10 @@
        </div>
        <script src="assets/backend/plugins/jquery/jquery.min.js"></script>
        <script>
+         var table;
          $(document).ready(function() {
-           $('#serverside-tables').DataTable({
+           // Initialize DataTable
+           table = $('#serverside-tables').DataTable({
              processing: true,
              serverSide: true,
              language: {
@@ -823,22 +900,90 @@
                url: "<?= base_url($page . '/fetchRiwayat') ?>",
                dataSrc: "data",
                data: function(d) {
-                 // d.nama = $('#nama_m').val();
-                 // return d;
+                 d.start_date = $('#start_date').val();
+                 d.end_date = $('#end_date').val();
+                 d.id_platform = $('#id_platform').val();
+                 return d;
                },
                type: "POST"
              },
              "columnDefs": [{
-                 "targets": [0, 5],
+                 "targets": [0, 10],
                  "orderable": false
                },
                {
-                 "targets": [0, 5],
+                 "targets": [0, 10],
                  "className": 'text-center'
                },
-             ]
+             ],
+             drawCallback: function(settings) {
+               // Update subtotal after table redraw
+               updateSubtotal();
+             }
+           });
+
+           // Filter button click
+           $('#filterBtn').click(function() {
+             table.ajax.reload();
+           });
+
+           // Reset button click
+           $('#resetBtn').click(function() {
+             $('#start_date').val('');
+             $('#end_date').val('');
+             $('#id_platform').val('');
+             table.ajax.reload();
+           });
+
+           // Export button click
+           $('#exportBtn').click(function() {
+             var startDate = $('#start_date').val();
+             var endDate = $('#end_date').val();
+             var idPlatform = $('#id_platform').val();
+             var url = "<?= base_url($page . '/exportRiwayat') ?>";
+             
+             var params = [];
+             if (startDate) params.push('start_date=' + startDate);
+             if (endDate) params.push('end_date=' + endDate);
+             if (idPlatform) params.push('id_platform=' + idPlatform);
+             
+             if (params.length > 0) {
+               url += '?' + params.join('&');
+             }
+             
+             window.open(url, '_blank');
            });
          });
+
+         // Function to update subtotal
+         function updateSubtotal() {
+           var startDate = $('#start_date').val();
+           var endDate = $('#end_date').val();
+           var idPlatform = $('#id_platform').val();
+           
+           $.ajax({
+             url: "<?= base_url($page . '/getSubtotal') ?>",
+             type: "POST",
+             data: {
+               start_date: startDate,
+               end_date: endDate,
+               id_platform: idPlatform
+             },
+             dataType: "json",
+             success: function(response) {
+               $('#totalTransactions').text(response.total_transactions);
+               $('#totalSales').text('Rp ' + formatNumber(response.total_sales));
+             },
+             error: function() {
+               console.log('Error fetching subtotal');
+             }
+           });
+         }
+
+         // Function to format number
+         function formatNumber(num) {
+           return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+         }
        </script>
      <?php } elseif ($set == 'insert' and $mode == 'import') {
       ?>

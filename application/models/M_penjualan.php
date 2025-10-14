@@ -12,6 +12,24 @@ class M_penjualan extends CI_Model
   {
     $customer = "'Walk in Customer'";
     
+    // Add date filtering
+    if (isset($filter['start_date']) && !empty($filter['start_date'])) {
+      $this->db->where('cart.tgl >=', $filter['start_date']);
+    }
+    
+    if (isset($filter['end_date']) && !empty($filter['end_date'])) {
+      $this->db->where('cart.tgl <=', $filter['end_date']);
+    }
+
+    // Filter for riwayat (completed/cancelled transactions)
+    if (isset($filter['riwayat']) && $filter['riwayat']) {
+      $this->db->where("cart.status",'selesai');
+    }
+
+    // Add platform filtering
+    if (isset($filter['id_platform']) && !empty($filter['id_platform'])) {
+      $this->db->where('cart.id_platform', $filter['id_platform']);
+    }
 
     if ($this->input->post('search')['value'] != '') {
       $this->db->group_start();
@@ -91,5 +109,33 @@ class M_penjualan extends CI_Model
     $filter['status'] = 2;
     $result = $this->getDetail($filter, $need_return);
     return $result;
+  }
+
+  function getSubtotal($filter = [])
+  {
+    // Add date filtering
+    if (isset($filter['start_date']) && !empty($filter['start_date'])) {
+      $this->db->where('cart.tgl >=', $filter['start_date']);
+    }
+    
+    if (isset($filter['end_date']) && !empty($filter['end_date'])) {
+      $this->db->where('cart.tgl <=', $filter['end_date']);
+    }
+
+    // Add platform filtering
+    if (isset($filter['id_platform']) && !empty($filter['id_platform'])) {
+      $this->db->where('cart.id_platform', $filter['id_platform']);
+    }
+
+    // Only count completed transactions for riwayat
+    $this->db->where("cart.status", 'selesai');
+    
+    $this->db->select("COUNT(*) as total_transactions, SUM(cart.total) as total_sales");
+    $result = $this->db->get("dwigital_cart cart")->row();
+    
+    return [
+      'total_transactions' => $result->total_transactions ?: 0,
+      'total_sales' => $result->total_sales ?: 0
+    ];
   }
 }

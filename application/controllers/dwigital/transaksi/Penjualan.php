@@ -73,7 +73,7 @@ class Penjualan extends CI_Controller
 		$data['dt_penjualan'] = $this->db->query($sql);
 
 		$this->template($data);
-	}  
+	}
 
 
 
@@ -565,7 +565,7 @@ class Penjualan extends CI_Controller
 				'no_faktur' => $no_faktur,
 				'id_user'   => $id_user_selected,
 				'status'    => 2,              // 2 = item sudah di-hold
-				'updated_at'=> waktu()
+				'updated_at' => waktu()
 			],
 			[
 				'status'     => 0,
@@ -697,11 +697,11 @@ class Penjualan extends CI_Controller
 				) SEPARATOR ', '
 				) AS produk
 			", false)
-			->from('dwigital_cart_detail d')
-			->join('dwigital_produk p', 'p.id_produk = d.id_produk', 'left')
-			->where('d.no_faktur', $rs->no_faktur)
-			->get()
-			->row();
+				->from('dwigital_cart_detail d')
+				->join('dwigital_produk p', 'p.id_produk = d.id_produk', 'left')
+				->where('d.no_faktur', $rs->no_faktur)
+				->get()
+				->row();
 
 			$produk_list = $produk_row ? ($produk_row->produk ?: '-') : '-';
 			// --------------------------------------------------------------
@@ -762,12 +762,91 @@ class Penjualan extends CI_Controller
 			$filter['order'] = $_POST['order'];
 		}
 
-		$filter['status']       = 'publish';
+		// Add date filtering
+		if ($this->input->post('start_date')) {
+			$filter['start_date'] = $this->input->post('start_date');
+		}
+		
+		if ($this->input->post('end_date')) {
+			$filter['end_date'] = $this->input->post('end_date');
+		}
+
+		// Add platform filtering
+		if ($this->input->post('id_platform')) {
+			$filter['id_platform'] = $this->input->post('id_platform');
+		}
+
+		// Filter for riwayat (completed/cancelled transactions)
+		$filter['riwayat'] = true;
 		if ($no_limit == true) {
 			return $this->m_penjualan->getPenjualan($filter)->num_rows();
 		} else {
 			return $this->m_penjualan->getPenjualan($filter);
 		}
+	}
+
+	public function getSubtotal()
+	{
+		$filter = [];
+		
+		if ($this->input->post('start_date')) {
+			$filter['start_date'] = $this->input->post('start_date');
+		}
+		
+		if ($this->input->post('end_date')) {
+			$filter['end_date'] = $this->input->post('end_date');
+		}
+
+		if ($this->input->post('id_platform')) {
+			$filter['id_platform'] = $this->input->post('id_platform');
+		}
+		
+		$result = $this->m_penjualan->getSubtotal($filter);
+		echo json_encode($result);
+	}
+
+	public function exportRiwayat()
+	{
+		$start_date = $this->input->get('start_date');
+		$end_date = $this->input->get('end_date');
+		$id_platform = $this->input->get('id_platform');
+		
+		$filter = [];
+		if ($start_date) {
+			$filter['start_date'] = $start_date;
+		}
+		if ($end_date) {
+			$filter['end_date'] = $end_date;
+		}
+		if ($id_platform) {
+			$filter['id_platform'] = $id_platform;
+		}
+
+		// Get data for export
+		$data = $this->m_penjualan->getPenjualan($filter);
+
+		// Set headers for Excel download
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment; filename="riwayat_penjualan_' . date('Y-m-d') . '.xls"');
+
+		// Simple HTML table for Excel
+		echo '<table border="1">';
+		echo '<tr><th>No</th><th>No Faktur</th><th>Tanggal</th><th>Customer</th><th>Platform</th><th>Total</th></tr>';
+
+		$no = 1;
+		foreach ($data->result() as $row) {
+			echo '<tr>';
+			echo '<td>' . $no . '</td>';
+			echo '<td>' . $row->no_faktur . '</td>';
+			echo '<td>' . $row->tgl . '</td>';
+			echo '<td>' . ($row->customer ?: 'Walk in Customer') . '</td>';
+			echo '<td>' . ($row->platform ?: '-') . '</td>';
+			echo '<td>' . number_format($row->total, 0, ',', '.') . '</td>';
+			echo '</tr>';
+			$no++;
+		}
+
+		echo '</table>';
 	}
 
 	public function import()
